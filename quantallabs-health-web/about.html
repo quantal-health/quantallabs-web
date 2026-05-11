@@ -225,6 +225,36 @@
       .footer-cols{grid-template-columns:repeat(2,1fr);}
       section{padding:64px 0;}
     }
+
+    /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+       black even in dark mode) need to flip to var(--text) so they stay readable. */
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+    [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+    [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color:var(--text); }
+    [data-theme="dark"] a,
+    [data-theme="system"].sys-dark a { color:var(--text); }
+    [data-theme="dark"] a:hover,
+    [data-theme="system"].sys-dark a:hover { color:var(--quantum); }
+    [data-theme="dark"] .brand-text strong,
+    [data-theme="system"].sys-dark .brand-text strong { color:var(--text); }
+    [data-theme="dark"] .brand svg circle:first-of-type,
+    [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke:var(--text); }
+    [data-theme="dark"] .topnav a:hover,
+    [data-theme="system"].sys-dark .topnav a:hover { color:var(--text); }
+    [data-theme="dark"] .topnav a.active,
+    [data-theme="system"].sys-dark .topnav a.active { color:var(--text); }
+    [data-theme="dark"] .btn-secondary,
+    [data-theme="system"].sys-dark .btn-secondary { color:var(--text); border-color:var(--border-strong); }
+    [data-theme="dark"] .btn-secondary:hover,
+    [data-theme="system"].sys-dark .btn-secondary:hover { background:var(--bg-clean); border-color:var(--text); }
+    /* Bold emphasis runs inside body copy used color:var(--ink) — flip to text. */
+    [data-theme="dark"] .mission p strong,
+    [data-theme="system"].sys-dark .mission p strong { color:var(--text); }
+    [data-theme="dark"] .why-now p strong,
+    [data-theme="system"].sys-dark .why-now p strong { color:var(--text); }
+    /* .honest-box uses var(--ink) bg + paper text — already an inverse panel, leave as-is. */
+
+    /* Section heads + bottom CTA already get color via the global h1-h4 dark override above. */
   </style>
 </head>
 <body>

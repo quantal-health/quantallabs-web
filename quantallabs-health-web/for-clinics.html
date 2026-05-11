@@ -246,6 +246,47 @@
     section { padding: 64px 0; }
     .hero { padding: 80px 0 64px; }
   }
+
+  /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+     black even in dark mode) need to flip to var(--text) so they stay readable. */
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+  [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+  [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color: var(--text); }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] a:hover,
+  [data-theme="system"].sys-dark a:hover { color: var(--quantum); }
+  [data-theme="dark"] .brand-text strong,
+  [data-theme="system"].sys-dark .brand-text strong { color: var(--text); }
+  [data-theme="dark"] .brand svg circle:first-of-type,
+  [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke: var(--text); }
+  [data-theme="dark"] .topnav a:hover,
+  [data-theme="system"].sys-dark .topnav a:hover { color: var(--text); }
+  [data-theme="dark"] .topnav a.active,
+  [data-theme="system"].sys-dark .topnav a.active { color: var(--text); }
+  [data-theme="dark"] .btn-secondary,
+  [data-theme="system"].sys-dark .btn-secondary { color: var(--text); border: 1.5px solid var(--border-strong); }
+  [data-theme="dark"] .btn-secondary:hover,
+  [data-theme="system"].sys-dark .btn-secondary:hover { background: var(--bg-clean); color: var(--text); border-color: var(--text); }
+  /* .testimonial-quote and .timeline-dot used color:var(--ink) on cream surfaces — flip to text. */
+  [data-theme="dark"] .testimonial-quote,
+  [data-theme="system"].sys-dark .testimonial-quote { color: var(--text); }
+  [data-theme="dark"] .timeline-dot,
+  [data-theme="system"].sys-dark .timeline-dot { color: var(--text); background: var(--bg-clean); }
+  /* .control-section already uses var(--ink) bg — keep it dark in both modes (it's the inverse panel). */
+  /* The check-mark SVG path inside the control-list illustration uses stroke="#1B1A18" — not user-facing
+     text and visible against the cream illustration background, so leave it. */
+
+  /* Additional dark-mode overrides for problem cards, solution visuals, testimonials, and CTA */
+  [data-theme="dark"] .problem-card,
+  [data-theme="system"].sys-dark .problem-card { background: var(--bg-clean); border-color: var(--border-strong); }
+  [data-theme="dark"] .solution-visual,
+  [data-theme="system"].sys-dark .solution-visual { background: var(--bg-clean); border-color: var(--border-strong); }
+  [data-theme="dark"] .testimonial,
+  [data-theme="system"].sys-dark .testimonial { background: var(--bg-clean); border-color: var(--border-strong); }
+  [data-theme="dark"] .cta-section h2,
+  [data-theme="system"].sys-dark .cta-section h2 { color: var(--text); }
+  /* Quantum check-circle in control-list uses --ink on yellow — that stays right (yellow doesn't switch). */
 </style>
 </head>
 <body>

@@ -225,6 +225,56 @@
       section{padding:64px 0;}
       section.hero{padding:80px 0 64px;}
     }
+
+    /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+       black even in dark mode) need to flip to var(--text) so they stay readable. */
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+    [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+    [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color:var(--text); }
+    [data-theme="dark"] a,
+    [data-theme="system"].sys-dark a { color:var(--text); }
+    [data-theme="dark"] a:hover,
+    [data-theme="system"].sys-dark a:hover { color:var(--quantum); }
+    [data-theme="dark"] .brand-text strong,
+    [data-theme="system"].sys-dark .brand-text strong { color:var(--text); }
+    [data-theme="dark"] .brand svg circle:first-of-type,
+    [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke:var(--text); }
+    [data-theme="dark"] .topnav a:hover,
+    [data-theme="system"].sys-dark .topnav a:hover { color:var(--text); }
+    [data-theme="dark"] .topnav a.active,
+    [data-theme="system"].sys-dark .topnav a.active { color:var(--text); }
+    [data-theme="dark"] .btn-secondary,
+    [data-theme="system"].sys-dark .btn-secondary { color:var(--text); border-color:var(--border-strong); }
+    [data-theme="dark"] .btn-secondary:hover,
+    [data-theme="system"].sys-dark .btn-secondary:hover { background:var(--bg-clean); border-color:var(--text); }
+    /* Hero illustration sits on a cream gradient background — give it a soft border in dark mode
+       so it doesn't float as a bright cream block against the dark page. */
+    [data-theme="dark"] .hero-illustration svg,
+    [data-theme="system"].sys-dark .hero-illustration svg {
+      filter:drop-shadow(0 18px 40px rgb(0 0 0 / 0.45));
+      border-radius:16px;
+    }
+
+    /* Comprehensive dark-mode text overrides — any element whose color was hardcoded to
+       var(--ink) needs to flip to var(--text) so it doesn't render as black-on-dark. We also
+       switch card surfaces to use bg-clean so they don't glow as cream blocks on the dark page. */
+    [data-theme="dark"] .pitch-card h3,
+    [data-theme="system"].sys-dark .pitch-card h3,
+    [data-theme="dark"] .module-body h3,
+    [data-theme="system"].sys-dark .module-body h3,
+    [data-theme="dark"] .section-head h2,
+    [data-theme="system"].sys-dark .section-head h2,
+    [data-theme="dark"] .bottom-cta h2,
+    [data-theme="system"].sys-dark .bottom-cta h2 { color:var(--text); }
+    /* Module preview boxes hold inline cream-art SVGs that are intentionally light (they
+       represent the actual product UI for the demo clinic). Keep the cream art but ensure
+       the surrounding tile body switches to a dark surface. */
+    [data-theme="dark"] .module-tile,
+    [data-theme="system"].sys-dark .module-tile { background:var(--bg-clean); border-color:var(--border-strong); }
+    [data-theme="dark"] .pitch-card,
+    [data-theme="system"].sys-dark .pitch-card { background:var(--bg-clean); border-color:var(--border-strong); }
+    /* Bottom CTA strip uses paper-light bg (which switches automatically) — body copy is fine,
+       but the H2 was using --ink. Already covered above. */
   </style>
 </head>
 <body>

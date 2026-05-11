@@ -346,6 +346,63 @@
     .footer-cols { grid-template-columns: 1fr 1fr; }
     .topnav { display: none; }
   }
+
+  /* Comprehensive dark-mode visual fixes — anything that hardcoded var(--ink), var(--paper),
+     or used cream surfaces needs to flip in dark mode so it stays legible against the dark page. */
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+  [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+  [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color: var(--text); }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] a:hover,
+  [data-theme="system"].sys-dark a:hover { color: var(--quantum); }
+  [data-theme="dark"] .brand-text strong,
+  [data-theme="system"].sys-dark .brand-text strong { color: var(--text); }
+  [data-theme="dark"] .brand svg circle:first-of-type,
+  [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke: var(--text); }
+  [data-theme="dark"] .topnav a:hover,
+  [data-theme="system"].sys-dark .topnav a:hover { color: var(--text); }
+  [data-theme="dark"] .topnav a.active,
+  [data-theme="system"].sys-dark .topnav a.active { color: var(--text); }
+
+  /* Option cards (right-side contact options) */
+  [data-theme="dark"] .option-card,
+  [data-theme="system"].sys-dark .option-card { background: var(--bg-clean); border-color: var(--border-strong); }
+
+  /* The form wrap is a cream-colored card on light mode — flip to dark surface */
+  [data-theme="dark"] .form-wrap,
+  [data-theme="system"].sys-dark .form-wrap { background: var(--bg-clean); border-color: var(--border-strong); }
+
+  /* Form labels were using --ink (black even in dark) → invisible on dark form-wrap */
+  [data-theme="dark"] .form-field label,
+  [data-theme="system"].sys-dark .form-field label { color: var(--text); }
+
+  /* Form inputs/selects/textareas — text was --ink (black), background was --surface (now dark)
+     → typed text was black-on-dark and invisible. Flip text to --text and pick a slightly
+     elevated dark background so the field stands out from the card. */
+  [data-theme="dark"] .form-field input,
+  [data-theme="dark"] .form-field select,
+  [data-theme="dark"] .form-field textarea,
+  [data-theme="system"].sys-dark .form-field input,
+  [data-theme="system"].sys-dark .form-field select,
+  [data-theme="system"].sys-dark .form-field textarea {
+    background: #1B1A18;
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  /* Placeholder text — light mode uses browser default; in dark mode we need a soft, visible
+     muted color so users can still read the example/hint text. */
+  [data-theme="dark"] .form-field input::placeholder,
+  [data-theme="dark"] .form-field textarea::placeholder,
+  [data-theme="system"].sys-dark .form-field input::placeholder,
+  [data-theme="system"].sys-dark .form-field textarea::placeholder { color: var(--text-muted); }
+  /* Native select shows its first option as the placeholder; ensure it reads in dark mode. */
+  [data-theme="dark"] .form-field select option,
+  [data-theme="system"].sys-dark .form-field select option { background: #1B1A18; color: var(--text); }
+
+  /* Form success message uses --ink for the heading on a quantum-soft background. The
+     quantum-soft cream stays cream in dark mode (intentional — it's a warm callout), so the
+     dark heading stays legible there. No override needed for .form-success h3. */
 </style>
 </head>
 <body>

@@ -432,6 +432,36 @@
     table.risk-table th, table.risk-table td { padding: 14px; font-size: 0.875rem; }
     .honesty, .reviewer-callout { padding: 32px 24px; }
   }
+
+  /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+     black even in dark mode) need to flip to var(--text) so they stay readable. */
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+  [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+  [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color: var(--text); }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] a:hover,
+  [data-theme="system"].sys-dark a:hover { color: var(--quantum); }
+  [data-theme="dark"] .brand-text strong,
+  [data-theme="system"].sys-dark .brand-text strong { color: var(--text); }
+  [data-theme="dark"] .brand svg circle:first-of-type,
+  [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke: var(--text); }
+  [data-theme="dark"] .topnav a:hover,
+  [data-theme="system"].sys-dark .topnav a:hover { color: var(--text); }
+  [data-theme="dark"] .topnav a.active,
+  [data-theme="system"].sys-dark .topnav a.active { color: var(--text); }
+  /* .two-col .highlight sits on var(--quantum-soft) (cream-yellow that does NOT switch in dark
+     mode), so the dark var(--ink) text stays legible on it in both modes — DO NOT override.
+     .isolation-box-title, table.risk-table td.risk, .recovery-stat — all hardcoded ink. */
+  [data-theme="dark"] .isolation-box-title,
+  [data-theme="system"].sys-dark .isolation-box-title { color: var(--text); }
+  [data-theme="dark"] table.risk-table td.risk,
+  [data-theme="system"].sys-dark table.risk-table td.risk { color: var(--text); }
+  [data-theme="dark"] .recovery-stat,
+  [data-theme="system"].sys-dark .recovery-stat { color: var(--text); }
+  /* .cta-button uses color:var(--ink) on a quantum-yellow background — already legible in both modes. */
+  /* .reviewer-callout, .footer use var(--ink) bg — keep dark in both modes (inverse panels). */
+  /* .bullet-check uses var(--ink) bg with paper text — that's a tiny round chip, leave it. */
 </style>
 </head>
 <body>

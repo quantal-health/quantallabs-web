@@ -224,6 +224,44 @@
       section{padding:64px 0;}
       section.hero{padding:80px 0 48px;}
     }
+
+    /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+       black even in dark mode) need to flip to var(--text) so they stay readable. */
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+    [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+    [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color:var(--text); }
+    [data-theme="dark"] a,
+    [data-theme="system"].sys-dark a { color:var(--text); }
+    [data-theme="dark"] a:hover,
+    [data-theme="system"].sys-dark a:hover { color:var(--quantum); }
+    [data-theme="dark"] .brand-text strong,
+    [data-theme="system"].sys-dark .brand-text strong { color:var(--text); }
+    [data-theme="dark"] .brand svg circle:first-of-type,
+    [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke:var(--text); }
+    [data-theme="dark"] .topnav a:hover,
+    [data-theme="system"].sys-dark .topnav a:hover { color:var(--text); }
+    [data-theme="dark"] .topnav a.active,
+    [data-theme="system"].sys-dark .topnav a.active { color:var(--text); }
+    /* Tile body title and CTA hardcoded var(--ink). */
+    [data-theme="dark"] .tile-body h3,
+    [data-theme="system"].sys-dark .tile-body h3 { color:var(--text); }
+    [data-theme="dark"] .tile-cta,
+    [data-theme="system"].sys-dark .tile-cta { color:var(--text); }
+    [data-theme="dark"] .info-card h4,
+    [data-theme="system"].sys-dark .info-card h4 { color:var(--text); }
+    /* .bottom-cta uses var(--ink) bg (intentional inverse panel) — leaves heading on dark bg light, fine. */
+    /* .btn-quantum (color:var(--ink) on quantum-yellow) stays legible in both modes. */
+    /* .btn-outline:hover swaps to paper bg + ink text — that's a hover-only flash, leave it. */
+
+    /* Tile and info-card surfaces — these were on var(--surface) (which switches), but the
+       tile-preview gradient uses paper/paper-light explicitly so it stays cream. The cream
+       preview is the demo "screenshot" representation — leave it cream in both modes. */
+    [data-theme="dark"] .tile,
+    [data-theme="system"].sys-dark .tile { background: var(--bg-clean); border-color: var(--border-strong); }
+    [data-theme="dark"] .info-card,
+    [data-theme="system"].sys-dark .info-card { background: var(--bg-clean); border-color: var(--border-strong); }
+    [data-theme="dark"] .section-head h2,
+    [data-theme="system"].sys-dark .section-head h2 { color: var(--text); }
   </style>
 </head>
 <body>

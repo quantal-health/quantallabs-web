@@ -482,6 +482,41 @@
     .footer-cols { grid-template-columns: repeat(2,1fr); }
     .page-intro { padding: 40px 24px 16px; }
   }
+
+  /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+     black even in dark mode) need to flip to var(--text) so they stay readable. The browser-frame
+     interior intentionally stays light/cream because it represents the actual product UI for
+     Mountainview Medicine (uses --i-* prefixed vars) — do not theme that. */
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+  [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+  [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color: var(--text); }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] a:hover,
+  [data-theme="system"].sys-dark a:hover { color: var(--quantum); }
+  [data-theme="dark"] .brand-text strong,
+  [data-theme="system"].sys-dark .brand-text strong { color: var(--text); }
+  [data-theme="dark"] .brand svg circle:first-of-type,
+  [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke: var(--text); }
+  [data-theme="dark"] .topnav a:hover,
+  [data-theme="system"].sys-dark .topnav a:hover { color: var(--text); }
+  [data-theme="dark"] .topnav a.active,
+  [data-theme="system"].sys-dark .topnav a.active { color: var(--text); }
+  [data-theme="dark"] .back-link:hover,
+  [data-theme="system"].sys-dark .back-link:hover { color: var(--text); }
+  [data-theme="dark"] .page-intro h1,
+  [data-theme="system"].sys-dark .page-intro h1 { color: var(--text); }
+  [data-theme="dark"] .btn-outro-secondary,
+  [data-theme="system"].sys-dark .btn-outro-secondary { color: var(--text); border-color: var(--border-strong); }
+  [data-theme="dark"] .btn-outro-secondary:hover,
+  [data-theme="system"].sys-dark .btn-outro-secondary:hover { background: var(--bg-clean); border-color: var(--text); }
+  /* The .browser-frame is intentional product-UI cream; leave background:white alone so the
+     dashboard preview stays consistent with the actual product. */
+  /* Outro paragraph and page-intro lede live OUTSIDE the browser frame, so they need to flip. */
+  [data-theme="dark"] .outro p,
+  [data-theme="system"].sys-dark .outro p { color: var(--text-secondary); }
+  [data-theme="dark"] .page-intro .lede,
+  [data-theme="system"].sys-dark .page-intro .lede { color: var(--text-secondary); }
 </style>
 </head>
 <body>
