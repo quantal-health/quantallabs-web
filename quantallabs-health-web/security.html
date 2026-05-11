@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security & HIPAA — Quantal Health</title>
+<meta name="description" content="How Quantal Health protects your patients' data. HIPAA from day one — built in, not bolted on.">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1B1A18;
+    --paper: #F4EFE2;
+    --quantum: #E8A412;
+    --ink-muted: #6B6863;
+    --ink-soft: #C9C4BC;
+    --paper-light: #FAF7EE;
+    --paper-dark: #E8E2D2;
+    --quantum-soft: #FBE9C0;
+    --quantum-dark: #B8810F;
+    --success: #10B981;
+    --info: #2563EB;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --bg: var(--paper);
+    --bg-clean: #FFFFFF;
+    --surface: #FFFFFF;
+    --text: var(--ink);
+    --text-secondary: var(--ink-muted);
+    --text-muted: var(--ink-soft);
+    --border: var(--paper-dark);
+    --border-strong: #D4CFC2;
+    --shadow-sm: 0 1px 2px rgb(27 26 24 / 0.04);
+    --shadow-md: 0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+    --shadow-lg: 0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  a { color: var(--ink); }
+
+  /* Dark mode */
+  [data-theme="dark"],
+  [data-theme="system"].sys-dark {
+    --bg: #1B1A18; --bg-clean: #252320; --surface: #252320;
+    --paper-light: #1F1D1B; --paper-dark: #2C2A27;
+    --text: #F4EFE2; --text-secondary: #B8B3A8; --text-muted: #7A7570;
+    --border: rgba(244,239,226,0.10); --border-strong: rgba(244,239,226,0.18);
+    --ink-muted: #B8B3A8; --ink-soft: #7A7570;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.30);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+    --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+  }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] .topbar,
+  [data-theme="system"].sys-dark .topbar { background: rgba(27,26,24,0.92); }
+  [data-theme="dark"] .topnav-cta,
+  [data-theme="system"].sys-dark .topnav-cta { background: var(--quantum); color: #1B1A18; }
+  [data-theme="dark"] .topnav-cta:hover,
+  [data-theme="system"].sys-dark .topnav-cta:hover { background: var(--quantum-dark); color: #1B1A18; }
+  [data-theme="dark"] .btn-primary,
+  [data-theme="system"].sys-dark .btn-primary { background: var(--quantum); color: #1B1A18; }
+  [data-theme="dark"] .btn-primary:hover,
+  [data-theme="system"].sys-dark .btn-primary:hover { background: var(--quantum-dark); color: #1B1A18; }
+
+  /* Brand attribution */
+  .brand-attribution {
+    display: block; font-size: 0.7rem; font-weight: 400; font-style: italic;
+    color: var(--text-muted); letter-spacing: 0; line-height: 1.1; margin-top: 2px;
+  }
+
+  /* Topnav back link */
+  .topnav-back {
+    display: inline-flex; align-items: center;
+    font-size: 0.8125rem; color: var(--text-muted); font-weight: 400;
+    padding: 6px 10px; border-radius: 6px; margin-right: 8px; text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topnav-back:hover { color: var(--text); background: rgba(27,26,24,0.05); text-decoration: none; }
+  [data-theme="dark"] .topnav-back:hover,
+  [data-theme="system"].sys-dark .topnav-back:hover { background: rgba(244,239,226,0.06); }
+
+  /* Settings (theme) toggle */
+  .settings-wrap { position: relative; }
+  .settings-toggle {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: none; cursor: pointer;
+    color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .settings-toggle:hover { background: var(--bg-clean); color: var(--text); }
+  .settings-toggle svg { width: 16px; height: 16px; }
+  .settings-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 210px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 12px;
+    opacity: 0; pointer-events: none; transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease; z-index: 200;
+  }
+  .settings-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .settings-lbl {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 8px; padding: 0 4px;
+  }
+  .theme-opts { display: flex; flex-direction: column; gap: 2px; }
+  .theme-opt {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 10px; border-radius: 8px; width: 100%;
+    font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .theme-opt:hover { background: var(--bg-clean); color: var(--text); }
+  .theme-opt.active { background: var(--bg-clean); color: var(--quantum-dark); font-weight: 600; }
+  [data-theme="dark"] .theme-opt.active,
+  [data-theme="system"].sys-dark .theme-opt.active { color: var(--quantum); }
+  .theme-opt svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+
+  /* Topnav */
+  .topbar { background: rgba(244, 239, 226, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 32px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-text strong { font-weight: 700; color: var(--ink); }
+  .brand-text { font-weight: 400; color: var(--ink-muted); font-size: 1.125rem; letter-spacing: -0.01em; }
+  .topnav { display: flex; gap: 24px; flex: 1; }
+  .topnav a { color: var(--ink-muted); font-size: 0.9375rem; text-decoration: none; transition: color 0.15s; }
+  .topnav a:hover { color: var(--ink); }
+  .topnav a.active { color: var(--ink); font-weight: 600; }
+  .topnav-cta { background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 8px; font-size: 0.9375rem; font-weight: 600; text-decoration: none; transition: all 0.15s; }
+  .topnav-cta:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 96px 0; }
+  .section-tight { padding: 64px 0; }
+
+  /* Hero */
+  .hero { padding: 96px 0 64px; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--quantum-dark);
+    background: var(--quantum-soft);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  h1.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin: 0 0 20px;
+    max-width: 820px;
+  }
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--ink-muted);
+    max-width: 720px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Headings */
+  h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 16px; }
+  h3 { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 12px; }
+  h4 { font-size: 1.125rem; font-weight: 600; margin: 0 0 8px; }
+  .section-intro { font-size: 1.0625rem; color: var(--ink-muted); max-width: 720px; margin: 0 0 40px; }
+
+  /* Pillar cards */
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .pillar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .pillar-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--quantum-soft);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .pillar-icon svg { width: 22px; height: 22px; stroke: var(--quantum-dark); fill: none; stroke-width: 2; }
+  .pillar h3 { font-size: 1.125rem; margin-bottom: 8px; }
+  .pillar p { color: var(--ink-muted); margin: 0; font-size: 0.9375rem; line-height: 1.55; }
+
+  /* Two-column block */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .two-col p { color: var(--text); font-size: 1rem; line-height: 1.65; margin: 0 0 16px; }
+  .two-col .highlight {
+    font-style: italic;
+    color: var(--ink);
+    background: var(--quantum-soft);
+    padding: 16px 20px;
+    border-radius: 10px;
+    border-left: 3px solid var(--quantum);
+    font-size: 0.9375rem;
+    margin: 16px 0;
+  }
+  .isolation-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .isolation-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .isolation-box {
+    border: 1.5px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+    background: var(--paper-light);
+  }
+  .isolation-box-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .isolation-stack { display: flex; flex-direction: column; gap: 6px; }
+  .isolation-cell {
+    font-size: 0.6875rem;
+    color: var(--ink-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 4px;
+  }
+  .isolation-divider {
+    border-top: 1px dashed var(--border-strong);
+    margin: 14px 0 10px;
+    text-align: center;
+    position: relative;
+  }
+  .isolation-divider span {
+    background: var(--surface);
+    padding: 0 10px;
+    font-size: 0.6875rem;
+    color: var(--ink-muted);
+    position: relative;
+    top: -8px;
+  }
+  .isolation-caption {
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+    margin-top: 6px;
+  }
+
+  /* HIPAA-from-day-one bullets */
+  .bullet-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 16px;
+  }
+  .bullet-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .bullet-check {
+    flex: 0 0 22px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    margin-top: 2px;
+  }
+  .bullet-list li p { margin: 0; color: var(--text); font-size: 0.9375rem; line-height: 1.55; }
+
+  /* Risk table */
+  .risk-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  table.risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  table.risk-table th, table.risk-table td {
+    text-align: left;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.risk-table thead th {
+    background: var(--paper-light);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  table.risk-table tbody tr:last-child td { border-bottom: none; }
+  table.risk-table td.risk { font-weight: 600; color: var(--ink); width: 38%; }
+  table.risk-table td.response { color: var(--ink-muted); }
+
+  /* Recovery callouts */
+  .recovery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .recovery-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .recovery-stat {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .recovery-stat-unit { font-size: 1rem; color: var(--ink-muted); font-weight: 400; }
+  .recovery-card h4 { margin-bottom: 8px; }
+  .recovery-card p { color: var(--ink-muted); font-size: 0.9375rem; margin: 0; line-height: 1.55; }
+
+  /* Honesty block */
+  .honesty {
+    background: var(--bg-clean);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px;
+    box-shadow: var(--shadow-md);
+  }
+  .honesty p { font-size: 1rem; color: var(--text); line-height: 1.65; margin: 0 0 16px; }
+  .honesty p:last-child { margin-bottom: 0; }
+  .honesty .roadmap-note {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--ink-muted);
+    font-size: 0.9375rem;
+  }
+
+  /* Reviewer callout */
+  .reviewer-callout {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 20px;
+    padding: 48px;
+  }
+  .reviewer-callout h3 { color: var(--paper); margin-bottom: 12px; }
+  .reviewer-callout p { color: rgba(244, 239, 226, 0.8); font-size: 1.0625rem; line-height: 1.6; margin: 0 0 8px; }
+  .reviewer-callout a {
+    color: var(--quantum);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .reviewer-callout a:hover { text-decoration: underline; }
+
+  /* Bottom CTA */
+  .cta-section { text-align: center; padding: 96px 0; }
+  .cta-section h2 { font-size: 2.25rem; margin-bottom: 16px; }
+  .cta-section p { font-size: 1.125rem; color: var(--ink-muted); margin: 0 0 32px; }
+  .cta-button {
+    display: inline-block;
+    background: var(--quantum);
+    color: var(--ink);
+    padding: 16px 32px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s;
+    box-shadow: var(--shadow-md);
+  }
+  .cta-button:hover { background: var(--quantum-dark); color: var(--paper); }
+
+  /* Footer */
+  .footer { background: var(--ink); color: var(--paper); padding: 64px 0 32px; margin-top: 96px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .footer-brand { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 40px; max-width: 500px; }
+  .footer-brand svg { flex: 0 0 36px; }
+  .footer-tagline { color: rgba(244, 239, 226, 0.7); margin: 0; font-size: 0.9375rem; line-height: 1.5; }
+  .footer-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-bottom: 32px; border-bottom: 1px solid rgba(244, 239, 226, 0.1); }
+  .footer-col h4 { font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--quantum); margin: 0 0 16px; }
+  .footer-col a { display: block; color: rgba(244, 239, 226, 0.7); text-decoration: none; font-size: 0.9375rem; margin-bottom: 8px; transition: color 0.15s; }
+  .footer-col a:hover { color: var(--paper); }
+  .footer-bottom { display: flex; justify-content: space-between; padding-top: 24px; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { color: rgba(244, 239, 226, 0.5); margin: 0; font-size: 0.8125rem; }
+
+  @media (max-width: 860px) {
+    .pillars { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; gap: 32px; }
+    .recovery-grid { grid-template-columns: 1fr; }
+    .footer-cols { grid-template-columns: 1fr 1fr; }
+    .topnav { display: none; }
+    .section { padding: 64px 0; }
+    table.risk-table th, table.risk-table td { padding: 14px; font-size: 0.875rem; }
+    .honesty, .reviewer-callout { padding: 32px 24px; }
+  }
+
+  /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+     black even in dark mode) need to flip to var(--text) so they stay readable. */
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+  [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+  [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color: var(--text); }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] a:hover,
+  [data-theme="system"].sys-dark a:hover { color: var(--quantum); }
+  [data-theme="dark"] .brand-text strong,
+  [data-theme="system"].sys-dark .brand-text strong { color: var(--text); }
+  [data-theme="dark"] .brand svg circle:first-of-type,
+  [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke: var(--text); }
+  [data-theme="dark"] .topnav a:hover,
+  [data-theme="system"].sys-dark .topnav a:hover { color: var(--text); }
+  [data-theme="dark"] .topnav a.active,
+  [data-theme="system"].sys-dark .topnav a.active { color: var(--text); }
+  /* .two-col .highlight sits on var(--quantum-soft) (cream-yellow that does NOT switch in dark
+     mode), so the dark var(--ink) text stays legible on it in both modes — DO NOT override.
+     .isolation-box-title, table.risk-table td.risk, .recovery-stat — all hardcoded ink. */
+  [data-theme="dark"] .isolation-box-title,
+  [data-theme="system"].sys-dark .isolation-box-title { color: var(--text); }
+  [data-theme="dark"] table.risk-table td.risk,
+  [data-theme="system"].sys-dark table.risk-table td.risk { color: var(--text); }
+  [data-theme="dark"] .recovery-stat,
+  [data-theme="system"].sys-dark .recovery-stat { color: var(--text); }
+  /* .cta-button uses color:var(--ink) on a quantum-yellow background — already legible in both modes. */
+  /* .reviewer-callout, .footer use var(--ink) bg — keep dark in both modes (inverse panels). */
+  /* .bullet-check uses var(--ink) bg with paper text — that's a tiny round chip, leave it. */
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html" class="active">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">Security & HIPAA</span>
+      <h1 class="hero-title">Your patients' data, protected by design.</h1>
+      <p class="hero-subtitle">We built Quantal Health for HIPAA from day one — not bolted it on later.</p>
+    </div>
+  </section>
+
+  <!-- Trust pillars -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4v6c0 5-4 8-9 9-5-1-9-4-9-9V7z"/></svg>
+          </div>
+          <h3>Your data lives in your own environment</h3>
+          <p>Each clinic gets its own dedicated, isolated infrastructure. Your patients' records don't sit in a shared database next to anyone else's.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+          </div>
+          <h3>Encrypted everywhere</h3>
+          <p>Patient data is encrypted at rest using your clinic's own dedicated encryption keys, and encrypted in transit using TLS — every connection, every time.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <h3>Activity logged for every access</h3>
+          <p>Every time a patient record is opened — by your team or ours — it's recorded. You can see who accessed what, when, and why.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 14h6"/><path d="M9 18h6"/></svg>
+          </div>
+          <h3>HIPAA-compliant agreements with every vendor</h3>
+          <p>We don't work with infrastructure or AI vendors who can't sign HIPAA-compliant data agreements. You sign one with us; we maintain the rest of the chain.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dedicated environment explainer -->
+  <section class="section">
+    <div class="container">
+      <h2>What "your data lives in your own environment" actually means</h2>
+      <p class="section-intro">Most software-as-a-service products mix every customer's data into one big shared database, and rely on software rules to keep them apart. We don't do that.</p>
+
+      <div class="two-col">
+        <div>
+          <p>When your clinic signs up with Quantal Health, we set you up with your own dedicated cloud environment — your own database, your own application servers, your own encryption keys. Your patients' records live in infrastructure that nobody else's clinic touches.</p>
+          <p>When a patient at Mountainview Medicine logs their weight, that data goes to Mountainview's own dedicated database. It never sits next to data from any other clinic. There's no shared table where a software bug could accidentally show one clinic's patient to another clinic's clinician — because the other clinic's data isn't even in the same place.</p>
+          <p class="highlight">If your clinic ever leaves us, we hand you the keys to your environment, including a final snapshot of all your data. No lock-in, no awkward export.</p>
+        </div>
+
+        <div class="isolation-diagram" aria-label="Each clinic has its own isolated environment">
+          <div class="isolation-row">
+            <div class="isolation-box">
+              <div class="isolation-box-title">Mountainview<br>Medicine</div>
+              <div class="isolation-stack">
+                <div class="isolation-cell">App</div>
+                <div class="isolation-cell">Database</div>
+                <div class="isolation-cell">Patients</div>
+              </div>
+            </div>
+            <div class="isolation-box">
+              <div class="isolation-box-title">Cedarvale<br>Health</div>
+              <div class="isolation-stack">
+                <div class="isolation-cell">App</div>
+                <div class="isolation-cell">Database</div>
+                <div class="isolation-cell">Patients</div>
+              </div>
+            </div>
+            <div class="isolation-box">
+              <div class="isolation-box-title">Pinegrove<br>Wellness</div>
+              <div class="isolation-stack">
+                <div class="isolation-cell">App</div>
+                <div class="isolation-cell">Database</div>
+                <div class="isolation-cell">Patients</div>
+              </div>
+            </div>
+          </div>
+          <div class="isolation-divider"><span>physically separated</span></div>
+          <p class="isolation-caption">Three clinics. Three completely separate environments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIPAA from day one -->
+  <section class="section" style="background: var(--paper-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <h2>What we mean by "HIPAA from day one"</h2>
+      <p class="section-intro">HIPAA isn't a checkbox we ticked at the end. It shaped how we wrote the code. A few specifics:</p>
+
+      <ul class="bullet-list">
+        <li>
+          <span class="bullet-check">&#10003;</span>
+          <p><strong>Patient data stays out of places it doesn't belong.</strong> We don't store patient information in browser logs, error reports, push notification text, SMS messages, web addresses, or analytics events. Even our own developers don't see patient names or weights when they're debugging the system.</p>
+        </li>
+        <li>
+          <span class="bullet-check">&#10003;</span>
+          <p><strong>Clinical AI requests route through our backend.</strong> When a patient takes a photo of their injection site, that photo never goes directly from the patient's phone to an AI provider. It flows through our servers, where we strip identifying information before any AI ever sees it.</p>
+        </li>
+        <li>
+          <span class="bullet-check">&#10003;</span>
+          <p><strong>HIPAA agreements with every link in the chain.</strong> Our cloud infrastructure provider, our monitoring tools, our AI providers — every vendor that could conceivably touch your patient data has signed a HIPAA-compliant data agreement with us.</p>
+        </li>
+        <li>
+          <span class="bullet-check">&#10003;</span>
+          <p><strong>One agreement covers everything.</strong> Your clinic signs one HIPAA-compliant data agreement with us. We handle every downstream agreement so you don't have to chase paperwork from our vendors.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Risk table -->
+  <section class="section">
+    <div class="container">
+      <h2>How we protect against common HIPAA risks</h2>
+      <p class="section-intro">A clinic's compliance officer will recognize this list. Here's how we've designed the system to handle each one.</p>
+
+      <div class="risk-table-wrap">
+        <table class="risk-table">
+          <thead>
+            <tr>
+              <th>The risk</th>
+              <th>How Quantal handles it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="risk">A patient's phone is lost or stolen</td>
+              <td class="response">All patient data lives in the cloud, not on the device. A stolen phone means no patient data exposed — there's nothing on the phone to steal.</td>
+            </tr>
+            <tr>
+              <td class="risk">Inappropriate access by someone on your team</td>
+              <td class="response">Every patient record access is logged. You can audit who on your team looked at which patient and when. If a clinician views a patient outside their care panel, you can find it.</td>
+            </tr>
+            <tr>
+              <td class="risk">A cloud misconfiguration exposes data</td>
+              <td class="response">Each clinic has its own encrypted environment. A misconfiguration in one clinic's setup cannot expose another clinic's data. The blast radius of any single mistake is contained to that one clinic.</td>
+            </tr>
+            <tr>
+              <td class="risk">A vendor without a HIPAA agreement gets involved</td>
+              <td class="response">We never use a vendor that hasn't signed a HIPAA-compliant data agreement with us. Your agreement with us covers our entire vendor chain — no surprise gaps.</td>
+            </tr>
+            <tr>
+              <td class="risk">A breach happens and notification is late</td>
+              <td class="response">We have a documented process to notify you within the legally required window. We've drafted the notification templates in advance so the clock doesn't start before we're ready to act.</td>
+            </tr>
+            <tr>
+              <td class="risk">Patient data shows up somewhere it shouldn't</td>
+              <td class="response">Our entire platform is engineered to never put patient data in places it doesn't belong — not in logs, not in URLs, not in notifications, not in analytics. We test for this continuously.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recovery commitments -->
+  <section class="section" style="background: var(--paper-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <h2>If something goes wrong</h2>
+      <p class="section-intro">No system runs forever without an incident. We've designed our recovery process so that, when one happens, you'd notice as little disruption as possible.</p>
+
+      <div class="recovery-grid">
+        <div class="recovery-card">
+          <div class="recovery-stat">4 <span class="recovery-stat-unit">hours</span></div>
+          <h4>Back online quickly</h4>
+          <p>If your environment goes down, we restore it within 4 hours. We test this commitment annually so it's not just a promise on paper.</p>
+        </div>
+        <div class="recovery-card">
+          <div class="recovery-stat">1 <span class="recovery-stat-unit">hour</span></div>
+          <h4>Minimal data loss in the worst case</h4>
+          <p>Your data is backed up continuously. In a worst-case incident, you wouldn't lose more than 1 hour of patient data.</p>
+        </div>
+        <div class="recovery-card">
+          <div class="recovery-stat">Daily</div>
+          <h4>Full backups, every day</h4>
+          <p>A complete snapshot of your environment is taken every day and stored separately, encrypted, and tested for restore-ability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Honesty block: who at Quantal can access -->
+  <section class="section">
+    <div class="container">
+      <div class="honesty">
+        <h2>Who at Quantal can access your data</h2>
+        <p>We want to be honest about this, because plenty of vendors are not.</p>
+        <p>Our team has administrative access to operate the platform. That's necessary because we run it for you — when something breaks at 3 a.m., a Quantal engineer needs the ability to investigate. Pretending otherwise would be misleading.</p>
+        <p>What we don't do is read your patient data unless you ask us to. We don't browse charts. We don't run analytics across your patient population. The only times anyone on our team would look at a specific patient's record are: you've asked us to investigate something, you've reported a bug we need to reproduce, or there's an active security incident we're responding to.</p>
+        <p>And when any of that happens, every access is logged in your activity log. You can see exactly when one of us touched a patient record, who it was, and why. There are no hidden hatches.</p>
+        <p class="roadmap-note"><strong>What's next:</strong> we're working on giving customers cryptographic guarantees that even our team cannot access patient data without your explicit, per-incident consent. That's on the roadmap; it's not shipped yet. We'd rather tell you what we're building than claim we already offer it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- For sophisticated reviewers -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="reviewer-callout">
+        <h3>For your compliance team</h3>
+        <p>If your security or compliance reviewer needs deeper detail — specific regulatory section citations, our subprocessor list with HIPAA agreement dates, breach-notification service-level commitments, or our recovery time and recovery point objectives — we have a security questionnaire we can share under NDA.</p>
+        <p style="margin-top: 16px;">Email <a href="mailto:security@quantal-health.example">security@quantal-health.example</a> and we'll send it over within one business day.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Have a security question we didn't answer?</h2>
+      <p>Get straight answers from our security team — no marketing fluff.</p>
+      <a href="mailto:security@quantal-health.example" class="cta-button">Talk to security at Quantal</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security & HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+      <p>Now accepting design partners.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Theme management
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>

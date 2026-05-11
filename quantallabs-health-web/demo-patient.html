@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantal Health — Patient app demo</title>
+<meta name="description" content="Click through a working demo of the Quantal patient app, branded for our demo clinic Mountainview Medicine." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* Marketing-site brand tokens */
+  :root {
+    --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+    --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+    --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+    --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
+    --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+    --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+    --bg-subtle:#FAF7EE; --bg-muted:#F3EFE0;
+    --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+    --border:var(--paper-dark); --border-strong:#D4CFC2;
+    --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+    --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+    --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+
+    /* Mountainview Medicine demo tenant brand */
+    --mv-primary: #16a34a;
+    --mv-primary-dark: #15803d;
+    --mv-primary-light: #dcfce7;
+    --mv-secondary: #0891b2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--quantum-dark); }
+
+  /* Dark mode (marketing chrome only — phone mock keeps its tenant colors) */
+  [data-theme="dark"],
+  [data-theme="system"].sys-dark {
+    --bg:#1B1A18; --bg-clean:#252320; --surface:#252320;
+    --bg-subtle:#1F1D1B; --bg-muted:#2C2A27;
+    --paper-light:#1F1D1B; --paper-dark:#2C2A27;
+    --text:#F4EFE2; --text-secondary:#B8B3A8; --text-muted:#7A7570;
+    --border:rgba(244,239,226,0.10); --border-strong:rgba(244,239,226,0.18);
+    --ink-muted:#B8B3A8; --ink-soft:#7A7570;
+    --shadow-sm:0 1px 2px rgb(0 0 0 / 0.30);
+    --shadow-md:0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+    --shadow-lg:0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+  }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color:var(--text); }
+  [data-theme="dark"] .topbar,
+  [data-theme="system"].sys-dark .topbar { background:rgba(27,26,24,0.92); }
+  [data-theme="dark"] .topnav-cta,
+  [data-theme="system"].sys-dark .topnav-cta { background:var(--quantum); color:#1B1A18; }
+  [data-theme="dark"] .topnav-cta:hover,
+  [data-theme="system"].sys-dark .topnav-cta:hover { background:var(--quantum-dark); color:#1B1A18; }
+
+  /* Brand attribution */
+  .brand-attribution {
+    display: block; font-size: 0.7rem; font-weight: 400; font-style: italic;
+    color: var(--text-muted); letter-spacing: 0; line-height: 1.1; margin-top: 2px;
+  }
+
+  /* Topnav back link */
+  .topnav-back {
+    display: inline-flex; align-items: center;
+    font-size: 0.8125rem; color: var(--text-muted); font-weight: 400;
+    padding: 6px 10px; border-radius: 6px; margin-right: 8px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topnav-back:hover { color: var(--text); background: rgba(27,26,24,0.05); text-decoration: none; }
+  [data-theme="dark"] .topnav-back:hover,
+  [data-theme="system"].sys-dark .topnav-back:hover { background: rgba(244,239,226,0.06); }
+
+  /* Settings (theme) toggle */
+  .settings-wrap { position: relative; }
+  .settings-toggle {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: none; cursor: pointer;
+    color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .settings-toggle:hover { background: var(--bg-clean); color: var(--text); }
+  .settings-toggle svg { width: 16px; height: 16px; }
+  .settings-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 210px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 12px;
+    opacity: 0; pointer-events: none; transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease; z-index: 200;
+  }
+  .settings-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .settings-lbl {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 8px; padding: 0 4px;
+  }
+  .theme-opts { display: flex; flex-direction: column; gap: 2px; }
+  .theme-opt {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 10px; border-radius: 8px; width: 100%;
+    font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .theme-opt:hover { background: var(--bg-clean); color: var(--text); }
+  .theme-opt.active { background: var(--bg-clean); color: var(--quantum-dark); font-weight: 600; }
+  [data-theme="dark"] .theme-opt.active,
+  [data-theme="system"].sys-dark .theme-opt.active { color: var(--quantum); }
+  .theme-opt svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+
+  /* ======================================================
+     Marketing-site topnav
+     ====================================================== */
+  .topbar { background: rgba(244,239,226,0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px;
+    display: flex; align-items: center; gap: 32px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-text { font-weight: 400; color: var(--ink-muted); font-size: 1.125rem; letter-spacing: -0.01em; }
+  .brand-text strong { font-weight: 700; color: var(--ink); }
+  .topnav { display: flex; gap: 24px; flex: 1; }
+  .topnav a { color: var(--ink-muted); font-size: 0.9375rem; }
+  .topnav a:hover { color: var(--ink); }
+  .topnav a.active { color: var(--ink); font-weight: 600; }
+  .topnav-cta { background: var(--ink); color: var(--paper); padding: 10px 18px;
+    border-radius: 8px; font-size: 0.9375rem; font-weight: 600; transition: all 0.15s; }
+  .topnav-cta:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+
+  /* ======================================================
+     Page intro
+     ====================================================== */
+  .page-intro {
+    max-width: 980px; margin: 0 auto; padding: 56px 24px 24px;
+    text-align: center;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.875rem; color: var(--ink-muted); margin-bottom: 18px;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--ink); text-decoration: none; }
+  .eyebrow {
+    display:inline-block; font-size:0.75rem; font-weight:700;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--quantum-dark);
+    background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:20px;
+  }
+  .page-intro h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 800;
+    line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px; color: var(--ink);
+  }
+  .page-intro .lede {
+    font-size: 1.0625rem; color: var(--ink-muted); max-width: 720px; margin: 0 auto;
+  }
+
+  /* ======================================================
+     Stage: phone centered, full-width
+     ====================================================== */
+  .stage {
+    max-width: 600px; margin: 0 auto; padding: 24px;
+    display: flex; flex-direction: column; align-items: center; gap: 24px;
+  }
+
+  /* iPhone frame */
+  .phone-frame {
+    position: relative;
+    width: 320px; height: 640px;
+    background: #1f2937;
+    border-radius: 40px;
+    padding: 12px;
+    box-shadow: 0 20px 50px -10px rgb(27 26 24 / 0.30), 0 8px 20px -6px rgb(27 26 24 / 0.18);
+    flex-shrink: 0;
+  }
+  .phone-frame::before {
+    content: "";
+    position: absolute;
+    top: 8px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 20px;
+    background: #1f2937;
+    border-radius: 10px;
+    z-index: 5;
+  }
+  .phone-screen {
+    position: relative;
+    width: 100%; height: 100%;
+    background: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .status-bar {
+    height: 28px; flex-shrink: 0;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 22px 4px;
+    font-size: 11px; font-weight: 600; color: var(--text);
+  }
+  .status-bar .dots { display: flex; gap: 3px; }
+  .status-bar .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text); }
+
+  /* Screen viewport */
+  .viewport {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+  }
+  .screen {
+    position: absolute; inset: 0;
+    overflow-y: auto;
+    padding: 0;
+    display: none;
+    flex-direction: column;
+  }
+  .screen.active { display: flex; }
+  .screen-pad { padding: 12px 16px 80px; }
+
+  /* Tab bar */
+  .tab-bar {
+    flex-shrink: 0;
+    height: 56px;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+  }
+  .tab-btn {
+    flex: 1;
+    background: none; border: none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px;
+    color: #6b7280;
+    font-size: 10px; font-weight: 500;
+    padding: 4px 2px;
+    transition: color 120ms ease;
+    font-family: inherit;
+  }
+  .tab-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .tab-btn.active { color: var(--mv-primary); }
+
+  /* Common screen elements */
+  .greeting { font-size: 1.1rem; font-weight: 600; color: #111827; margin: 6px 0 2px; }
+  .subtle { font-size: 0.78rem; color: #6b7280; margin: 0; }
+  .card {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
+    padding: 14px; margin-top: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: #6b7280; font-weight: 600; }
+  .card-value { font-size: 1.5rem; font-weight: 700; color: #111827; margin: 4px 0 2px; }
+  .card-meta { font-size: 0.72rem; color: #6b7280; }
+
+  /* Quick actions */
+  .qa-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 12px; }
+  .qa-btn {
+    width: 100%; text-align: left; cursor: pointer;
+    background: var(--mv-primary-light); color: var(--mv-primary-dark);
+    border: 1px solid #bbf7d0; border-radius: 12px;
+    padding: 12px 14px; font-size: 0.92rem; font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+    transition: background 120ms ease, transform 120ms ease;
+    font-family: inherit;
+  }
+  .qa-btn:hover { background: #bbf7d0; }
+  .qa-btn:active { transform: scale(0.98); }
+  .qa-btn .qa-emoji { font-size: 1.2rem; }
+
+  /* Banner */
+  .checkin-banner {
+    margin-top: 12px; padding: 10px 12px;
+    background: linear-gradient(135deg, var(--mv-primary), var(--mv-primary-dark));
+    color: #fff; border-radius: 12px;
+    font-size: 0.85rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; gap: 8px;
+  }
+  .checkin-banner small { font-weight: 400; opacity: 0.9; display: block; font-size: 0.7rem; margin-top: 2px; }
+  .checkin-banner .arrow { font-size: 1.1rem; }
+
+  /* Splash */
+  .splash {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, var(--mv-primary-light) 0%, #ffffff 100%);
+    text-align: center; padding: 24px;
+  }
+  .splash-logo {
+    width: 64px; height: 64px; border-radius: 14px;
+    background: var(--mv-primary);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 28px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 16px;
+  }
+  .splash-title { font-size: 1.2rem; font-weight: 700; margin: 0; color: #111827; }
+  .splash-sub { font-size: 0.85rem; color: #6b7280; margin: 4px 0 24px; }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 3px solid var(--mv-primary-light);
+    border-top-color: var(--mv-primary);
+    border-radius: 50%;
+    animation: spin 800ms linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Header inside screen */
+  .scr-header {
+    position: sticky; top: 0;
+    background: #fff; z-index: 2;
+    padding: 10px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .scr-back {
+    background: none; border: none; cursor: pointer; padding: 4px;
+    color: var(--mv-primary); font-size: 1.1rem; font-weight: 600;
+    font-family: inherit;
+  }
+  .scr-title { font-size: 0.95rem; font-weight: 600; flex: 1; color: #111827; }
+
+  /* Chooser */
+  .chooser-grid { display: grid; gap: 10px; margin-top: 14px; }
+  .chooser-btn {
+    cursor: pointer;
+    background: #fff; border: 2px solid var(--mv-primary-light);
+    border-radius: 14px; padding: 18px 14px;
+    text-align: center; font-size: 0.95rem; font-weight: 600;
+    color: #111827;
+    transition: all 120ms ease;
+    font-family: inherit;
+  }
+  .chooser-btn:hover { border-color: var(--mv-primary); background: var(--mv-primary-light); }
+  .chooser-btn .ch-emoji { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+  .chooser-btn small { font-weight: 400; color: #6b7280; display: block; margin-top: 4px; font-size: 0.72rem; }
+
+  /* Camera */
+  .camera-screen {
+    flex: 1;
+    background: #000; color: #fff;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+  .camera-top {
+    padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    color: #fff; font-size: 0.8rem;
+  }
+  .camera-cancel { background: none; border: none; color: #fff; font-size: 0.9rem; cursor: pointer; font-family: inherit; }
+  .camera-viewfinder {
+    flex: 1;
+    background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #1f2937 100%);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .camera-viewfinder::before {
+    content: "";
+    position: absolute; inset: 20px;
+    border: 2px solid rgba(255,255,255,0.25); border-radius: 12px;
+  }
+  .camera-target {
+    color: rgba(255,255,255,0.5); font-size: 0.85rem;
+    text-align: center;
+  }
+  .camera-target svg { width: 56px; height: 56px; opacity: 0.4; margin-bottom: 8px; }
+  .camera-bottom {
+    padding: 16px 16px 24px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 24px;
+  }
+  .shutter {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 4px solid #fff;
+    cursor: pointer;
+    transition: transform 120ms ease, background 120ms ease;
+  }
+  .shutter:hover { background: rgba(255,255,255,0.3); }
+  .shutter:active { transform: scale(0.92); background: #fff; }
+  .flash {
+    position: absolute; inset: 0; background: #fff;
+    opacity: 0; pointer-events: none;
+    z-index: 10;
+  }
+  .flash.fire { animation: flash 250ms ease; }
+  @keyframes flash {
+    0% { opacity: 0; }
+    25% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Captured + analyzing */
+  .captured {
+    flex: 1;
+    background: #000; color: #fff;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .captured-image {
+    flex: 1;
+    background:
+      radial-gradient(circle at 30% 30%, #fde68a 0%, transparent 35%),
+      radial-gradient(circle at 70% 60%, #fef3c7 0%, transparent 30%),
+      linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    position: relative;
+  }
+  .captured-image::before {
+    content: "";
+    position: absolute; inset: 18% 22%;
+    background: radial-gradient(circle, #fff 0%, #f3f4f6 60%, #d1d5db 100%);
+    border-radius: 50%;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
+  }
+  .captured-image::after {
+    content: "";
+    position: absolute; top: 32%; left: 35%;
+    width: 30%; height: 25%;
+    background:
+      radial-gradient(ellipse, #92400e 0%, #b45309 50%, transparent 70%);
+    border-radius: 40%;
+    opacity: 0.7;
+  }
+  .analyzing-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff;
+    gap: 12px;
+  }
+  .analyzing-overlay .spinner {
+    border-color: rgba(255,255,255,0.25);
+    border-top-color: #fff;
+  }
+
+  /* AI result */
+  .result-photo {
+    height: 140px; flex-shrink: 0;
+    background:
+      radial-gradient(circle at 30% 30%, #fde68a 0%, transparent 35%),
+      radial-gradient(circle at 70% 60%, #fef3c7 0%, transparent 30%),
+      linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    position: relative;
+    border-radius: 0 0 14px 14px;
+  }
+  .result-photo::before {
+    content: "";
+    position: absolute; inset: 14% 28%;
+    background: radial-gradient(circle, #fff 0%, #f3f4f6 60%, #d1d5db 100%);
+    border-radius: 50%;
+  }
+  .result-photo::after {
+    content: "";
+    position: absolute; top: 30%; left: 38%;
+    width: 24%; height: 28%;
+    background: radial-gradient(ellipse, #92400e 0%, #b45309 50%, transparent 70%);
+    border-radius: 40%;
+    opacity: 0.7;
+  }
+
+  .ai-confidence {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--mv-primary-light); color: var(--mv-primary-dark);
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 0.68rem; font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .macros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+  .macro {
+    background: #f9fafb; border-radius: 8px;
+    padding: 8px 6px; text-align: center;
+  }
+  .macro-label { font-size: 0.62rem; text-transform: uppercase; color: #6b7280; font-weight: 600; }
+  .macro-input {
+    width: 100%; border: none; background: transparent;
+    text-align: center; font-size: 1rem; font-weight: 700; color: #111827;
+    padding: 2px 0; margin-top: 2px;
+    -moz-appearance: textfield;
+    font-family: inherit;
+  }
+  .macro-input::-webkit-outer-spin-button,
+  .macro-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .macro-input:focus { outline: 2px solid var(--mv-primary); outline-offset: 2px; border-radius: 4px; }
+  .macro-unit { font-size: 0.62rem; color: #6b7280; }
+
+  .correction-prompt {
+    margin-top: 14px;
+    background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .correction-prompt .cp-label {
+    font-size: 0.78rem; color: #4b5563; font-weight: 600;
+    display: block; margin-bottom: 6px;
+  }
+  .cp-options { display: flex; gap: 6px; }
+  .cp-opt {
+    cursor: pointer;
+    background: #fff; border: 1px solid #d1d5db; border-radius: 999px;
+    padding: 5px 10px; font-size: 0.75rem; font-weight: 500;
+    color: #4b5563;
+    transition: all 120ms ease;
+    font-family: inherit;
+  }
+  .cp-opt.selected, .cp-opt:hover {
+    background: var(--mv-primary); color: #fff; border-color: var(--mv-primary);
+  }
+
+  /* Primary save button */
+  .btn-primary {
+    width: 100%; cursor: pointer;
+    background: var(--mv-primary); color: #fff;
+    border: none; border-radius: 12px;
+    padding: 14px 16px; font-size: 0.95rem; font-weight: 600;
+    margin-top: 14px;
+    transition: background 120ms ease, transform 120ms ease;
+    font-family: inherit;
+  }
+  .btn-primary:hover { background: var(--mv-primary-dark); }
+  .btn-primary:active { transform: scale(0.99); }
+
+  /* Toast */
+  .toast {
+    position: absolute; bottom: 70px; left: 16px; right: 16px;
+    background: rgba(17, 24, 39, 0.94); color: #fff;
+    padding: 12px 14px; border-radius: 10px;
+    font-size: 0.82rem; text-align: center;
+    z-index: 30;
+    transform: translateY(20px); opacity: 0;
+    transition: transform 240ms ease, opacity 240ms ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Trends chart */
+  .trend-chart-wrap {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
+    padding: 12px; margin-top: 12px;
+  }
+  .trend-chart-wrap svg { width: 100%; height: auto; display: block; }
+  .trend-stats {
+    display: flex; justify-content: space-between; margin-top: 6px;
+    font-size: 0.72rem;
+  }
+  .trend-stat { color: #6b7280; }
+  .trend-stat strong { color: #111827; display: block; font-size: 0.95rem; }
+  .delta-pill {
+    display: inline-block; background: var(--mv-primary-light); color: var(--mv-primary-dark);
+    padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700;
+    margin-top: 6px;
+  }
+
+  /* Messages */
+  .message {
+    padding: 8px 10px; border-radius: 12px; font-size: 0.82rem;
+    max-width: 78%; margin-bottom: 8px; line-height: 1.4;
+  }
+  .message-from-them {
+    background: #f3f4f6; color: #111827;
+    border-top-left-radius: 4px; align-self: flex-start;
+  }
+  .message-from-me {
+    background: var(--mv-primary); color: #fff;
+    border-top-right-radius: 4px; align-self: flex-end; margin-left: auto;
+  }
+  .message-meta { font-size: 0.62rem; color: #6b7280; margin-bottom: 2px; }
+  .messages-thread { display: flex; flex-direction: column; padding: 4px 0; }
+  .message-input {
+    margin-top: 12px;
+    display: flex; gap: 6px;
+    border-top: 1px solid #e5e7eb; padding-top: 12px;
+  }
+  .message-input input {
+    flex: 1; border: 1px solid #e5e7eb; border-radius: 999px;
+    padding: 8px 12px; font-size: 0.85rem; font-family: inherit;
+  }
+  .message-input button {
+    background: var(--mv-primary); color: #fff; border: none;
+    border-radius: 999px; padding: 8px 14px; font-weight: 600; font-size: 0.82rem;
+    cursor: pointer; font-family: inherit;
+  }
+
+  /* Daily check-in */
+  .scale {
+    display: flex; gap: 4px; margin-top: 6px;
+  }
+  .scale-btn {
+    flex: 1; min-height: 36px;
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+    cursor: pointer; font-size: 0.85rem; font-weight: 600;
+    color: #4b5563;
+    transition: all 120ms ease;
+    font-family: inherit;
+  }
+  .scale-btn:hover { border-color: var(--mv-primary); }
+  .scale-btn.selected {
+    background: var(--mv-primary); color: #fff; border-color: var(--mv-primary);
+  }
+  .field-label {
+    font-size: 0.78rem; font-weight: 600; color: #4b5563;
+    margin-top: 14px; display: block;
+  }
+  select.field-select {
+    width: 100%; margin-top: 6px;
+    border: 1px solid #e5e7eb; border-radius: 8px;
+    padding: 8px 10px; font-size: 0.85rem; font-family: inherit;
+    background: #fff;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip {
+    cursor: pointer;
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 999px;
+    padding: 6px 12px; font-size: 0.78rem; font-weight: 500; color: #4b5563;
+    transition: all 120ms ease;
+    font-family: inherit;
+  }
+  .chip.selected { background: var(--mv-primary); color: #fff; border-color: var(--mv-primary); }
+
+  /* Profile */
+  .avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--mv-primary), var(--mv-primary-dark));
+    color: #fff; font-size: 1.5rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 8px auto 6px;
+  }
+  .profile-name { font-size: 1rem; font-weight: 700; text-align: center; margin: 0; color: #111827; }
+  .profile-sub { font-size: 0.78rem; color: #6b7280; text-align: center; margin: 2px 0 12px; }
+  .profile-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px;
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+    margin-bottom: 8px; font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .profile-row:hover { background: #f9fafb; }
+  .profile-row .row-label { color: #4b5563; font-weight: 500; }
+  .profile-row .row-value { color: #111827; font-weight: 600; font-size: 0.82rem; }
+
+  /* Help screen */
+  .help-form { display: flex; flex-direction: column; gap: 8px; }
+  .help-form input, .help-form textarea {
+    border: 1px solid #e5e7eb; border-radius: 8px;
+    padding: 10px 12px; font-size: 0.85rem; font-family: inherit;
+    width: 100%;
+  }
+  .help-form textarea { min-height: 90px; resize: vertical; }
+
+  /* External nav controls */
+  .nav-controls {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 12px;
+    background: #fff; border: 1px solid var(--border); border-radius: 999px;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-btn {
+    cursor: pointer;
+    background: var(--paper-light); border: 1px solid var(--border);
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 120ms ease;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .nav-btn:hover { background: var(--mv-primary); color: white; border-color: var(--mv-primary); }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; background: var(--paper-light); color: var(--ink-soft); }
+  .nav-label {
+    font-size: 0.82rem; font-weight: 600; color: var(--ink);
+    min-width: 200px; text-align: center;
+  }
+  .nav-label .nav-counter { color: var(--ink-muted); font-weight: 500; font-size: 0.72rem; display: block; }
+
+  .screen-title {
+    font-size: 1.1rem; font-weight: 700; text-align: center;
+    margin: 0 0 2px; color: #111827;
+  }
+  .screen-subtitle {
+    font-size: 0.8rem; color: #6b7280; text-align: center; margin: 0;
+  }
+
+  /* Outro section */
+  .outro {
+    max-width: 720px; margin: 0 auto; padding: 32px 24px 56px;
+    text-align: center;
+  }
+  .outro p { color: var(--ink-muted); font-size: 1.0625rem; margin-bottom: 20px; }
+  .outro-cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-outro {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px;
+    border-radius: 10px; font-size: 0.9375rem; font-weight: 600; text-decoration: none;
+    transition: all 0.15s; border: 1px solid transparent;
+  }
+  .btn-outro-primary { background: var(--ink); color: var(--paper); }
+  .btn-outro-primary:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+  .btn-outro-secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+  .btn-outro-secondary:hover { background: var(--bg-clean); border-color: var(--ink); }
+
+  /* Marketing-site footer */
+  .footer{background:var(--ink); color:var(--ink-soft); padding:64px 0 32px;}
+  .footer-inner{max-width:1200px; margin:0 auto; padding:0 24px;
+    display:grid; grid-template-columns:1.5fr 2.5fr; gap:48px;}
+  .footer-brand p{color:var(--ink-soft);}
+  .footer-tagline{color:var(--ink-soft); font-size:0.9375rem; margin-top:16px; max-width:280px;}
+  .footer-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+  .footer-col h4{color:var(--paper); font-size:0.875rem; text-transform:uppercase;
+    letter-spacing:0.08em; margin-bottom:16px;}
+  .footer-col a{display:block; color:var(--ink-soft); font-size:0.9375rem;
+    padding:6px 0; text-decoration:none;}
+  .footer-col a:hover{color:var(--quantum);}
+  .footer-bottom{max-width:1200px; margin:48px auto 0; padding:24px 24px 0;
+    border-top:1px solid #2a2926; display:flex; justify-content:space-between;
+    align-items:center; color:var(--ink-soft); font-size:0.875rem;}
+  .footer-bottom p{color:var(--ink-soft); font-size:0.875rem;}
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .topnav { display: none; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-cols { grid-template-columns: repeat(2,1fr); }
+    .page-intro { padding: 40px 24px 16px; }
+  }
+
+  /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+     black even in dark mode) need to flip to var(--text) so they stay readable. The phone-frame
+     screen interior intentionally stays light/cream because it represents the actual product UI
+     for Mountainview Medicine — do not theme that. */
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+  [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+  [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color: var(--text); }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] a:hover,
+  [data-theme="system"].sys-dark a:hover { color: var(--quantum); }
+  [data-theme="dark"] .brand-text strong,
+  [data-theme="system"].sys-dark .brand-text strong { color: var(--text); }
+  [data-theme="dark"] .brand svg circle:first-of-type,
+  [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke: var(--text); }
+  [data-theme="dark"] .topnav a:hover,
+  [data-theme="system"].sys-dark .topnav a:hover { color: var(--text); }
+  [data-theme="dark"] .topnav a.active,
+  [data-theme="system"].sys-dark .topnav a.active { color: var(--text); }
+  [data-theme="dark"] .back-link:hover,
+  [data-theme="system"].sys-dark .back-link:hover { color: var(--text); }
+  /* page-intro h1 and outro buttons hardcoded ink. */
+  [data-theme="dark"] .page-intro h1,
+  [data-theme="system"].sys-dark .page-intro h1 { color: var(--text); }
+  [data-theme="dark"] .btn-outro-secondary,
+  [data-theme="system"].sys-dark .btn-outro-secondary { color: var(--text); border-color: var(--border-strong); }
+  [data-theme="dark"] .btn-outro-secondary:hover,
+  [data-theme="system"].sys-dark .btn-outro-secondary:hover { background: var(--bg-clean); border-color: var(--text); }
+  /* Phone-frame demo nav controls (stage chrome around the iPhone) — these sit OUTSIDE the phone
+     screen and were styled with var(--ink) text on var(--bg-clean) bg, which becomes invisible. */
+  [data-theme="dark"] .nav-btn,
+  [data-theme="system"].sys-dark .nav-btn { color: var(--text); }
+  [data-theme="dark"] .nav-label,
+  [data-theme="system"].sys-dark .nav-label { color: var(--text); }
+  /* The .nav-controls container has hardcoded background:#fff — needs a dark surface in dark mode. */
+  [data-theme="dark"] .nav-controls,
+  [data-theme="system"].sys-dark .nav-controls { background: var(--surface); border-color: var(--border-strong); }
+  /* nav-btn uses paper-light bg (which switches automatically) but border + color need help */
+  [data-theme="dark"] .nav-btn,
+  [data-theme="system"].sys-dark .nav-btn { background: var(--paper-light); border-color: var(--border-strong); }
+  /* Outro paragraph (just outside the phone frame) */
+  [data-theme="dark"] .outro p,
+  [data-theme="system"].sys-dark .outro p { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html" class="active">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-intro">
+  <a href="demo.html" class="back-link">&larr; Back to demos</a>
+  <span class="eyebrow">Patient app</span>
+  <h1>This is the patient app, branded for Mountainview Medicine.</h1>
+  <p class="lede">
+    Click any screen to interact. Use the arrows below to step through key flows &mdash; daily logging, AI food vision, weight trends, messaging, and the daily check-in. All data is fictional.
+  </p>
+</div>
+
+<div class="stage">
+
+  <!-- Phone -->
+  <div class="phone-frame">
+    <div class="phone-screen">
+
+      <!-- SCREEN 1: Splash -->
+      <section class="screen active" data-screen="splash">
+        <div class="splash">
+          <div class="splash-logo">M</div>
+          <h2 class="splash-title">Mountainview Medicine</h2>
+          <p class="splash-sub">Welcome back, Jane</p>
+          <div class="spinner" aria-label="Loading"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: Home dashboard -->
+      <section class="screen" data-screen="home">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="screen-pad" style="flex:1; overflow-y:auto;">
+          <p class="greeting">Hello, Jane.</p>
+          <p class="subtle">Week 8 of your journey &middot; Wegovy 0.5mg</p>
+
+          <div class="checkin-banner" data-go="checkin">
+            <div>
+              Daily check-in
+              <small>How are you feeling today? &middot; ~60 seconds</small>
+            </div>
+            <span class="arrow">&rarr;</span>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Today&rsquo;s weight</div>
+            <div class="card-value"><span id="home-weight">207.6</span> lb</div>
+            <div class="card-meta">Logged this morning &middot; <span id="home-weight-delta" style="color:var(--mv-primary);font-weight:600;">&minus;1.3 lb from last week</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Today&rsquo;s nutrition</div>
+            <div class="card-value"><span id="home-kcal">290</span> <span style="font-size:0.95rem;color:#6b7280;font-weight:500;">/ ~1500 kcal</span></div>
+            <div class="card-meta">1 meal logged &middot; 18g protein &middot; 4g fiber</div>
+          </div>
+
+          <div class="qa-grid">
+            <button class="qa-btn" data-go="meal-chooser"><span class="qa-emoji">📷</span> Snap a meal</button>
+            <button class="qa-btn" data-go="weight-toast"><span class="qa-emoji">⚖️</span> Log weight</button>
+            <button class="qa-btn" data-go="messages"><span class="qa-emoji">💬</span> Message Dr. Chen</button>
+          </div>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- SCREEN 3: Meal entry chooser -->
+      <section class="screen" data-screen="meal-chooser">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="scr-header">
+          <button class="scr-back" data-go="home">&larr;</button>
+          <span class="scr-title">Add a meal</span>
+        </div>
+        <div class="screen-pad" style="flex:1;">
+          <p class="screen-subtitle" style="margin-top:14px;">How would you like to log this meal?</p>
+          <div class="chooser-grid">
+            <button class="chooser-btn" data-go="camera">
+              <span class="ch-emoji">📷</span>
+              Use AI Vision
+              <small>~30 seconds &middot; we parse it for you</small>
+            </button>
+            <button class="chooser-btn" data-go="manual-toast">
+              <span class="ch-emoji">✏️</span>
+              Manual entry
+              <small>Search USDA database</small>
+            </button>
+          </div>
+
+          <div class="card" style="margin-top:18px; background:#f9fafb;">
+            <div class="card-label">Today so far</div>
+            <p style="margin:6px 0 0; font-size:0.82rem; color:#4b5563;">1 meal &middot; 290 kcal &middot; targets: ~1500 kcal, 90g protein</p>
+          </div>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- SCREEN 4: Camera viewfinder -->
+      <section class="screen" data-screen="camera">
+        <div class="camera-screen">
+          <div class="camera-top">
+            <button class="camera-cancel" data-go="meal-chooser">Cancel</button>
+            <span style="opacity:0.7;">Lunch</span>
+            <span style="opacity:0;">.</span>
+          </div>
+          <div class="camera-viewfinder">
+            <div class="camera-target">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="13" r="4"/><path d="M5 7h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/></svg>
+              <div>Frame your meal</div>
+            </div>
+            <div class="flash" id="camera-flash"></div>
+          </div>
+          <div class="camera-bottom">
+            <button class="shutter" id="shutter-btn" aria-label="Capture"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: Captured + analyzing -->
+      <section class="screen" data-screen="analyzing">
+        <div class="captured">
+          <div class="camera-top">
+            <span style="opacity:0.7;">Captured</span>
+            <span style="opacity:0;">.</span>
+            <span style="opacity:0;">.</span>
+          </div>
+          <div class="captured-image">
+            <div class="analyzing-overlay">
+              <div class="spinner" aria-label="Analyzing"></div>
+              <div style="font-weight:600; font-size:0.9rem;">Analyzing your meal&hellip;</div>
+              <div style="font-size:0.72rem; opacity:0.75;">Privacy info stripped on device</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 6: AI vision result -->
+      <section class="screen" data-screen="result">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="scr-header">
+          <button class="scr-back" data-go="meal-chooser">&larr;</button>
+          <span class="scr-title">Review your meal</span>
+        </div>
+        <div class="screen-pad" style="flex:1; overflow-y:auto;">
+          <div class="result-photo"></div>
+
+          <div style="margin-top:14px;">
+            <span class="ai-confidence">AI confidence: high</span>
+            <h3 style="margin:0; font-size:1rem; color:#111827;">Greek yogurt with granola</h3>
+            <p class="subtle" style="margin-top:2px;">Detected 1 item &middot; you can edit any field</p>
+          </div>
+
+          <div class="macros">
+            <div class="macro">
+              <div class="macro-label">Calories</div>
+              <input class="macro-input" type="number" id="kcal-input" value="290" min="0" max="2000" />
+              <div class="macro-unit">kcal</div>
+            </div>
+            <div class="macro">
+              <div class="macro-label">Protein</div>
+              <input class="macro-input" type="number" id="protein-input" value="18" min="0" max="200" />
+              <div class="macro-unit">grams</div>
+            </div>
+            <div class="macro">
+              <div class="macro-label">Fiber</div>
+              <input class="macro-input" type="number" id="fiber-input" value="4" min="0" max="60" />
+              <div class="macro-unit">grams</div>
+            </div>
+          </div>
+
+          <div class="correction-prompt" id="correction-prompt" style="display:none;">
+            <span class="cp-label">Was this incorrect?</span>
+            <div class="cp-options">
+              <button class="cp-opt selected" data-intent="just_refining">Just refining</button>
+              <button class="cp-opt" data-intent="ai_got_it_wrong">AI got it wrong</button>
+            </div>
+            <div class="subtle" style="margin-top:8px; font-size:0.7rem;">
+              Helps us tell &ldquo;portion tweak&rdquo; apart from &ldquo;model error&rdquo; &middot; one tap, no follow-up.
+            </div>
+          </div>
+
+          <button class="btn-primary" data-go="save-meal">Save meal</button>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- SCREEN 7: Trends -->
+      <section class="screen" data-screen="trends">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="screen-pad" style="flex:1; overflow-y:auto;">
+          <h3 class="screen-title" style="text-align:left; margin-top:6px;">Your trends</h3>
+          <p class="subtle" style="text-align:left;">Weight, nutrition, side effects</p>
+
+          <div class="trend-chart-wrap">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div class="card-label">Weight (8 weeks)</div>
+                <div class="delta-pill">&minus;10.8 lb total</div>
+              </div>
+              <div style="text-align:right; font-size:0.7rem; color:#6b7280;">Mar 14 &mdash; May 9</div>
+            </div>
+            <svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg" style="margin-top:8px;">
+              <defs>
+                <linearGradient id="grad-area" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#16a34a" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#16a34a" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="30" y1="20" x2="270" y2="20" stroke="#f3f4f6" stroke-width="1"/>
+              <line x1="30" y1="60" x2="270" y2="60" stroke="#f3f4f6" stroke-width="1"/>
+              <line x1="30" y1="100" x2="270" y2="100" stroke="#f3f4f6" stroke-width="1"/>
+              <line x1="30" y1="120" x2="270" y2="120" stroke="#e5e7eb" stroke-width="1"/>
+              <text x="6" y="24" font-size="9" fill="#9ca3af">220</text>
+              <text x="6" y="64" font-size="9" fill="#9ca3af">214</text>
+              <text x="6" y="104" font-size="9" fill="#9ca3af">208</text>
+              <path d="M 50 30.7 L 80 41.3 L 110 52 L 140 66.7 L 170 72.7 L 200 84 L 230 94 L 260 102.7 L 260 120 L 50 120 Z" fill="url(#grad-area)"/>
+              <polyline points="50,30.7 80,41.3 110,52 140,66.7 170,72.7 200,84 230,94 260,102.7"
+                        fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="50" cy="30.7" r="3.5" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+              <circle cx="80" cy="41.3" r="2.5" fill="#16a34a"/>
+              <circle cx="110" cy="52" r="2.5" fill="#16a34a"/>
+              <circle cx="140" cy="66.7" r="2.5" fill="#16a34a"/>
+              <circle cx="170" cy="72.7" r="2.5" fill="#16a34a"/>
+              <circle cx="200" cy="84" r="2.5" fill="#16a34a"/>
+              <circle cx="230" cy="94" r="2.5" fill="#16a34a"/>
+              <circle cx="260" cy="102.7" r="4" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+              <text x="50" y="20" font-size="9" fill="#6b7280" text-anchor="middle">218.4</text>
+              <text x="260" y="116" font-size="9" fill="#15803d" font-weight="600" text-anchor="end">207.6</text>
+              <text x="50" y="135" font-size="9" fill="#9ca3af" text-anchor="middle">W1</text>
+              <text x="155" y="135" font-size="9" fill="#9ca3af" text-anchor="middle">W4</text>
+              <text x="260" y="135" font-size="9" fill="#9ca3af" text-anchor="middle">W8</text>
+            </svg>
+            <div class="trend-stats">
+              <div class="trend-stat"><strong>218.4 lb</strong>Starting</div>
+              <div class="trend-stat" style="text-align:center;"><strong>&minus;5.0%</strong>Of body weight</div>
+              <div class="trend-stat" style="text-align:right;"><strong>207.6 lb</strong>Today</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Nutrition (last 7 days)</div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+              <div>
+                <div style="font-size:0.85rem; color:#6b7280;">Avg calories</div>
+                <div style="font-weight:700; font-size:1.05rem; color:#111827;">1,480 <span style="font-weight:400; font-size:0.78rem; color:#6b7280;">kcal/day</span></div>
+              </div>
+              <div>
+                <div style="font-size:0.85rem; color:#6b7280;">Avg protein</div>
+                <div style="font-weight:700; font-size:1.05rem; color:#111827;">78 <span style="font-weight:400; font-size:0.78rem; color:#6b7280;">g/day</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Side effects</div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--mv-primary);"></span>
+              <span style="font-size:0.85rem; color:#111827;">Mild nausea</span>
+              <span style="font-size:0.72rem; color:#6b7280; margin-left:auto;">Resolved week 6</span>
+            </div>
+            <p class="subtle" style="margin-top:6px; font-size:0.72rem;">No active symptoms reported this week.</p>
+          </div>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- SCREEN 8: Messages -->
+      <section class="screen" data-screen="messages">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="scr-header">
+          <button class="scr-back" data-go="home">&larr;</button>
+          <span class="scr-title">Dr. Sarah Chen, MD</span>
+        </div>
+        <div class="screen-pad" style="flex:1; display:flex; flex-direction:column; padding-bottom:12px;">
+          <div class="messages-thread" style="flex:1; overflow-y:auto;">
+            <div class="message-meta" style="text-align:center; margin: 6px 0;">Yesterday, 3:42 PM</div>
+
+            <div class="message message-from-them">
+              Hi Jane &mdash; how are the meals going this week? Any return of the nausea?
+            </div>
+
+            <div class="message message-from-me">
+              Hi Dr. Chen, the nausea has stopped &mdash; should we still increase to 1.0mg next week?
+            </div>
+
+            <div class="message message-from-them">
+              Great news. Yes, let&rsquo;s plan to titrate up. I&rsquo;ll send instructions in tomorrow&rsquo;s check-in.
+            </div>
+
+            <div class="message-meta" style="text-align:center; margin: 8px 0 4px;">Today, 9:18 AM</div>
+            <div class="message message-from-them">
+              Saw your morning weight &mdash; nice steady decline. Keep the protein up at breakfast.
+            </div>
+          </div>
+
+          <form class="message-input" id="msg-form" autocomplete="off">
+            <input type="text" id="msg-text" placeholder="Message Dr. Chen&hellip;" />
+            <button type="submit">Send</button>
+          </form>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- SCREEN 9: Daily check-in -->
+      <section class="screen" data-screen="checkin">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="scr-header">
+          <button class="scr-back" data-go="home">&larr;</button>
+          <span class="scr-title">Daily check-in</span>
+        </div>
+        <div class="screen-pad" style="flex:1; overflow-y:auto;">
+          <p class="screen-subtitle" style="margin-top:8px;">How are you feeling today?</p>
+
+          <span class="field-label">Energy</span>
+          <div class="scale" data-field="energy">
+            <button class="scale-btn">1</button>
+            <button class="scale-btn">2</button>
+            <button class="scale-btn">3</button>
+            <button class="scale-btn selected">4</button>
+            <button class="scale-btn">5</button>
+          </div>
+
+          <span class="field-label">Hunger</span>
+          <div class="scale" data-field="hunger">
+            <button class="scale-btn">1</button>
+            <button class="scale-btn selected">2</button>
+            <button class="scale-btn">3</button>
+            <button class="scale-btn">4</button>
+            <button class="scale-btn">5</button>
+          </div>
+
+          <span class="field-label">Mood</span>
+          <div class="scale" data-field="mood">
+            <button class="scale-btn">1</button>
+            <button class="scale-btn">2</button>
+            <button class="scale-btn">3</button>
+            <button class="scale-btn selected">4</button>
+            <button class="scale-btn">5</button>
+          </div>
+
+          <span class="field-label">Sleep last night</span>
+          <select class="field-select">
+            <option>5 hours</option>
+            <option>6 hours</option>
+            <option selected>7 hours</option>
+            <option>8 hours</option>
+            <option>9+ hours</option>
+          </select>
+
+          <span class="field-label">Side effects today</span>
+          <div class="chips" data-field="side-effects">
+            <button class="chip">Nausea</button>
+            <button class="chip">Fatigue</button>
+            <button class="chip">Headache</button>
+            <button class="chip selected">None</button>
+          </div>
+
+          <button class="btn-primary" data-go="checkin-toast">Submit</button>
+          <p class="subtle" style="margin-top:10px; font-size:0.7rem; text-align:center;">
+            Most patients finish in under a minute.
+          </p>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- SCREEN 10: Profile -->
+      <section class="screen" data-screen="profile">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="screen-pad" style="flex:1; overflow-y:auto;">
+          <div class="avatar">JD</div>
+          <h3 class="profile-name">Jane Doe</h3>
+          <p class="profile-sub">Mountainview Medicine &middot; member since March 2026</p>
+
+          <div class="profile-row">
+            <span class="row-label">Active program</span>
+            <span class="row-value">Wegovy 0.5 → 1.0mg</span>
+          </div>
+          <div class="profile-row">
+            <span class="row-label">Care team</span>
+            <span class="row-value">Dr. Sarah Chen</span>
+          </div>
+          <div class="profile-row">
+            <span class="row-label">Connected wearable</span>
+            <span class="row-value">Apple Health</span>
+          </div>
+          <div class="profile-row" data-go="help">
+            <span class="row-label">Help &amp; Support</span>
+            <span class="row-value">&rsaquo;</span>
+          </div>
+          <div class="profile-row">
+            <span class="row-label">Privacy &amp; data</span>
+            <span class="row-value">&rsaquo;</span>
+          </div>
+          <div class="profile-row">
+            <span class="row-label">Sign out</span>
+            <span class="row-value" style="color:var(--danger);">&rsaquo;</span>
+          </div>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- SCREEN 11: Help -->
+      <section class="screen" data-screen="help">
+        <div class="status-bar"><span>9:41</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="scr-header">
+          <button class="scr-back" data-go="profile">&larr;</button>
+          <span class="scr-title">Help &amp; Support</span>
+        </div>
+        <div class="screen-pad" style="flex:1; overflow-y:auto;">
+          <p style="font-size:0.85rem; color:#4b5563; margin-top:8px;">Send a request to the Quantal support team. We respond within 1 business day.</p>
+
+          <form class="help-form" onsubmit="event.preventDefault(); window.__demo.toast('Support request sent. We&apos;ll be in touch.');">
+            <span class="field-label" style="margin-top:10px;">Subject</span>
+            <input type="text" placeholder="What do you need help with?" />
+
+            <span class="field-label">Description</span>
+            <textarea placeholder="Tell us what&rsquo;s happening&hellip;"></textarea>
+
+            <button type="submit" class="btn-primary">Send support request</button>
+          </form>
+        </div>
+        <div class="tab-bar"></div>
+      </section>
+
+      <!-- Toast -->
+      <div class="toast" id="toast"></div>
+
+    </div>
+  </div>
+
+  <!-- External nav controls -->
+  <div class="nav-controls">
+    <button class="nav-btn" id="prev-btn" aria-label="Previous screen">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="nav-label">
+      <span id="nav-screen-name">Splash</span>
+      <span class="nav-counter" id="nav-counter">1 of 11</span>
+    </div>
+    <button class="nav-btn" id="next-btn" aria-label="Next screen">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <p class="subtle" style="text-align:center; max-width:320px; color:var(--ink-muted);">
+    Tip: tap any green button or use the bottom tab bar to navigate the app like Jane would. The arrows above step through screens.
+  </p>
+</div>
+
+<!-- Outro -->
+<div class="outro">
+  <p>Liked it? See the clinician dashboard demo or talk to founders.</p>
+  <div class="outro-cta-row">
+    <a href="demo-clinician.html" class="btn-outro btn-outro-secondary">See the clinician dashboard</a>
+    <a href="contact.html" class="btn-outro btn-outro-primary">
+      Talk to founders
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<!-- Tab bar template (cloned into each screen) -->
+<template id="tab-bar-tpl">
+  <button class="tab-btn" data-tab="home" data-go="home">
+    <svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>
+    Home
+  </button>
+  <button class="tab-btn" data-tab="log" data-go="meal-chooser">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Log
+  </button>
+  <button class="tab-btn" data-tab="trends" data-go="trends">
+    <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+    Trends
+  </button>
+  <button class="tab-btn" data-tab="messages" data-go="messages">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Messages
+  </button>
+  <button class="tab-btn" data-tab="more" data-go="profile">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg>
+    More
+  </button>
+</template>
+
+<script>
+(function () {
+  // ============================================================
+  // State + screen registry
+  // ============================================================
+  const SCREENS = [
+    { id: 'splash',        label: 'Splash',           tab: null },
+    { id: 'home',          label: 'Home dashboard',   tab: 'home' },
+    { id: 'meal-chooser',  label: 'Log a meal',       tab: 'log' },
+    { id: 'camera',        label: 'AI vision capture', tab: 'log' },
+    { id: 'analyzing',     label: 'Analyzing...',     tab: 'log' },
+    { id: 'result',        label: 'AI result + edit', tab: 'log' },
+    { id: 'trends',        label: 'Trends',           tab: 'trends' },
+    { id: 'messages',      label: 'Messages',         tab: 'messages' },
+    { id: 'checkin',       label: 'Daily check-in',   tab: 'home' },
+    { id: 'profile',       label: 'Profile / More',   tab: 'more' },
+    { id: 'help',          label: 'Help & Support',   tab: 'more' },
+  ];
+
+  // ============================================================
+  // Tab bar mounting (clone template into each screen)
+  // ============================================================
+  function mountTabBars() {
+    const tpl = document.getElementById('tab-bar-tpl');
+    document.querySelectorAll('.tab-bar').forEach(slot => {
+      slot.appendChild(tpl.content.cloneNode(true));
+    });
+  }
+
+  // ============================================================
+  // Screen navigation
+  // ============================================================
+  function getActiveScreenId() {
+    const el = document.querySelector('.screen.active');
+    return el ? el.getAttribute('data-screen') : SCREENS[0].id;
+  }
+
+  function showScreen(id, opts) {
+    opts = opts || {};
+    const target = document.querySelector('.screen[data-screen="' + id + '"]');
+    if (!target) return;
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    target.classList.add('active');
+
+    // Update tab bar active state
+    const def = SCREENS.find(s => s.id === id);
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', def && btn.getAttribute('data-tab') === def.tab);
+    });
+
+    // Update nav controls
+    const idx = SCREENS.findIndex(s => s.id === id);
+    document.getElementById('nav-screen-name').textContent = def ? def.label : id;
+    document.getElementById('nav-counter').textContent = (idx + 1) + ' of ' + SCREENS.length;
+    document.getElementById('prev-btn').disabled = idx <= 0;
+    document.getElementById('next-btn').disabled = idx >= SCREENS.length - 1;
+
+    // Mount toast into the new active screen
+    const toast = document.getElementById('toast');
+    if (toast && target.querySelector('.viewport, .splash, .camera-screen, .captured, .screen-pad, .messages-thread')) {
+      target.appendChild(toast);
+    }
+
+    // Auto-advance: splash -> home, analyzing -> result
+    if (id === 'splash' && !opts.fromNav) {
+      setTimeout(() => { if (getActiveScreenId() === 'splash') showScreen('home'); }, 1800);
+    }
+    if (id === 'analyzing' && !opts.fromNav) {
+      setTimeout(() => {
+        if (getActiveScreenId() === 'analyzing') {
+          showScreen('result');
+          setTimeout(() => {
+            const cp = document.getElementById('correction-prompt');
+            if (cp) cp.style.display = 'block';
+          }, 200);
+        }
+      }, 2000);
+    }
+  }
+
+  // ============================================================
+  // Toast
+  // ============================================================
+  function toast(msg, ms) {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    const active = document.querySelector('.screen.active');
+    if (active) active.appendChild(el);
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(window.__toastT);
+    window.__toastT = setTimeout(() => el.classList.remove('show'), ms || 3000);
+  }
+
+  // ============================================================
+  // Camera shutter
+  // ============================================================
+  function wireCamera() {
+    const shutter = document.getElementById('shutter-btn');
+    const flash = document.getElementById('camera-flash');
+    if (!shutter) return;
+    shutter.addEventListener('click', () => {
+      if (flash) {
+        flash.classList.remove('fire');
+        void flash.offsetWidth;
+        flash.classList.add('fire');
+      }
+      setTimeout(() => showScreen('analyzing'), 250);
+    });
+  }
+
+  // ============================================================
+  // Save meal: roll new totals into Home
+  // ============================================================
+  function wireSaveMeal() {
+    document.querySelectorAll('[data-go="save-meal"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const kcal = parseInt(document.getElementById('kcal-input').value, 10) || 0;
+        const home = document.getElementById('home-kcal');
+        if (home) {
+          const newTotal = 290 + kcal;
+          home.textContent = String(newTotal);
+        }
+        showScreen('home');
+        toast('Thanks — your edits help us improve over time.', 3000);
+      });
+    });
+
+    document.querySelectorAll('.cp-opt').forEach(o => {
+      o.addEventListener('click', () => {
+        document.querySelectorAll('.cp-opt').forEach(x => x.classList.remove('selected'));
+        o.classList.add('selected');
+      });
+    });
+  }
+
+  // ============================================================
+  // Quick action toasts
+  // ============================================================
+  function wireWeightToast() {
+    document.querySelectorAll('[data-go="weight-toast"]').forEach(b => {
+      b.addEventListener('click', () => toast('Today’s weight already logged: 207.6 lb', 2800));
+    });
+    document.querySelectorAll('[data-go="manual-toast"]').forEach(b => {
+      b.addEventListener('click', () => toast('Manual entry opens USDA search', 2800));
+    });
+    document.querySelectorAll('[data-go="checkin-toast"]').forEach(b => {
+      b.addEventListener('click', () => {
+        showScreen('home');
+        toast('Logged — see you tomorrow.', 2800);
+      });
+    });
+  }
+
+  // ============================================================
+  // Daily check-in: scale + chip toggle
+  // ============================================================
+  function wireCheckin() {
+    document.querySelectorAll('.scale').forEach(group => {
+      group.addEventListener('click', e => {
+        const btn = e.target.closest('.scale-btn');
+        if (!btn) return;
+        group.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+    document.querySelectorAll('.chips').forEach(group => {
+      group.addEventListener('click', e => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        if (chip.textContent.trim() === 'None') {
+          group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+          chip.classList.add('selected');
+        } else {
+          const none = Array.from(group.querySelectorAll('.chip')).find(c => c.textContent.trim() === 'None');
+          if (none) none.classList.remove('selected');
+          chip.classList.toggle('selected');
+        }
+      });
+    });
+  }
+
+  // ============================================================
+  // Messages: send (in-memory, doesn't persist)
+  // ============================================================
+  function wireMessages() {
+    const form = document.getElementById('msg-form');
+    if (!form) return;
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const input = document.getElementById('msg-text');
+      const text = (input.value || '').trim();
+      if (!text) return;
+      const thread = form.previousElementSibling;
+      const div = document.createElement('div');
+      div.className = 'message message-from-me';
+      div.textContent = text;
+      thread.appendChild(div);
+      thread.scrollTop = thread.scrollHeight;
+      input.value = '';
+    });
+  }
+
+  // ============================================================
+  // Generic [data-go] click router
+  // ============================================================
+  function wireGoLinks() {
+    document.body.addEventListener('click', e => {
+      const t = e.target.closest('[data-go]');
+      if (!t) return;
+      const id = t.getAttribute('data-go');
+      if (['save-meal', 'weight-toast', 'manual-toast', 'checkin-toast'].indexOf(id) !== -1) return;
+      e.preventDefault();
+      showScreen(id);
+    });
+  }
+
+  // ============================================================
+  // Nav controls
+  // ============================================================
+  function wireNavControls() {
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      const idx = SCREENS.findIndex(s => s.id === getActiveScreenId());
+      if (idx > 0) showScreen(SCREENS[idx - 1].id, { fromNav: true });
+    });
+    document.getElementById('next-btn').addEventListener('click', () => {
+      const idx = SCREENS.findIndex(s => s.id === getActiveScreenId());
+      if (idx < SCREENS.length - 1) showScreen(SCREENS[idx + 1].id, { fromNav: true });
+    });
+  }
+
+  // ============================================================
+  // Boot
+  // ============================================================
+  function boot() {
+    mountTabBars();
+    wireGoLinks();
+    wireCamera();
+    wireSaveMeal();
+    wireWeightToast();
+    wireCheckin();
+    wireMessages();
+    wireNavControls();
+
+    window.__demo = { toast: toast, showScreen: showScreen };
+
+    showScreen('splash');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
+<script>
+  // Theme management (marketing chrome)
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>

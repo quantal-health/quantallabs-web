@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Quantal Health</title>
+  <meta name="description" content="Why we built Quantal Health: a purpose-built care platform for weight-loss clinics treating GLP-1 patients." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+      --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+      --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+      --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
+      --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+      --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+      --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+      --border:var(--paper-dark); --border-strong:#D4CFC2;
+      --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+      --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+      --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+      --font-hero:clamp(2.75rem, 5vw, 4.5rem);
+      --font-h1:2.5rem; --font-h2:2rem; --font-h3:1.375rem; --font-h4:1.125rem;
+      --font-body-large:1.25rem; --font-body:1rem; --font-small:0.875rem; --font-eyebrow:0.75rem;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+      font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+      -webkit-font-smoothing:antialiased; line-height:1.6;
+      transition:background 0.2s ease, color 0.2s ease;}
+
+    /* Dark mode */
+    [data-theme="dark"],
+    [data-theme="system"].sys-dark {
+      --bg:#1B1A18; --bg-clean:#252320; --surface:#252320;
+      --paper-light:#1F1D1B; --paper-dark:#2C2A27;
+      --text:#F4EFE2; --text-secondary:#B8B3A8; --text-muted:#7A7570;
+      --border:rgba(244,239,226,0.10); --border-strong:rgba(244,239,226,0.18);
+      --ink-muted:#B8B3A8; --ink-soft:#7A7570;
+      --shadow-sm:0 1px 2px rgb(0 0 0 / 0.30);
+      --shadow-md:0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+      --shadow-lg:0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+    }
+    [data-theme="dark"] .topbar,
+    [data-theme="system"].sys-dark .topbar { background:rgba(27,26,24,0.92); }
+    [data-theme="dark"] .topnav-cta,
+    [data-theme="system"].sys-dark .topnav-cta { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .topnav-cta:hover,
+    [data-theme="system"].sys-dark .topnav-cta:hover { background:var(--quantum-dark); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary,
+    [data-theme="system"].sys-dark .btn-primary { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary:hover,
+    [data-theme="system"].sys-dark .btn-primary:hover { background:var(--quantum-dark); color:#1B1A18; }
+
+    /* Brand attribution */
+    .brand-attribution {
+      display:block; font-size:0.7rem; font-weight:400; font-style:italic;
+      color:var(--text-muted); letter-spacing:0; line-height:1.1; margin-top:2px;
+    }
+
+    /* Topnav back link */
+    .topnav-back {
+      display:inline-flex; align-items:center;
+      font-size:0.8125rem; color:var(--text-muted); font-weight:400;
+      padding:6px 10px; border-radius:6px; margin-right:8px;
+      transition:color 0.15s, background 0.15s;
+    }
+    .topnav-back:hover { color:var(--text); background:rgba(27,26,24,0.05); text-decoration:none; }
+    [data-theme="dark"] .topnav-back:hover,
+    [data-theme="system"].sys-dark .topnav-back:hover { background:rgba(244,239,226,0.06); }
+
+    /* Settings (theme) toggle */
+    .settings-wrap { position:relative; }
+    .settings-toggle {
+      width:34px; height:34px; border-radius:8px;
+      border:1px solid var(--border-strong); background:none; cursor:pointer;
+      color:var(--text-secondary); display:flex; align-items:center; justify-content:center;
+      transition:background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .settings-toggle:hover { background:var(--bg-clean); color:var(--text); }
+    .settings-toggle svg { width:16px; height:16px; }
+    .settings-panel {
+      position:absolute; top:calc(100% + 8px); right:0; width:210px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; box-shadow:var(--shadow-lg); padding:12px;
+      opacity:0; pointer-events:none; transform:translateY(-4px);
+      transition:opacity 0.15s ease, transform 0.15s ease; z-index:200;
+    }
+    .settings-panel.open { opacity:1; pointer-events:all; transform:translateY(0); }
+    .settings-lbl {
+      font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+      color:var(--text-muted); margin-bottom:8px; padding:0 4px;
+    }
+    .theme-opts { display:flex; flex-direction:column; gap:2px; }
+    .theme-opt {
+      display:flex; align-items:center; gap:9px;
+      padding:8px 10px; border-radius:8px; width:100%;
+      font-size:0.875rem; font-weight:500; color:var(--text-secondary);
+      background:none; border:none; cursor:pointer; font-family:inherit;
+      transition:background 0.15s, color 0.15s;
+    }
+    .theme-opt:hover { background:var(--bg-clean); color:var(--text); }
+    .theme-opt.active { background:var(--bg-clean); color:var(--quantum-dark); font-weight:600; }
+    [data-theme="dark"] .theme-opt.active,
+    [data-theme="system"].sys-dark .theme-opt.active { color:var(--quantum); }
+    .theme-opt svg { width:15px; height:15px; flex-shrink:0; }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    a{color:var(--ink); text-decoration:none}
+    a:hover{color:var(--quantum-dark)}
+    h1,h2,h3,h4{margin:0; line-height:1.2; letter-spacing:-0.015em; color:var(--ink)}
+    h1{font-size:var(--font-hero); font-weight:800; letter-spacing:-0.025em}
+    h2{font-size:var(--font-h2); font-weight:700}
+    h3{font-size:var(--font-h3); font-weight:600}
+    h4{font-size:var(--font-h4); font-weight:600}
+    p{margin:0; color:var(--text-secondary)}
+
+    /* Topbar */
+    .topbar{background:rgba(244,239,226,0.95); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50;}
+    .topbar-inner{max-width:1200px; margin:0 auto; padding:16px 24px;
+      display:flex; align-items:center; gap:32px;}
+    .brand{display:flex; align-items:center; gap:10px;}
+    .brand-text{font-weight:400; color:var(--ink-muted); font-size:1.125rem; letter-spacing:-0.01em;}
+    .brand-text strong{font-weight:700; color:var(--ink);}
+    .topnav{display:flex; gap:24px; flex:1;}
+    .topnav a{color:var(--ink-muted); font-size:0.9375rem;}
+    .topnav a:hover{color:var(--ink);}
+    .topnav a.active{color:var(--ink); font-weight:600;}
+    .topnav-cta{background:var(--ink); color:var(--paper); padding:10px 18px;
+      border-radius:8px; font-size:0.9375rem; font-weight:600; transition:all 0.15s;}
+    .topnav-cta:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+
+    .container{max-width:1200px; margin:0 auto; padding:0 24px;}
+    .narrow{max-width:780px; margin:0 auto;}
+    section{padding:96px 0;}
+    section.hero{padding:128px 0 96px; text-align:center;}
+
+    /* Hero */
+    .eyebrow{display:inline-block; font-size:var(--font-eyebrow); font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase; color:var(--quantum-dark);
+      background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:24px;}
+    .hero h1{max-width:880px; margin:0 auto;}
+    .hero p.lede{font-size:var(--font-body-large); color:var(--text-secondary);
+      max-width:680px; margin:24px auto 0;}
+
+    /* Mission */
+    .mission p{font-size:1.125rem; margin-bottom:20px; color:var(--text-secondary);}
+    .mission p strong{color:var(--ink); font-weight:600;}
+
+    /* Section heads */
+    .section-head{max-width:780px; margin:0 auto 56px;}
+    .section-head.center{text-align:center;}
+    .section-head h2{margin-bottom:14px;}
+    .section-head p{font-size:var(--font-body-large);}
+
+    /* Differentiators */
+    section.cream{background:var(--paper-light); border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+    .diff-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px;}
+    .diff-card{background:var(--surface); border:1px solid var(--border);
+      border-radius:14px; padding:32px; box-shadow:var(--shadow-sm);}
+    .diff-icon{width:44px; height:44px; border-radius:10px; background:var(--quantum-soft);
+      display:flex; align-items:center; justify-content:center; margin-bottom:20px;}
+    .diff-icon svg{width:24px; height:24px; color:var(--quantum-dark);}
+    .diff-card h3{margin-bottom:10px;}
+    .diff-card p{font-size:0.9875rem;}
+
+    /* Team */
+    .team-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:32px;}
+    .founder-card{background:var(--surface); border:1px solid var(--border);
+      border-radius:14px; padding:36px; box-shadow:var(--shadow-sm);}
+    .founder-portrait{width:80px; height:80px; border-radius:50%; background:var(--quantum-soft);
+      display:flex; align-items:center; justify-content:center; margin-bottom:20px;
+      font-size:1.75rem; font-weight:700; color:var(--quantum-dark); letter-spacing:-0.02em;}
+    .founder-card h3{margin-bottom:4px;}
+    .founder-role{font-size:0.875rem; color:var(--quantum-dark); font-weight:600;
+      letter-spacing:0.02em; text-transform:uppercase; margin-bottom:16px;}
+    .founder-card p{font-size:0.9875rem;}
+
+    /* Honest box */
+    .honest-box{background:var(--ink); color:var(--paper); border-radius:14px;
+      padding:40px; margin-top:40px;}
+    .honest-box h3{color:var(--paper); margin-bottom:12px;}
+    .honest-box p{color:var(--ink-soft); font-size:1.0625rem;}
+
+    /* Why now */
+    .why-now p{font-size:1.0625rem; color:var(--text-secondary);}
+    .why-now p strong{color:var(--ink); font-weight:600;}
+
+    /* Bottom CTA */
+    .bottom-cta{background:var(--paper-light); border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border); padding:96px 0; text-align:center;}
+    .bottom-cta h2{max-width:680px; margin:0 auto 16px;}
+    .bottom-cta p{max-width:560px; margin:0 auto 32px;}
+    .cta-row{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:20px;}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 22px;
+      border-radius:10px; font-size:1rem; font-weight:600; text-decoration:none;
+      transition:all 0.15s; border:1px solid transparent; cursor:pointer;}
+    .btn-primary{background:var(--ink); color:var(--paper);}
+    .btn-primary:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+    .btn-secondary{background:transparent; color:var(--ink); border-color:var(--border-strong);}
+    .btn-secondary:hover{background:var(--bg-clean); border-color:var(--ink);}
+
+    /* Footer */
+    .footer{background:var(--ink); color:var(--ink-soft); padding:64px 0 32px;}
+    .footer-inner{max-width:1200px; margin:0 auto; padding:0 24px;
+      display:grid; grid-template-columns:1.5fr 2.5fr; gap:48px;}
+    .footer-tagline{color:var(--ink-soft); font-size:0.9375rem; margin-top:16px; max-width:280px;}
+    .footer-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+    .footer-col h4{color:var(--paper); font-size:0.875rem; text-transform:uppercase;
+      letter-spacing:0.08em; margin-bottom:16px;}
+    .footer-col a{display:block; color:var(--ink-soft); font-size:0.9375rem; padding:6px 0;}
+    .footer-col a:hover{color:var(--quantum);}
+    .footer-bottom{max-width:1200px; margin:48px auto 0; padding:24px 24px 0;
+      border-top:1px solid #2a2926; display:flex; justify-content:space-between;
+      align-items:center; font-size:0.875rem;}
+    .footer-bottom p{color:var(--ink-soft);}
+
+    @media (max-width:900px){
+      .diff-grid{grid-template-columns:1fr;}
+      .team-grid{grid-template-columns:1fr;}
+      .topnav{display:none;}
+      .footer-inner{grid-template-columns:1fr;}
+      .footer-cols{grid-template-columns:repeat(2,1fr);}
+      section{padding:64px 0;}
+    }
+
+    /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+       black even in dark mode) need to flip to var(--text) so they stay readable. */
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+    [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+    [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color:var(--text); }
+    [data-theme="dark"] a,
+    [data-theme="system"].sys-dark a { color:var(--text); }
+    [data-theme="dark"] a:hover,
+    [data-theme="system"].sys-dark a:hover { color:var(--quantum); }
+    [data-theme="dark"] .brand-text strong,
+    [data-theme="system"].sys-dark .brand-text strong { color:var(--text); }
+    [data-theme="dark"] .brand svg circle:first-of-type,
+    [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke:var(--text); }
+    [data-theme="dark"] .topnav a:hover,
+    [data-theme="system"].sys-dark .topnav a:hover { color:var(--text); }
+    [data-theme="dark"] .topnav a.active,
+    [data-theme="system"].sys-dark .topnav a.active { color:var(--text); }
+    [data-theme="dark"] .btn-secondary,
+    [data-theme="system"].sys-dark .btn-secondary { color:var(--text); border-color:var(--border-strong); }
+    [data-theme="dark"] .btn-secondary:hover,
+    [data-theme="system"].sys-dark .btn-secondary:hover { background:var(--bg-clean); border-color:var(--text); }
+    /* Bold emphasis runs inside body copy used color:var(--ink) — flip to text. */
+    [data-theme="dark"] .mission p strong,
+    [data-theme="system"].sys-dark .mission p strong { color:var(--text); }
+    [data-theme="dark"] .why-now p strong,
+    [data-theme="system"].sys-dark .why-now p strong { color:var(--text); }
+    /* .honest-box uses var(--ink) bg + paper text — already an inverse panel, leave as-is. */
+
+    /* Section heads + bottom CTA already get color via the global h1-h4 dark override above. */
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html">Demo</a>
+      <a href="about.html" class="active">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">About</span>
+    <h1>Why we built Quantal Health.</h1>
+    <p class="lede">A small team building the care platform that GLP-1 clinics deserve — and that, frankly, didn't exist yet.</p>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section>
+  <div class="container narrow mission">
+    <span class="eyebrow">The mission</span>
+    <h2 style="margin:14px 0 28px;">Better tools for the clinics doing the most important work in weight management today.</h2>
+
+    <p>GLP-1 medications — Wegovy, Ozempic, Zepbound, Mounjaro, Saxenda — are <strong>fundamentally changing how weight management works</strong>. The clinical results are real. Demand has exploded. Specialized weight-loss clinics are scaling faster than any other corner of primary care.</p>
+
+    <p>But the tooling has not kept up. Most clinics doing this work today are duct-taping their workflow together: a generic patient-tracking app downloaded from the App Store, a couple of shared spreadsheets, an email thread for side-effect questions, and a phone for the urgent stuff. <strong>None of it was built for what GLP-1 care actually looks like.</strong></p>
+
+    <p>We're building the alternative. A care platform purpose-built for clinics treating GLP-1 patients — designed around the rhythm of weekly weigh-ins, daily food logs, side-effect monitoring, and the messaging cadence between visits. White-labeled, so it ships as your clinic, not as ours. HIPAA-aligned by design, not bolted on. <strong>Now accepting design partners.</strong></p>
+  </div>
+</section>
+
+<!-- DIFFERENTIATORS -->
+<section class="cream">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">What makes us different</span>
+      <h2>Four things you'll find in Quantal that you won't find elsewhere.</h2>
+    </div>
+
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7v6c0 5 4 9 9 10 5-1 9-5 9-10V7l-9-5z"/></svg>
+        </div>
+        <h3>White-label all the way down</h3>
+        <p>Your brand on the App Store. Your colors in the patient app. Your clinic's data in its own dedicated environment. Patients don't download "Quantal" — they download your clinic's app.</p>
+      </div>
+
+      <div class="diff-card">
+        <div class="diff-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <h3>Built for the GLP-1 workflow specifically</h3>
+        <p>Not a generic chronic-care platform with weight-loss bolted on. Every screen, every alert, every report is designed for the way GLP-1 clinics actually work — titration, side-effect monitoring, plateau response, the whole arc.</p>
+      </div>
+
+      <div class="diff-card">
+        <div class="diff-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        </div>
+        <h3>HIPAA-aligned by design, not bolted on</h3>
+        <p>Encryption, access controls, activity logs, signed agreements with every vendor that touches your data — engineered into the foundation, not layered on later. You get the trust signal without doing the engineering work.</p>
+      </div>
+
+      <div class="diff-card">
+        <div class="diff-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Founder-led — you talk to the people who built it</h3>
+        <p>You're not getting handed off to a regional account manager. When you have a question, you talk to a founder. When you need a feature, the engineer who builds it knows your name.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section>
+  <div class="container narrow">
+    <div class="section-head" style="margin-bottom:40px;">
+      <span class="eyebrow">The team</span>
+      <h2 style="margin:14px 0 14px;">A small team. By design.</h2>
+      <p>We're early. We answer our own emails. You'll talk to founders.</p>
+    </div>
+
+    <div class="team-grid">
+      <div class="founder-card">
+        <div class="founder-portrait">QH</div>
+        <h3>Founder &amp; CTO</h3>
+        <div class="founder-role">Building Quantal full-time</div>
+        <p>Software engineer with a background in healthcare infrastructure. Building Quantal Health as the founding engineer — designing the platform, writing the code, sitting with design partners to learn what their clinicians actually need.</p>
+      </div>
+
+      <div class="founder-card">
+        <div class="founder-portrait">QH</div>
+        <h3>Co-founder</h3>
+        <div class="founder-role">Clinical advisor &amp; product</div>
+        <p>Clinician with direct experience in weight management and GLP-1 care. Shapes the clinical workflow inside the product, advises on safety guardrails, and ensures we are building for how clinicians actually practice — not how we imagine they do.</p>
+      </div>
+    </div>
+
+    <div class="honest-box">
+      <h3>An honest note.</h3>
+      <p>We're a small team with a clear focus. We're not pretending to be enterprise-scale yet. What you get instead is fast turnaround, a direct line to the people building the product, and a platform shaped by the first clinics we work with — not by a roadmap committee.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUANTAL LABS CONTEXT -->
+<section class="cream">
+  <div class="container narrow">
+    <span class="eyebrow">Part of Quantal Labs</span>
+    <h2 style="margin:14px 0 28px;">Quantal Health is part of Quantal Labs.</h2>
+    <p style="font-size:1.0625rem;">Quantal Labs is a small studio building purpose-built infrastructure for healthcare verticals — categories where the existing tools were either built for a different era of medicine or were never built at all. Quantal Health is our focused entry into weight management. We picked this category because the clinical impact of GLP-1 medications is real, the clinics doing this work are growing fast, and the gap between what they need and what's available is wide.</p>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section>
+  <div class="container narrow why-now">
+    <span class="eyebrow">Why now</span>
+    <h2 style="margin:14px 0 28px;">The window is open.</h2>
+    <p>This is a category-defining moment for weight management. <strong>The medications work.</strong> Patients are seeking out specialized clinics in numbers that didn't exist three years ago. The clinics succeeding right now are the ones investing in patient experience and clinical workflow before they hit a wall — not after. We're building the platform that lets a four-clinician practice run like a much bigger one, without losing the personal relationship that makes patients choose them in the first place.</p>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+  <div class="container">
+    <h2>Want to talk?</h2>
+    <p>We're picking our first design partners now. If your clinic treats GLP-1 patients and you want a real say in shaping the product, we'd love to hear from you.</p>
+    <div class="cta-row">
+      <a href="contact.html" class="btn btn-primary">Talk to founders</a>
+      <a href="demo.html" class="btn btn-secondary">Try the demo first</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<script>
+  // Theme management
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>

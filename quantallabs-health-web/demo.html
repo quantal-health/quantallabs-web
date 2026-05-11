@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quantal Health — Try the demo</title>
+  <meta name="description" content="Click through working demos of the Quantal patient app, clinician dashboard, and admin console. No signup, no email — just click." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+      --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+      --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+      --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
+      --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+      --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+      --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+      --border:var(--paper-dark); --border-strong:#D4CFC2;
+      --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+      --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+      --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+      --font-hero:clamp(2.75rem, 5vw, 4.5rem);
+      --font-h1:2.5rem; --font-h2:2rem; --font-h3:1.375rem; --font-h4:1.125rem;
+      --font-body-large:1.25rem; --font-body:1rem; --font-small:0.875rem; --font-eyebrow:0.75rem;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+      font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+      -webkit-font-smoothing:antialiased; line-height:1.55;
+      transition:background 0.2s ease, color 0.2s ease;}
+
+    /* Dark mode */
+    [data-theme="dark"],
+    [data-theme="system"].sys-dark {
+      --bg:#1B1A18; --bg-clean:#252320; --surface:#252320;
+      --paper-light:#1F1D1B; --paper-dark:#2C2A27;
+      --text:#F4EFE2; --text-secondary:#B8B3A8; --text-muted:#7A7570;
+      --border:rgba(244,239,226,0.10); --border-strong:rgba(244,239,226,0.18);
+      --ink-muted:#B8B3A8; --ink-soft:#7A7570;
+      --shadow-sm:0 1px 2px rgb(0 0 0 / 0.30);
+      --shadow-md:0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+      --shadow-lg:0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+    }
+    [data-theme="dark"] a,
+    [data-theme="system"].sys-dark a { color:var(--text); }
+    [data-theme="dark"] .topbar,
+    [data-theme="system"].sys-dark .topbar { background:rgba(27,26,24,0.92); }
+    [data-theme="dark"] .topnav-cta,
+    [data-theme="system"].sys-dark .topnav-cta { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .topnav-cta:hover,
+    [data-theme="system"].sys-dark .topnav-cta:hover { background:var(--quantum-dark); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary,
+    [data-theme="system"].sys-dark .btn-primary { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary:hover,
+    [data-theme="system"].sys-dark .btn-primary:hover { background:var(--quantum-dark); color:#1B1A18; }
+
+    /* Brand attribution */
+    .brand-attribution {
+      display:block; font-size:0.7rem; font-weight:400; font-style:italic;
+      color:var(--text-muted); letter-spacing:0; line-height:1.1; margin-top:2px;
+    }
+
+    /* Topnav back link */
+    .topnav-back {
+      display:inline-flex; align-items:center;
+      font-size:0.8125rem; color:var(--text-muted); font-weight:400;
+      padding:6px 10px; border-radius:6px; margin-right:8px;
+      transition:color 0.15s, background 0.15s;
+    }
+    .topnav-back:hover { color:var(--text); background:rgba(27,26,24,0.05); text-decoration:none; }
+    [data-theme="dark"] .topnav-back:hover,
+    [data-theme="system"].sys-dark .topnav-back:hover { background:rgba(244,239,226,0.06); }
+
+    /* Settings (theme) toggle */
+    .settings-wrap { position:relative; }
+    .settings-toggle {
+      width:34px; height:34px; border-radius:8px;
+      border:1px solid var(--border-strong); background:none; cursor:pointer;
+      color:var(--text-secondary); display:flex; align-items:center; justify-content:center;
+      transition:background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .settings-toggle:hover { background:var(--bg-clean); color:var(--text); }
+    .settings-toggle svg { width:16px; height:16px; }
+    .settings-panel {
+      position:absolute; top:calc(100% + 8px); right:0; width:210px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; box-shadow:var(--shadow-lg); padding:12px;
+      opacity:0; pointer-events:none; transform:translateY(-4px);
+      transition:opacity 0.15s ease, transform 0.15s ease; z-index:200;
+    }
+    .settings-panel.open { opacity:1; pointer-events:all; transform:translateY(0); }
+    .settings-lbl {
+      font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+      color:var(--text-muted); margin-bottom:8px; padding:0 4px;
+    }
+    .theme-opts { display:flex; flex-direction:column; gap:2px; }
+    .theme-opt {
+      display:flex; align-items:center; gap:9px;
+      padding:8px 10px; border-radius:8px; width:100%;
+      font-size:0.875rem; font-weight:500; color:var(--text-secondary);
+      background:none; border:none; cursor:pointer; font-family:inherit;
+      transition:background 0.15s, color 0.15s;
+    }
+    .theme-opt:hover { background:var(--bg-clean); color:var(--text); }
+    .theme-opt.active { background:var(--bg-clean); color:var(--quantum-dark); font-weight:600; }
+    [data-theme="dark"] .theme-opt.active,
+    [data-theme="system"].sys-dark .theme-opt.active { color:var(--quantum); }
+    .theme-opt svg { width:15px; height:15px; flex-shrink:0; }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    a{color:var(--ink); text-decoration:none}
+    a:hover{color:var(--quantum-dark)}
+    h1,h2,h3,h4{margin:0; line-height:1.15; letter-spacing:-0.015em; color:var(--ink)}
+    h1{font-size:var(--font-hero); font-weight:800; letter-spacing:-0.025em}
+    h2{font-size:var(--font-h2); font-weight:700}
+    h3{font-size:var(--font-h3); font-weight:600}
+    h4{font-size:var(--font-h4); font-weight:600}
+    p{margin:0; color:var(--text-secondary)}
+
+    /* Topbar */
+    .topbar{background:rgba(244,239,226,0.95); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50;}
+    .topbar-inner{max-width:1200px; margin:0 auto; padding:16px 24px;
+      display:flex; align-items:center; gap:32px;}
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
+    .brand-text{font-weight:400; color:var(--ink-muted); font-size:1.125rem; letter-spacing:-0.01em;}
+    .brand-text strong{font-weight:700; color:var(--ink);}
+    .topnav{display:flex; gap:24px; flex:1;}
+    .topnav a{color:var(--ink-muted); font-size:0.9375rem;}
+    .topnav a:hover{color:var(--ink);}
+    .topnav a.active{color:var(--ink); font-weight:600;}
+    .topnav-cta{background:var(--ink); color:var(--paper); padding:10px 18px;
+      border-radius:8px; font-size:0.9375rem; font-weight:600; transition:all 0.15s;}
+    .topnav-cta:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+
+    .container{max-width:1200px; margin:0 auto; padding:0 24px;}
+    section{padding:96px 0;}
+    section.hero{padding:128px 0 64px;}
+    section.tight{padding:64px 0;}
+
+    /* Hero */
+    .hero{text-align:center;}
+    .hero .eyebrow{display:inline-block; font-size:var(--font-eyebrow); font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase; color:var(--quantum-dark);
+      background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:24px;}
+    .hero h1{margin-bottom:20px;}
+    .hero .lede{font-size:var(--font-body-large); color:var(--text-secondary);
+      max-width:640px; margin:0 auto;}
+
+    /* Demo tile grid */
+    .tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:64px;}
+    .tile{background:var(--surface); border:1px solid var(--border);
+      border-radius:18px; overflow:hidden; box-shadow:var(--shadow-md);
+      display:flex; flex-direction:column; text-decoration:none;
+      transition:transform 0.2s, box-shadow 0.2s, border-color 0.2s;}
+    .tile:hover{transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--quantum);}
+    .tile-preview{background:linear-gradient(160deg, var(--paper-light) 0%, var(--paper) 100%);
+      border-bottom:1px solid var(--border); padding:32px 24px; min-height:240px;
+      display:flex; align-items:center; justify-content:center;}
+    .tile-preview svg{width:100%; height:auto; max-height:200px;}
+    .tile-body{padding:28px 28px 32px; flex:1; display:flex; flex-direction:column;}
+    .tile-eyebrow{font-size:var(--font-eyebrow); font-weight:700; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px;}
+    .tile-body h3{margin-bottom:10px; color:var(--ink);}
+    .tile-body p{font-size:0.95rem; flex:1;}
+    .tile-cta{margin-top:20px; display:inline-flex; align-items:center; gap:8px;
+      font-weight:600; color:var(--ink); font-size:0.9375rem;}
+    .tile-cta svg{width:14px; height:14px;}
+    .tile:hover .tile-cta{color:var(--quantum-dark);}
+
+    /* What's in the demos */
+    .info-section{background:var(--paper-light); border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);}
+    .section-head{text-align:center; max-width:680px; margin:0 auto 48px;}
+    .section-head h2{margin-bottom:14px;}
+    .section-head p{font-size:var(--font-body-large);}
+    .info-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+    .info-card{background:var(--surface); border:1px solid var(--border);
+      border-radius:14px; padding:28px; box-shadow:var(--shadow-sm);}
+    .info-card h4{margin-bottom:10px; color:var(--ink); font-size:1.0625rem;}
+    .info-card p{font-size:0.9375rem;}
+    .info-icon{width:44px; height:44px; border-radius:10px; background:var(--quantum-soft);
+      display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
+    .info-icon svg{width:22px; height:22px; color:var(--quantum-dark);}
+
+    /* Bottom CTA */
+    .bottom-cta{background:var(--ink); color:var(--paper); padding:96px 0; text-align:center;}
+    .bottom-cta h2{color:var(--paper); max-width:680px; margin:0 auto 16px;}
+    .bottom-cta p{color:var(--ink-soft); max-width:560px; margin:0 auto 32px; font-size:var(--font-body-large);}
+    .bottom-cta .cta-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 22px;
+      border-radius:10px; font-size:1rem; font-weight:600; text-decoration:none;
+      transition:all 0.15s; border:1px solid transparent; cursor:pointer;}
+    .btn-quantum{background:var(--quantum); color:var(--ink);}
+    .btn-quantum:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+    .btn-outline{background:transparent; color:var(--paper); border-color:var(--ink-muted);}
+    .btn-outline:hover{background:var(--paper); color:var(--ink);}
+    .btn svg{width:16px; height:16px;}
+
+    /* Footer */
+    .footer{background:var(--ink); color:var(--ink-soft); padding:64px 0 32px; border-top:1px solid #2a2926;}
+    .footer-inner{max-width:1200px; margin:0 auto; padding:0 24px;
+      display:grid; grid-template-columns:1.5fr 2.5fr; gap:48px;}
+    .footer-brand p{color:var(--ink-soft);}
+    .footer-tagline{color:var(--ink-soft); font-size:0.9375rem; margin-top:16px; max-width:280px;}
+    .footer-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+    .footer-col h4{color:var(--paper); font-size:0.875rem; text-transform:uppercase;
+      letter-spacing:0.08em; margin-bottom:16px;}
+    .footer-col a{display:block; color:var(--ink-soft); font-size:0.9375rem;
+      padding:6px 0; text-decoration:none;}
+    .footer-col a:hover{color:var(--quantum);}
+    .footer-bottom{max-width:1200px; margin:48px auto 0; padding:24px 24px 0;
+      border-top:1px solid #2a2926; display:flex; justify-content:space-between;
+      align-items:center; color:var(--ink-soft); font-size:0.875rem;}
+    .footer-bottom p{color:var(--ink-soft); font-size:0.875rem;}
+
+    @media (max-width:900px){
+      .tiles{grid-template-columns:1fr;}
+      .info-grid{grid-template-columns:1fr;}
+      .topnav{display:none;}
+      .footer-inner{grid-template-columns:1fr;}
+      .footer-cols{grid-template-columns:repeat(2,1fr);}
+      section{padding:64px 0;}
+      section.hero{padding:80px 0 48px;}
+    }
+
+    /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+       black even in dark mode) need to flip to var(--text) so they stay readable. */
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+    [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+    [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color:var(--text); }
+    [data-theme="dark"] a,
+    [data-theme="system"].sys-dark a { color:var(--text); }
+    [data-theme="dark"] a:hover,
+    [data-theme="system"].sys-dark a:hover { color:var(--quantum); }
+    [data-theme="dark"] .brand-text strong,
+    [data-theme="system"].sys-dark .brand-text strong { color:var(--text); }
+    [data-theme="dark"] .brand svg circle:first-of-type,
+    [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke:var(--text); }
+    [data-theme="dark"] .topnav a:hover,
+    [data-theme="system"].sys-dark .topnav a:hover { color:var(--text); }
+    [data-theme="dark"] .topnav a.active,
+    [data-theme="system"].sys-dark .topnav a.active { color:var(--text); }
+    /* Tile body title and CTA hardcoded var(--ink). */
+    [data-theme="dark"] .tile-body h3,
+    [data-theme="system"].sys-dark .tile-body h3 { color:var(--text); }
+    [data-theme="dark"] .tile-cta,
+    [data-theme="system"].sys-dark .tile-cta { color:var(--text); }
+    [data-theme="dark"] .info-card h4,
+    [data-theme="system"].sys-dark .info-card h4 { color:var(--text); }
+    /* .bottom-cta uses var(--ink) bg (intentional inverse panel) — leaves heading on dark bg light, fine. */
+    /* .btn-quantum (color:var(--ink) on quantum-yellow) stays legible in both modes. */
+    /* .btn-outline:hover swaps to paper bg + ink text — that's a hover-only flash, leave it. */
+
+    /* Tile and info-card surfaces — these were on var(--surface) (which switches), but the
+       tile-preview gradient uses paper/paper-light explicitly so it stays cream. The cream
+       preview is the demo "screenshot" representation — leave it cream in both modes. */
+    [data-theme="dark"] .tile,
+    [data-theme="system"].sys-dark .tile { background: var(--bg-clean); border-color: var(--border-strong); }
+    [data-theme="dark"] .info-card,
+    [data-theme="system"].sys-dark .info-card { background: var(--bg-clean); border-color: var(--border-strong); }
+    [data-theme="dark"] .section-head h2,
+    [data-theme="system"].sys-dark .section-head h2 { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html" class="active">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Try it right now</span>
+    <h1>Try Quantal Health right now.</h1>
+    <p class="lede">No signup. No email. Just click through.</p>
+  </div>
+</section>
+
+<!-- TILES -->
+<section style="padding-top:0;">
+  <div class="container">
+    <div class="tiles">
+
+      <!-- Patient app -->
+      <a href="demo-patient.html" class="tile">
+        <div class="tile-preview" aria-hidden="true">
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Phone -->
+            <rect x="60" y="10" width="100" height="180" rx="16" fill="#1f2937"/>
+            <rect x="65" y="15" width="90" height="170" rx="12" fill="#FFFFFF"/>
+            <!-- Notch -->
+            <rect x="92" y="18" width="36" height="6" rx="3" fill="#1f2937"/>
+            <!-- Greeting -->
+            <text x="74" y="46" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">Hello, Jane</text>
+            <text x="74" y="56" font-family="-apple-system,sans-serif" font-size="6" fill="#6B6863">Week 8 · Wegovy 0.5mg</text>
+            <!-- Check-in banner -->
+            <rect x="74" y="64" width="72" height="22" rx="6" fill="#16a34a"/>
+            <text x="80" y="76" font-family="-apple-system,sans-serif" font-size="6" font-weight="600" fill="#FFFFFF">Daily check-in</text>
+            <text x="80" y="83" font-family="-apple-system,sans-serif" font-size="5" fill="#FFFFFF" opacity="0.9">~60 seconds</text>
+            <!-- Weight card -->
+            <rect x="74" y="92" width="72" height="28" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="78" y="100" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">TODAY'S WEIGHT</text>
+            <text x="78" y="113" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#1B1A18">207.6 lb</text>
+            <!-- Quick actions -->
+            <rect x="74" y="126" width="72" height="14" rx="4" fill="#dcfce7"/>
+            <text x="78" y="135" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#15803d">📷 Snap a meal</text>
+            <rect x="74" y="144" width="72" height="14" rx="4" fill="#dcfce7"/>
+            <text x="78" y="153" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#15803d">⚖️ Log weight</text>
+            <!-- Tab bar -->
+            <rect x="65" y="170" width="90" height="15" fill="#FAF7EE"/>
+            <circle cx="78" cy="178" r="2" fill="#16a34a"/>
+            <circle cx="98" cy="178" r="2" fill="#C9C4BC"/>
+            <circle cx="118" cy="178" r="2" fill="#C9C4BC"/>
+            <circle cx="138" cy="178" r="2" fill="#C9C4BC"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <span class="tile-eyebrow">Patient app</span>
+          <h3>What your patients will see</h3>
+          <p>Log a meal, log a weight, message your team. Click around.</p>
+          <span class="tile-cta">
+            Try the patient demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Clinician dashboard -->
+      <a href="demo-clinician.html" class="tile">
+        <div class="tile-preview" aria-hidden="true">
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Browser frame -->
+            <rect x="10" y="20" width="200" height="160" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <!-- Browser chrome -->
+            <rect x="10" y="20" width="200" height="14" fill="#F4EFE2"/>
+            <circle cx="18" cy="27" r="2" fill="#EF4444"/>
+            <circle cx="26" cy="27" r="2" fill="#F59E0B"/>
+            <circle cx="34" cy="27" r="2" fill="#10B981"/>
+            <rect x="46" y="23" width="100" height="8" rx="2" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <!-- Header bar -->
+            <rect x="10" y="34" width="200" height="18" fill="#16a34a"/>
+            <text x="18" y="46" font-family="-apple-system,sans-serif" font-size="7" font-weight="700" fill="#FFFFFF">Mountainview Medicine</text>
+            <circle cx="200" cy="43" r="5" fill="#FFFFFF" opacity="0.3"/>
+            <!-- Sidebar -->
+            <rect x="10" y="52" width="48" height="128" fill="#FAF7EE"/>
+            <rect x="14" y="60" width="40" height="10" rx="3" fill="#dcfce7"/>
+            <text x="17" y="67" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#15803d">Patients</text>
+            <rect x="14" y="74" width="36" height="3" rx="1" fill="#C9C4BC"/>
+            <rect x="14" y="82" width="32" height="3" rx="1" fill="#C9C4BC"/>
+            <rect x="14" y="90" width="38" height="3" rx="1" fill="#C9C4BC"/>
+            <!-- Patient roster -->
+            <text x="64" y="64" font-family="-apple-system,sans-serif" font-size="7" font-weight="700" fill="#1B1A18">Active patients · 60</text>
+            <rect x="64" y="70" width="140" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <circle cx="72" cy="81" r="5" fill="#16a34a"/>
+            <text x="72" y="84" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="5" font-weight="700" fill="#FFFFFF">JD</text>
+            <text x="82" y="79" font-family="-apple-system,sans-serif" font-size="6" font-weight="600" fill="#1B1A18">Jane Doe</text>
+            <text x="82" y="87" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Wegovy · W8 · −10.8 lb</text>
+            <rect x="170" y="76" width="28" height="10" rx="5" fill="#dcfce7"/>
+            <text x="184" y="83" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="4" font-weight="600" fill="#15803d">Titrating</text>
+            <rect x="64" y="96" width="140" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <circle cx="72" cy="107" r="5" fill="#ef4444"/>
+            <text x="72" y="110" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="5" font-weight="700" fill="#FFFFFF">MO</text>
+            <text x="82" y="105" font-family="-apple-system,sans-serif" font-size="6" font-weight="600" fill="#1B1A18">Marcus Okafor</text>
+            <text x="82" y="113" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Ozempic · W10 · −12.3 lb</text>
+            <rect x="170" y="102" width="28" height="10" rx="5" fill="#dcfce7"/>
+            <text x="184" y="109" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="4" font-weight="600" fill="#15803d">Stable</text>
+            <rect x="64" y="122" width="140" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <circle cx="72" cy="133" r="5" fill="#06b6d4"/>
+            <text x="72" y="136" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="5" font-weight="700" fill="#FFFFFF">PA</text>
+            <text x="82" y="131" font-family="-apple-system,sans-serif" font-size="6" font-weight="600" fill="#1B1A18">Priya Iyer-Anand</text>
+            <text x="82" y="139" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Zepbound · W4 · −9.6 lb</text>
+            <rect x="166" y="128" width="32" height="10" rx="5" fill="#fef3c7"/>
+            <text x="182" y="135" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="4" font-weight="600" fill="#92400e">Review</text>
+            <rect x="64" y="148" width="140" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <circle cx="72" cy="159" r="5" fill="#f59e0b"/>
+            <text x="72" y="162" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="5" font-weight="700" fill="#FFFFFF">RP</text>
+            <text x="82" y="157" font-family="-apple-system,sans-serif" font-size="6" font-weight="600" fill="#1B1A18">Rosa Padilla</text>
+            <text x="82" y="165" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Wegovy · W16 · −0.2 lb</text>
+            <rect x="170" y="154" width="28" height="10" rx="5" fill="#dcfce7"/>
+            <text x="184" y="161" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="4" font-weight="600" fill="#15803d">Stable</text>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <span class="tile-eyebrow">Clinician dashboard</span>
+          <h3>What your team will see</h3>
+          <p>Patient roster, weight trends, message inbox. Click around.</p>
+          <span class="tile-cta">
+            Try the clinician demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Admin console -->
+      <a href="demo-admin.html" class="tile">
+        <div class="tile-preview" aria-hidden="true">
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Browser frame -->
+            <rect x="10" y="20" width="200" height="160" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <!-- Browser chrome -->
+            <rect x="10" y="20" width="200" height="14" fill="#F4EFE2"/>
+            <circle cx="18" cy="27" r="2" fill="#EF4444"/>
+            <circle cx="26" cy="27" r="2" fill="#F59E0B"/>
+            <circle cx="34" cy="27" r="2" fill="#10B981"/>
+            <rect x="46" y="23" width="100" height="8" rx="2" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <!-- Sidebar -->
+            <rect x="10" y="34" width="62" height="146" fill="#FAFAFA"/>
+            <!-- Tenant badge -->
+            <rect x="14" y="40" width="54" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <rect x="18" y="44" width="14" height="14" rx="3" fill="#16a34a"/>
+            <text x="25" y="54" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" font-weight="700" fill="#FFFFFF">M</text>
+            <text x="36" y="51" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#1B1A18">Mountainview</text>
+            <rect x="36" y="54" width="20" height="6" rx="3" fill="#16a34a"/>
+            <text x="46" y="58" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="3" font-weight="600" fill="#FFFFFF">Pro</text>
+            <!-- Nav items -->
+            <rect x="14" y="68" width="54" height="10" rx="2" fill="#FFFFFF"/>
+            <rect x="14" y="68" width="2" height="10" fill="#16a34a"/>
+            <text x="20" y="75" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#15803d">Tier &amp; Modules</text>
+            <text x="20" y="86" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Branding</text>
+            <text x="20" y="96" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Users</text>
+            <text x="20" y="106" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Tickets</text>
+            <text x="20" y="116" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Settings</text>
+            <!-- Main content -->
+            <text x="80" y="48" font-family="-apple-system,sans-serif" font-size="7" font-weight="700" fill="#1B1A18">Branding</text>
+            <text x="80" y="56" font-family="-apple-system,sans-serif" font-size="5" fill="#6B6863">Live preview</text>
+            <!-- Color pickers -->
+            <rect x="80" y="62" width="60" height="22" rx="3" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="83" y="69" font-family="-apple-system,sans-serif" font-size="4" fill="#6B6863">PRIMARY</text>
+            <rect x="83" y="72" width="10" height="9" rx="2" fill="#16a34a"/>
+            <text x="96" y="79" font-family="-apple-system,sans-serif" font-size="5" font-family="monospace" fill="#1B1A18">#16a34a</text>
+            <rect x="80" y="88" width="60" height="22" rx="3" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="83" y="95" font-family="-apple-system,sans-serif" font-size="4" fill="#6B6863">APP NAME</text>
+            <text x="83" y="105" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#1B1A18">Mountainview</text>
+            <!-- Mini phone preview -->
+            <rect x="148" y="62" width="50" height="110" rx="6" fill="#1f2937"/>
+            <rect x="151" y="65" width="44" height="104" rx="4" fill="#FFFFFF"/>
+            <rect x="151" y="65" width="44" height="14" fill="#16a34a"/>
+            <text x="173" y="74" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="4" font-weight="700" fill="#FFFFFF">Mountainview</text>
+            <rect x="153" y="82" width="40" height="20" rx="2" fill="#FAF7EE"/>
+            <text x="155" y="89" font-family="-apple-system,sans-serif" font-size="3" fill="#6B6863">TODAY</text>
+            <text x="155" y="97" font-family="-apple-system,sans-serif" font-size="5" font-weight="700" fill="#1B1A18">207.6 lb</text>
+            <rect x="153" y="106" width="40" height="14" rx="2" fill="#dcfce7"/>
+            <text x="156" y="115" font-family="-apple-system,sans-serif" font-size="4" font-weight="600" fill="#15803d">Snap meal</text>
+            <rect x="153" y="124" width="40" height="14" rx="2" fill="#dcfce7"/>
+            <text x="156" y="133" font-family="-apple-system,sans-serif" font-size="4" font-weight="600" fill="#15803d">Log weight</text>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <span class="tile-eyebrow">Admin console</span>
+          <h3>What your practice administrator will see</h3>
+          <p>Configure tiers, branding, user roles. Click around.</p>
+          <span class="tile-cta">
+            Try the admin demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S IN THE DEMOS -->
+<section class="info-section">
+  <div class="container">
+    <div class="section-head">
+      <h2>What's in the demos.</h2>
+      <p>Everything you click is real. The data is fictional, the workflows are not.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h4>Real workflows</h4>
+        <p>Every screen you see is what your patients and team will actually use. We didn't build a special demo version — these are the real interfaces, with working forms, filters, charts, and message threads.</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h4>Sample data</h4>
+        <p>We use a fictional clinic called <strong>Mountainview Medicine</strong> and a fictional patient <strong>Jane Doe</strong> for the demos. Your real data never goes here. Nothing you type or click is saved.</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M3 12h18"/></svg>
+        </div>
+        <h4>Branded for our demo clinic</h4>
+        <p>The patient app and dashboards in the demo are styled in Mountainview Medicine's green. Your branding will look different — your colors, your logo, your name on the App Store.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+  <div class="container">
+    <h2>Like what you see?</h2>
+    <p>Talk to founders. We're onboarding our first design partners now.</p>
+    <div class="cta-row">
+      <a href="contact.html" class="btn btn-quantum">
+        Talk to founders
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="for-clinics.html" class="btn btn-outline">For clinics</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<script>
+  // Theme management
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>

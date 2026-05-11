@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product — Quantal Health</title>
+  <meta name="description" content="Everything your patients need to stay on track. Everything your clinicians need to follow along. The Quantal Health product overview." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+      --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+      --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+      --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
+      --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+      --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+      --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+      --border:var(--paper-dark); --border-strong:#D4CFC2;
+      --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+      --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+      --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+      --font-hero:clamp(2.5rem, 4.5vw, 4rem);
+      --font-h1:2.5rem; --font-h2:2rem; --font-h3:1.375rem; --font-h4:1.125rem;
+      --font-body-large:1.25rem; --font-body:1rem; --font-small:0.875rem; --font-eyebrow:0.75rem;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+      font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+      -webkit-font-smoothing:antialiased; line-height:1.55;
+      transition:background 0.2s ease, color 0.2s ease;}
+
+    /* Dark mode */
+    [data-theme="dark"],
+    [data-theme="system"].sys-dark {
+      --bg:#1B1A18; --bg-clean:#252320; --surface:#252320;
+      --paper-light:#1F1D1B; --paper-dark:#2C2A27;
+      --text:#F4EFE2; --text-secondary:#B8B3A8; --text-muted:#7A7570;
+      --border:rgba(244,239,226,0.10); --border-strong:rgba(244,239,226,0.18);
+      --ink-muted:#B8B3A8; --ink-soft:#7A7570;
+      --shadow-sm:0 1px 2px rgb(0 0 0 / 0.30);
+      --shadow-md:0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+      --shadow-lg:0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+    }
+    [data-theme="dark"] .topbar,
+    [data-theme="system"].sys-dark .topbar { background:rgba(27,26,24,0.92); }
+    [data-theme="dark"] .topnav-cta,
+    [data-theme="system"].sys-dark .topnav-cta { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .topnav-cta:hover,
+    [data-theme="system"].sys-dark .topnav-cta:hover { background:var(--quantum-dark); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary,
+    [data-theme="system"].sys-dark .btn-primary { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary:hover,
+    [data-theme="system"].sys-dark .btn-primary:hover { background:var(--quantum-dark); color:#1B1A18; }
+
+    /* Brand attribution */
+    .brand-attribution {
+      display:block; font-size:0.7rem; font-weight:400; font-style:italic;
+      color:var(--text-muted); letter-spacing:0; line-height:1.1; margin-top:2px;
+    }
+
+    /* Topnav back link */
+    .topnav-back {
+      display:inline-flex; align-items:center;
+      font-size:0.8125rem; color:var(--text-muted); font-weight:400;
+      padding:6px 10px; border-radius:6px; margin-right:8px;
+      transition:color 0.15s, background 0.15s;
+    }
+    .topnav-back:hover { color:var(--text); background:rgba(27,26,24,0.05); text-decoration:none; }
+    [data-theme="dark"] .topnav-back:hover,
+    [data-theme="system"].sys-dark .topnav-back:hover { background:rgba(244,239,226,0.06); }
+
+    /* Settings (theme) toggle */
+    .settings-wrap { position:relative; }
+    .settings-toggle {
+      width:34px; height:34px; border-radius:8px;
+      border:1px solid var(--border-strong); background:none; cursor:pointer;
+      color:var(--text-secondary); display:flex; align-items:center; justify-content:center;
+      transition:background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .settings-toggle:hover { background:var(--bg-clean); color:var(--text); }
+    .settings-toggle svg { width:16px; height:16px; }
+    .settings-panel {
+      position:absolute; top:calc(100% + 8px); right:0; width:210px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; box-shadow:var(--shadow-lg); padding:12px;
+      opacity:0; pointer-events:none; transform:translateY(-4px);
+      transition:opacity 0.15s ease, transform 0.15s ease; z-index:200;
+    }
+    .settings-panel.open { opacity:1; pointer-events:all; transform:translateY(0); }
+    .settings-lbl {
+      font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+      color:var(--text-muted); margin-bottom:8px; padding:0 4px;
+    }
+    .theme-opts { display:flex; flex-direction:column; gap:2px; }
+    .theme-opt {
+      display:flex; align-items:center; gap:9px;
+      padding:8px 10px; border-radius:8px; width:100%;
+      font-size:0.875rem; font-weight:500; color:var(--text-secondary);
+      background:none; border:none; cursor:pointer; font-family:inherit;
+      transition:background 0.15s, color 0.15s;
+    }
+    .theme-opt:hover { background:var(--bg-clean); color:var(--text); }
+    .theme-opt.active { background:var(--bg-clean); color:var(--quantum-dark); font-weight:600; }
+    [data-theme="dark"] .theme-opt.active,
+    [data-theme="system"].sys-dark .theme-opt.active { color:var(--quantum); }
+    .theme-opt svg { width:15px; height:15px; flex-shrink:0; }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    a{color:var(--ink); text-decoration:none}
+    a:hover{color:var(--quantum-dark)}
+    h1,h2,h3,h4{margin:0; line-height:1.2; letter-spacing:-0.015em; color:var(--ink)}
+    h1{font-size:var(--font-hero); font-weight:800; letter-spacing:-0.025em}
+    h2{font-size:var(--font-h2); font-weight:700}
+    h3{font-size:var(--font-h3); font-weight:600}
+    h4{font-size:var(--font-h4); font-weight:600}
+    p{margin:0; color:var(--text-secondary)}
+
+    /* Topbar */
+    .topbar{background:rgba(244,239,226,0.95); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50;}
+    .topbar-inner{max-width:1200px; margin:0 auto; padding:16px 24px;
+      display:flex; align-items:center; gap:32px;}
+    .brand{display:flex; align-items:center; gap:10px;}
+    .brand-text{font-weight:400; color:var(--ink-muted); font-size:1.125rem; letter-spacing:-0.01em;}
+    .brand-text strong{font-weight:700; color:var(--ink);}
+    .topnav{display:flex; gap:24px; flex:1;}
+    .topnav a{color:var(--ink-muted); font-size:0.9375rem;}
+    .topnav a:hover{color:var(--ink);}
+    .topnav a.active{color:var(--ink); font-weight:600;}
+    .topnav-cta{background:var(--ink); color:var(--paper); padding:10px 18px;
+      border-radius:8px; font-size:0.9375rem; font-weight:600; transition:all 0.15s;}
+    .topnav-cta:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+
+    .container{max-width:1200px; margin:0 auto; padding:0 24px;}
+    section{padding:96px 0;}
+    section.hero{padding:128px 0 80px; text-align:center;}
+
+    /* Hero */
+    .eyebrow{display:inline-block; font-size:var(--font-eyebrow); font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase; color:var(--quantum-dark);
+      background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:24px;}
+    .hero h1{max-width:920px; margin:0 auto;}
+    .hero p.lede{font-size:var(--font-body-large); color:var(--text-secondary);
+      max-width:720px; margin:24px auto 0;}
+
+    /* Section heads */
+    .section-head{max-width:780px; margin:0 auto 56px;}
+    .section-head.center{text-align:center;}
+    .section-head h2{margin-bottom:14px;}
+    .section-head p{font-size:var(--font-body-large);}
+
+    /* Section divider color blocks */
+    section.dark{background:var(--ink); color:var(--paper);}
+    section.dark h2, section.dark h3, section.dark h4{color:var(--paper);}
+    section.dark .section-head p, section.dark p{color:var(--ink-soft);}
+    section.cream{background:var(--paper-light); border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+
+    /* Capability grid */
+    .cap-grid{display:grid; grid-template-columns:1fr 1fr; gap:32px;}
+    .cap-card{background:var(--surface); border:1px solid var(--border);
+      border-radius:14px; overflow:hidden; box-shadow:var(--shadow-sm);
+      display:flex; flex-direction:column;}
+    .cap-preview{background:var(--paper-light); padding:24px; min-height:180px;
+      display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border);}
+    .cap-preview svg{width:100%; height:auto; max-height:180px;}
+    .cap-body{padding:24px 28px 28px;}
+    .cap-body h3{margin-bottom:8px;}
+    .cap-body p{font-size:0.95rem;}
+
+    /* Dark cards */
+    section.dark .cap-card{background:#262522; border-color:#3a3936;}
+    section.dark .cap-preview{background:#1f1e1c; border-color:#3a3936;}
+    section.dark .cap-body p{color:var(--ink-soft);}
+
+    /* White-label commitment */
+    .commitment{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;}
+    .commitment-list{list-style:none; padding:0; margin:24px 0 0;}
+    .commitment-list li{padding:14px 0; border-top:1px solid var(--border);
+      display:flex; align-items:flex-start; gap:14px; font-size:1.0625rem; color:var(--text-secondary);}
+    .commitment-list li:last-child{border-bottom:1px solid var(--border);}
+    .commitment-list svg{width:22px; height:22px; flex-shrink:0; color:var(--quantum-dark); margin-top:2px;}
+    .commitment-visual{background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:32px; box-shadow:var(--shadow-md);}
+    .commitment-visual svg{width:100%; height:auto; display:block;}
+
+    /* Buttons */
+    .cta-row{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:36px;}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 22px;
+      border-radius:10px; font-size:1rem; font-weight:600; text-decoration:none;
+      transition:all 0.15s; border:1px solid transparent; cursor:pointer;}
+    .btn-primary{background:var(--ink); color:var(--paper);}
+    .btn-primary:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+    .btn-secondary{background:transparent; color:var(--ink); border-color:var(--border-strong);}
+    .btn-secondary:hover{background:var(--bg-clean); border-color:var(--ink);}
+
+    /* Bottom CTA */
+    .bottom-cta{background:var(--paper-light); border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border); padding:96px 0; text-align:center;}
+    .bottom-cta h2{max-width:680px; margin:0 auto 16px;}
+    .bottom-cta p{max-width:560px; margin:0 auto 32px;}
+
+    /* Footer */
+    .footer{background:var(--ink); color:var(--ink-soft); padding:64px 0 32px;}
+    .footer-inner{max-width:1200px; margin:0 auto; padding:0 24px;
+      display:grid; grid-template-columns:1.5fr 2.5fr; gap:48px;}
+    .footer-tagline{color:var(--ink-soft); font-size:0.9375rem; margin-top:16px; max-width:280px;}
+    .footer-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+    .footer-col h4{color:var(--paper); font-size:0.875rem; text-transform:uppercase;
+      letter-spacing:0.08em; margin-bottom:16px;}
+    .footer-col a{display:block; color:var(--ink-soft); font-size:0.9375rem; padding:6px 0;}
+    .footer-col a:hover{color:var(--quantum);}
+    .footer-bottom{max-width:1200px; margin:48px auto 0; padding:24px 24px 0;
+      border-top:1px solid #2a2926; display:flex; justify-content:space-between;
+      align-items:center; font-size:0.875rem;}
+    .footer-bottom p{color:var(--ink-soft);}
+
+    @media (max-width:900px){
+      .cap-grid{grid-template-columns:1fr;}
+      .commitment{grid-template-columns:1fr;}
+      .topnav{display:none;}
+      .footer-inner{grid-template-columns:1fr;}
+      .footer-cols{grid-template-columns:repeat(2,1fr);}
+      section{padding:64px 0;}
+    }
+
+    /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+       black even in dark mode) need to flip to var(--text) so they stay readable. */
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+    [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+    [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color:var(--text); }
+    [data-theme="dark"] a,
+    [data-theme="system"].sys-dark a { color:var(--text); }
+    [data-theme="dark"] a:hover,
+    [data-theme="system"].sys-dark a:hover { color:var(--quantum); }
+    [data-theme="dark"] .brand-text strong,
+    [data-theme="system"].sys-dark .brand-text strong { color:var(--text); }
+    [data-theme="dark"] .brand svg circle:first-of-type,
+    [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke:var(--text); }
+    [data-theme="dark"] .topnav a:hover,
+    [data-theme="system"].sys-dark .topnav a:hover { color:var(--text); }
+    [data-theme="dark"] .topnav a.active,
+    [data-theme="system"].sys-dark .topnav a.active { color:var(--text); }
+    [data-theme="dark"] .btn-secondary,
+    [data-theme="system"].sys-dark .btn-secondary { color:var(--text); border-color:var(--border-strong); }
+    [data-theme="dark"] .btn-secondary:hover,
+    [data-theme="system"].sys-dark .btn-secondary:hover { background:var(--bg-clean); border-color:var(--text); }
+    /* The "section.dark" blocks already use var(--ink) as their background, which keeps the same
+       dark/cream contrast in dark mode (dark bg with cream text). Headings inside those sections
+       already target color:var(--paper); preserve that by re-asserting it after the global h1 override. */
+    [data-theme="dark"] section.dark h2, [data-theme="dark"] section.dark h3, [data-theme="dark"] section.dark h4,
+    [data-theme="system"].sys-dark section.dark h2, [data-theme="system"].sys-dark section.dark h3,
+    [data-theme="system"].sys-dark section.dark h4 { color:var(--paper); }
+    /* Cap-preview/commitment-visual SVGs sit on cream backgrounds — give them a soft border
+       in dark mode to separate them from the dark page. */
+    [data-theme="dark"] .cap-preview,
+    [data-theme="system"].sys-dark .cap-preview { background:#1f1e1c; }
+    [data-theme="dark"] .commitment-visual,
+    [data-theme="system"].sys-dark .commitment-visual { background:var(--surface); }
+
+    /* Comprehensive dark-mode overrides for product page surfaces & text */
+    [data-theme="dark"] .cap-card,
+    [data-theme="system"].sys-dark .cap-card { background:var(--bg-clean); border-color:var(--border-strong); }
+    [data-theme="dark"] .cap-body h3,
+    [data-theme="system"].sys-dark .cap-body h3,
+    [data-theme="dark"] .cap-body p,
+    [data-theme="system"].sys-dark .cap-body p { color:var(--text); }
+    [data-theme="dark"] .cap-body p,
+    [data-theme="system"].sys-dark .cap-body p { color:var(--text-secondary); }
+    [data-theme="dark"] .commitment-list li,
+    [data-theme="system"].sys-dark .commitment-list li { color:var(--text-secondary); border-color:var(--border-strong); }
+    [data-theme="dark"] .section-head h2,
+    [data-theme="system"].sys-dark .section-head h2 { color:var(--text); }
+    [data-theme="dark"] .bottom-cta h2,
+    [data-theme="system"].sys-dark .bottom-cta h2 { color:var(--text); }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html" class="active">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Product overview</span>
+    <h1>Everything your patients need to stay on track.<br/>Everything your clinicians need to follow along.</h1>
+    <p class="lede">Quantal Health is a paired patient app and clinician dashboard, white-labeled for your clinic and built specifically for the rhythm of GLP-1 care. Here's what's inside the box, organized the way your team will actually use it: the patient experience, the clinician dashboard, the admin console, and the white-label commitment that ties them together.</p>
+  </div>
+</section>
+
+<!-- PATIENT APP -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">For patients</span>
+      <h2>The patient app — your brand on every screen.</h2>
+      <p>Designed around the rhythm of a GLP-1 program: weekly weigh-ins, daily food logs, side-effect check-ins, and a direct line to your care team. Every screen is white-labeled, so patients see your clinic name on the App Store, your logo on the home screen, and your colors throughout. The app does the heavy lifting; your brand gets the credit.</p>
+    </div>
+
+    <div class="cap-grid">
+      <!-- Daily check-in -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="44" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="42" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#1B1A18">How are you feeling today, Jane?</text>
+            <text x="36" y="56" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Tap one. Takes two seconds.</text>
+            <g transform="translate(20,76)">
+              <rect x="0" y="0" width="64" height="64" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="32" y="38" text-anchor="middle" font-size="22">😄</text>
+              <text x="32" y="56" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">Great</text>
+              <rect x="72" y="0" width="64" height="64" rx="8" fill="#16a34a" opacity="0.15" stroke="#16a34a"/>
+              <text x="104" y="38" text-anchor="middle" font-size="22">🙂</text>
+              <text x="104" y="56" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="700" fill="#16a34a">Good</text>
+              <rect x="144" y="0" width="64" height="64" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="176" y="38" text-anchor="middle" font-size="22">😐</text>
+              <text x="176" y="56" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">OK</text>
+              <rect x="216" y="0" width="64" height="64" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="248" y="38" text-anchor="middle" font-size="22">😣</text>
+              <text x="248" y="56" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">Rough</text>
+            </g>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Daily check-in</h3>
+          <p>Patients log their weight and how they're feeling in one tap each morning. No scrolling, no menu diving — adherence stays high because the friction stays low. The data lands in your clinician dashboard the same morning, so anyone falling off shows up immediately rather than weeks later at their next visit.</p>
+        </div>
+      </div>
+
+      <!-- AI Food Vision -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="120" height="120" rx="10" fill="#1B1A18"/>
+            <rect x="28" y="36" width="104" height="88" rx="6" fill="#FBE9C0"/>
+            <circle cx="80" cy="80" r="28" fill="#E8A412" opacity="0.7"/>
+            <circle cx="62" cy="68" r="9" fill="#16a34a"/>
+            <circle cx="98" cy="74" r="7" fill="#EF4444" opacity="0.6"/>
+            <rect x="54" y="98" width="52" height="12" rx="2" fill="#B8810F" opacity="0.6"/>
+            <text x="80" y="138" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#FFFFFF" opacity="0.85">Tap to capture</text>
+            <rect x="156" y="20" width="144" height="120" rx="10" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="170" y="40" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#1B1A18">Grilled chicken bowl</text>
+            <text x="170" y="54" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">~540 kcal · 42g protein</text>
+            <line x1="170" y1="62" x2="290" y2="62" stroke="#E8E2D2"/>
+            <rect x="170" y="74" width="20" height="50" rx="3" fill="#16a34a" opacity="0.7"/>
+            <rect x="194" y="86" width="20" height="38" rx="3" fill="#E8A412" opacity="0.7"/>
+            <rect x="218" y="98" width="20" height="26" rx="3" fill="#EF4444" opacity="0.7"/>
+            <text x="180" y="138" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#6B6863">P</text>
+            <text x="204" y="138" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#6B6863">C</text>
+            <text x="228" y="138" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#6B6863">F</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>AI Food Vision</h3>
+          <p>Snap a photo of any meal and the app estimates calories, protein, carbs, and fat in seconds. Built so patients log every meal — not just the easy ones. Patients can confirm or correct the estimate before saving, which keeps the data honest and trains the model on the foods your specific patient population actually eats.</p>
+        </div>
+      </div>
+
+      <!-- Manual logging -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="32" rx="16" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="40" y="40" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">Search foods…</text>
+            <circle cx="280" cy="36" r="10" fill="#FBE9C0"/>
+            <text x="280" y="40" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11">🔍</text>
+            <rect x="20" y="64" width="280" height="36" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="80" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Greek yogurt, plain · 1 cup</text>
+            <text x="36" y="93" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">130 kcal · 22g protein</text>
+            <text x="290" y="86" text-anchor="end" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#16a34a">+</text>
+            <rect x="20" y="108" width="280" height="36" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="124" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Blueberries · 1/2 cup</text>
+            <text x="36" y="137" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">42 kcal · 0g protein</text>
+            <text x="290" y="130" text-anchor="end" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#16a34a">+</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Manual food logging</h3>
+          <p>For prepackaged foods, recipes, or anything the camera can't capture cleanly — a fast searchable food database backs up the AI. Common items are one tap; barcode scanning handles the rest. Patients always have a path to log a meal, even if the camera picks the wrong dish.</p>
+        </div>
+      </div>
+
+      <!-- Wearables -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <!-- Apple Watch -->
+            <rect x="48" y="32" width="78" height="96" rx="14" fill="#1B1A18"/>
+            <rect x="56" y="44" width="62" height="72" rx="6" fill="#16a34a" opacity="0.18"/>
+            <text x="87" y="74" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#16a34a">9,247</text>
+            <text x="87" y="86" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#16a34a">steps</text>
+            <text x="87" y="102" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14">⌚</text>
+            <!-- Sync arrows -->
+            <path d="M148,80 Q172,60 196,80" fill="none" stroke="#E8A412" stroke-width="2" stroke-dasharray="4,3"/>
+            <path d="M196,80 Q172,100 148,80" fill="none" stroke="#E8A412" stroke-width="2" stroke-dasharray="4,3"/>
+            <!-- Phone view -->
+            <rect x="208" y="32" width="64" height="96" rx="10" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="240" y="56" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="700" fill="#6B6863">TODAY</text>
+            <text x="240" y="78" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#1B1A18">9,247</text>
+            <text x="240" y="92" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">steps</text>
+            <line x1="220" y1="100" x2="260" y2="100" stroke="#E8E2D2"/>
+            <text x="240" y="116" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#1B1A18">412</text>
+            <text x="240" y="124" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#6B6863">kcal burned</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Wearables sync</h3>
+          <p>Apple Watch, Apple Health, and Android health platforms feed steps, activity, and heart rate into the app — no manual entry needed for the data patients are already collecting. Activity trends sit alongside weight and food in the clinician view, so your team can see the full picture without asking patients to copy numbers between apps.</p>
+        </div>
+      </div>
+
+      <!-- Side effects -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="28" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="38" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#1B1A18">Any side effects today?</text>
+            <g transform="translate(20,60)">
+              <rect x="0" y="0" width="86" height="28" rx="14" fill="#FBE9C0" stroke="#E8A412"/>
+              <text x="43" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#B8810F">Mild nausea</text>
+              <rect x="94" y="0" width="78" height="28" rx="14" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="133" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">Headache</text>
+              <rect x="180" y="0" width="92" height="28" rx="14" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="226" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">Constipation</text>
+            </g>
+            <g transform="translate(20,98)">
+              <rect x="0" y="0" width="86" height="28" rx="14" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="43" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">Fatigue</text>
+              <rect x="94" y="0" width="80" height="28" rx="14" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="134" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">Heartburn</text>
+              <rect x="182" y="0" width="60" height="28" rx="14" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="212" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">None</text>
+            </g>
+            <text x="36" y="148" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Severity: mild → bothering me</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Side-effect tracking</h3>
+          <p>Patients flag side effects with severity in seconds. Your team sees the pattern early and can intervene before someone considers stopping their medication. The most common GLP-1 side effects are pre-listed, so logging is one tap rather than a freeform note.</p>
+        </div>
+      </div>
+
+      <!-- Messaging -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="32" rx="6" fill="#16a34a"/>
+            <text x="36" y="40" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Dr. Sarah Chen — Care team</text>
+            <rect x="20" y="64" width="180" height="32" rx="10" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="32" y="80" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">How is the nausea today?</text>
+            <text x="32" y="92" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">9:42 AM</text>
+            <rect x="120" y="104" width="180" height="32" rx="10" fill="#FBE9C0"/>
+            <text x="132" y="120" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">Better today, thanks!</text>
+            <text x="132" y="132" font-family="-apple-system,sans-serif" font-size="8" fill="#B8810F">Jane · 10:14 AM</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Two-way messaging</h3>
+          <p>HIPAA-aligned messaging between patients and your care team — replacing personal cell numbers, generic patient portals, and email back-and-forth that nobody loves. Every conversation is captured in the patient's record, searchable later, and routed to the right clinician without anyone juggling a personal device.</p>
+        </div>
+      </div>
+
+      <!-- Progress trends -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="120" rx="10" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="42" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#6B6863">8 WEEKS ON WEGOVY</text>
+            <text x="36" y="62" font-family="-apple-system,sans-serif" font-size="20" font-weight="800" fill="#1B1A18">−10.8 lb</text>
+            <text x="120" y="62" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#16a34a">on track</text>
+            <!-- Chart -->
+            <line x1="36" y1="118" x2="290" y2="118" stroke="#E8E2D2"/>
+            <polyline fill="none" stroke="#16a34a" stroke-width="2.5" points="40,82 75,86 110,90 145,94 180,100 215,106 250,110 285,116"/>
+            <circle cx="285" cy="116" r="4" fill="#16a34a"/>
+            <text x="40" y="132" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">Wk 1</text>
+            <text x="285" y="132" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">Wk 8</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Progress trends and insights</h3>
+          <p>Patients see their weight curve, weekly averages, and milestones in an honest, non-shaming way. Designed to keep motivation high without overpromising results, and to give your team a shared view of progress when they meet for the next visit.</p>
+        </div>
+      </div>
+
+      <!-- Empty placeholder for grid alignment OR you can leave odd -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="120" rx="10" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="42" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#6B6863">YOUR CARE PLAN</text>
+            <rect x="36" y="56" width="248" height="28" rx="6" fill="#FAF7EE"/>
+            <text x="48" y="74" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Week 8 — Wegovy 1.0mg</text>
+            <text x="270" y="74" text-anchor="end" font-family="-apple-system,sans-serif" font-size="9" fill="#10B981" font-weight="600">current</text>
+            <rect x="36" y="92" width="248" height="20" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="48" y="106" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Weeks 9-12 — same dose</text>
+            <rect x="36" y="118" width="248" height="20" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="48" y="132" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Week 13 — titration check-in</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Their care plan, in plain language</h3>
+          <p>Patients see where they are in their plan — current dose, what's coming next, and what their care team is watching for. No more confusion between visits, no more phone calls asking "wait, am I supposed to bump up next week or the week after?"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLINICIAN DASHBOARD -->
+<section class="dark">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow" style="background:#3a3936; color:var(--quantum);">For your clinical team</span>
+      <h2>The clinician dashboard — every patient, in one view.</h2>
+      <p>Built for clinicians who actually work with GLP-1 patients all day. Triage, message, and follow up without leaving the app — and without bouncing between three browser tabs and a paper sticky-note system to keep track of who needs a call back.</p>
+    </div>
+
+    <div class="cap-grid">
+      <!-- Patient roster -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="200" rx="10" fill="#1f1e1c"/>
+            <rect x="16" y="16" width="288" height="28" rx="6" fill="#262522"/>
+            <text x="28" y="34" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#F4EFE2">Patient roster · 240</text>
+            <text x="296" y="34" text-anchor="end" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">12 need attention</text>
+            <g transform="translate(16,52)">
+              <rect x="0" y="0" width="288" height="36" rx="6" fill="#262522"/>
+              <circle cx="20" cy="18" r="9" fill="#FBE9C0"/>
+              <text x="20" y="22" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="700" fill="#B8810F">JD</text>
+              <text x="38" y="16" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#F4EFE2">Jane Doe</text>
+              <text x="38" y="28" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">Wegovy 1.0mg · wk 8 · −10.8 lb</text>
+              <rect x="232" y="10" width="48" height="16" rx="8" fill="#10B981" opacity="0.25"/>
+              <text x="256" y="21" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#10B981">on track</text>
+
+              <rect x="0" y="44" width="288" height="36" rx="6" fill="#262522"/>
+              <circle cx="20" cy="62" r="9" fill="#FBE9C0"/>
+              <text x="20" y="66" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="700" fill="#B8810F">MR</text>
+              <text x="38" y="60" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#F4EFE2">Maria Reyes</text>
+              <text x="38" y="72" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">Zepbound 5mg · wk 4</text>
+              <rect x="232" y="54" width="48" height="16" rx="8" fill="#F59E0B" opacity="0.3"/>
+              <text x="256" y="65" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#F59E0B">review</text>
+
+              <rect x="0" y="88" width="288" height="36" rx="6" fill="#262522"/>
+              <circle cx="20" cy="106" r="9" fill="#FBE9C0"/>
+              <text x="20" y="110" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="700" fill="#B8810F">AT</text>
+              <text x="38" y="104" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#F4EFE2">Alex Tran</text>
+              <text x="38" y="116" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">Ozempic 0.5mg · wk 12</text>
+              <rect x="232" y="98" width="48" height="16" rx="8" fill="#10B981" opacity="0.25"/>
+              <text x="256" y="109" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#10B981">on track</text>
+            </g>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Patient roster with status at a glance</h3>
+          <p>Sort by who needs attention today. Filter by medication, by week of titration, by assigned clinician. The patients who need follow-up surface to the top automatically — based on their recent check-ins, side-effect reports, and unread messages.</p>
+        </div>
+      </div>
+
+      <!-- Per-patient detail -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="200" rx="10" fill="#1f1e1c"/>
+            <text x="20" y="32" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#F4EFE2">Jane Doe</text>
+            <text x="20" y="46" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">47 · Wegovy · week 8 · Dr. Chen</text>
+            <rect x="20" y="60" width="280" height="120" rx="8" fill="#262522"/>
+            <text x="34" y="80" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#C9C4BC">8-WEEK WEIGHT TREND</text>
+            <polyline fill="none" stroke="#16a34a" stroke-width="2.5" points="40,140 75,142 110,144 145,148 180,152 215,156 250,158 285,164"/>
+            <circle cx="40" cy="140" r="2.5" fill="#16a34a"/>
+            <circle cx="285" cy="164" r="3.5" fill="#16a34a"/>
+            <line x1="34" y1="170" x2="290" y2="170" stroke="#3a3936"/>
+            <text x="34" y="100" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#F4EFE2">218.4 → 207.6</text>
+            <text x="160" y="100" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#10B981">−10.8 lb (−4.9%)</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Per-patient detail view</h3>
+          <p>Weight trends, food logs, side effects, message history, and clinician notes — all on one page. Click into a patient and you have everything you need to make a call, write a reply, or update a plan, without rummaging through three other systems.</p>
+        </div>
+      </div>
+
+      <!-- Inbox -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="200" rx="10" fill="#1f1e1c"/>
+            <text x="20" y="32" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#F4EFE2">Inbox · 14 unread</text>
+            <g transform="translate(16,46)">
+              <rect x="0" y="0" width="288" height="44" rx="6" fill="#262522"/>
+              <circle cx="6" cy="22" r="3" fill="#E8A412"/>
+              <text x="20" y="20" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#F4EFE2">Jane Doe</text>
+              <text x="20" y="34" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">Better today, thanks!</text>
+              <text x="280" y="20" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">10:14 AM</text>
+
+              <rect x="0" y="52" width="288" height="44" rx="6" fill="#262522"/>
+              <circle cx="6" cy="74" r="3" fill="#E8A412"/>
+              <text x="20" y="72" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#F4EFE2">Maria Reyes</text>
+              <text x="20" y="86" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">When should I take it next?</text>
+              <text x="280" y="72" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#C9C4BC">9:08 AM</text>
+
+              <rect x="0" y="104" width="288" height="44" rx="6" fill="#262522"/>
+              <text x="20" y="124" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#C9C4BC">Alex Tran</text>
+              <text x="20" y="138" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Thanks!</text>
+              <text x="280" y="124" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Yesterday</text>
+            </g>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Message inbox across all patients</h3>
+          <p>Every patient message in one queue. Triage by urgency, route to the right clinician, and clear the inbox without juggling tabs. Templates for common replies, so your team doesn't retype the same answer about meal timing fourteen times a day.</p>
+        </div>
+      </div>
+
+      <!-- Care queue -->
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="200" rx="10" fill="#1f1e1c"/>
+            <text x="20" y="32" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#F4EFE2">Today's care queue</text>
+            <text x="300" y="32" text-anchor="end" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">May 10</text>
+            <g transform="translate(16,48)">
+              <rect x="0" y="0" width="288" height="40" rx="6" fill="#262522"/>
+              <rect x="10" y="10" width="3" height="20" fill="#EF4444"/>
+              <text x="22" y="20" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#F4EFE2">Maria Reyes — week 4 review</text>
+              <text x="22" y="32" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">Reported moderate nausea, 2 days</text>
+
+              <rect x="0" y="48" width="288" height="40" rx="6" fill="#262522"/>
+              <rect x="10" y="58" width="3" height="20" fill="#F59E0B"/>
+              <text x="22" y="68" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#F4EFE2">Sam Patel — message reply</text>
+              <text x="22" y="80" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">Question about meal timing</text>
+
+              <rect x="0" y="96" width="288" height="40" rx="6" fill="#262522"/>
+              <rect x="10" y="106" width="3" height="20" fill="#10B981"/>
+              <text x="22" y="116" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#F4EFE2">Jane Doe — weekly check-in</text>
+              <text x="22" y="128" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">On track, no action needed</text>
+            </g>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Daily care queue</h3>
+          <p>A prioritized list of who to see today: urgent follow-ups first, then scheduled check-ins, then routine messages. Designed to make a clinician's morning a one-screen operation, so the day starts with a clear plan rather than thirty minutes of triage.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN CONSOLE -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">For practice admins</span>
+      <h2>The admin console — settings that belong to you.</h2>
+      <p>The configuration layer for your clinic. What's enabled, what's branded, who has access. The console is designed so a practice administrator — not an engineer — can run it day to day, with the changes taking effect across the patient app and the clinician dashboard immediately.</p>
+    </div>
+
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="36" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="40" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#1B1A18">Plan: Pro</text>
+            <text x="284" y="40" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#16a34a">Active</text>
+            <g transform="translate(20,68)">
+              <rect x="0" y="0" width="280" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="14" y="16" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">AI Food Vision</text>
+              <rect x="248" y="6" width="24" height="12" rx="6" fill="#16a34a"/>
+              <circle cx="266" cy="12" r="5" fill="#FFFFFF"/>
+              <rect x="0" y="30" width="280" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="14" y="46" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">Wearables sync</text>
+              <rect x="248" y="36" width="24" height="12" rx="6" fill="#16a34a"/>
+              <circle cx="266" cy="42" r="5" fill="#FFFFFF"/>
+              <rect x="0" y="60" width="280" height="22" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="14" y="76" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">Aggregate practice reports</text>
+              <rect x="248" y="66" width="24" height="12" rx="6" fill="#C9C4BC"/>
+              <circle cx="254" cy="72" r="5" fill="#FFFFFF"/>
+            </g>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Plan and module configuration</h3>
+          <p>Turn modules on or off based on your plan and your workflow. Your admin controls what your clinicians and patients see, so you can roll out new capabilities to a small pilot group before opening them up to your full patient population.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="280" height="120" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="36" y="44" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#6B6863">YOUR BRAND</text>
+            <text x="36" y="68" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#1B1A18">Mountainview Medicine</text>
+            <text x="36" y="84" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">App name shown to patients</text>
+            <line x1="36" y1="94" x2="284" y2="94" stroke="#E8E2D2"/>
+            <circle cx="48" cy="116" r="11" fill="#16a34a"/>
+            <text x="68" y="120" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">#16a34a</text>
+            <text x="130" y="120" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">primary color</text>
+            <rect x="220" y="106" width="60" height="22" rx="4" fill="#1B1A18"/>
+            <text x="250" y="121" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#F4EFE2">Edit</text>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Branding configuration</h3>
+          <p>Upload your logo, set your primary color, name your app. Changes propagate to the patient app and the dashboard immediately, ready for a new App Store push. No engineering ticket, no waiting on a release window — your brand is something your team controls.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <text x="20" y="32" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#1B1A18">Support tickets · 3 open</text>
+            <g transform="translate(20,46)">
+              <rect x="0" y="0" width="280" height="32" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="14" y="16" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Patient can't sync Apple Watch</text>
+              <text x="14" y="28" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Open · 2h ago</text>
+              <rect x="0" y="40" width="280" height="32" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="14" y="56" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Add new clinician account</text>
+              <text x="14" y="68" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">In progress · yesterday</text>
+              <rect x="0" y="80" width="280" height="32" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <text x="14" y="96" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Quarterly access review</text>
+              <text x="14" y="108" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Scheduled · Jun 1</text>
+            </g>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>Support ticket inbox</h3>
+          <p>One place for your admin team to handle clinician requests, patient escalations, and our team's responses — without bouncing through email. Every ticket carries the context of which patient or clinician it touches, so your admins can act without a thirty-minute archeology dig.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-preview">
+          <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="320" height="160" rx="10" fill="#FAF7EE"/>
+            <text x="20" y="32" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#1B1A18">Team · 6 members</text>
+            <g transform="translate(20,46)">
+              <rect x="0" y="0" width="280" height="32" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <circle cx="20" cy="16" r="10" fill="#16a34a" opacity="0.18"/>
+              <text x="20" y="20" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#16a34a">SC</text>
+              <text x="40" y="14" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Dr. Sarah Chen</text>
+              <text x="40" y="26" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Clinician · admin</text>
+              <rect x="0" y="40" width="280" height="32" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <circle cx="20" cy="56" r="10" fill="#FBE9C0"/>
+              <text x="20" y="60" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#B8810F">JM</text>
+              <text x="40" y="54" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Jordan Miller, NP</text>
+              <text x="40" y="66" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Clinician</text>
+              <rect x="0" y="80" width="280" height="32" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <circle cx="20" cy="96" r="10" fill="#FBE9C0"/>
+              <text x="20" y="100" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#B8810F">RP</text>
+              <text x="40" y="94" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#1B1A18">Rita Park</text>
+              <text x="40" y="106" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Practice administrator</text>
+            </g>
+          </svg>
+        </div>
+        <div class="cap-body">
+          <h3>User management</h3>
+          <p>Add or remove clinicians and admins. Set roles. Run quarterly access reviews. The activity trail is captured automatically, so when a compliance review asks who had access to what and when, you have the answer in one click instead of an afternoon of spreadsheet work.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHITE-LABEL COMMITMENT -->
+<section class="cream">
+  <div class="container">
+    <div class="section-head center" style="margin-bottom:48px;">
+      <span class="eyebrow">The white-label commitment</span>
+      <h2>Onboarding in weeks, not quarters.</h2>
+      <p>The first cohort of patients on Mountainview Medicine's branded app went live in under six weeks. Once your branding, your developer accounts, and your team are set up, every cohort after that is faster — because the heavy lifting only happens once.</p>
+    </div>
+    <div class="commitment">
+      <div>
+        <h2 style="font-size:1.5rem;">It's your product, end to end.</h2>
+        <p style="margin-top:16px; font-size:var(--font-body-large);">We build the platform. You ship it as your own. Your patients download an app from your developer account, see your name in the App Store search results, and never see ours.</p>
+        <ul class="commitment-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Your branded app published in your own App Store and Google Play developer accounts.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Your patients see your name, your logo, and your colors on every screen — never ours.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Your patient data lives in its own dedicated environment — never co-mingled with another clinic.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Four to six weeks to your first cohort of patients. Faster on every cohort after that.
+          </li>
+        </ul>
+      </div>
+      <div class="commitment-visual">
+        <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="greenGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#16a34a"/>
+              <stop offset="100%" stop-color="#22c55e"/>
+            </linearGradient>
+          </defs>
+          <!-- Phone -->
+          <rect x="40" y="40" width="180" height="280" rx="22" fill="#1B1A18"/>
+          <rect x="46" y="46" width="168" height="268" rx="18" fill="#FFFFFF"/>
+          <rect x="80" y="50" width="48" height="8" rx="4" fill="#1B1A18"/>
+          <rect x="46" y="62" width="168" height="60" fill="url(#greenGrad)"/>
+          <text x="60" y="86" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Mountainview</text>
+          <text x="60" y="100" font-family="-apple-system,sans-serif" font-size="9" fill="#FFFFFF" opacity="0.85">Your weight-loss companion</text>
+          <rect x="60" y="138" width="140" height="60" rx="8" fill="#FAF7EE"/>
+          <text x="74" y="158" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#6B6863">TODAY</text>
+          <text x="74" y="180" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#1B1A18">207.6 lb</text>
+          <text x="74" y="194" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#10B981">−1.2 this week</text>
+          <rect x="60" y="208" width="64" height="48" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+          <text x="92" y="232" text-anchor="middle" font-size="14">📷</text>
+          <text x="92" y="248" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">Log meal</text>
+          <rect x="132" y="208" width="68" height="48" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+          <text x="166" y="232" text-anchor="middle" font-size="14">⚖️</text>
+          <text x="166" y="248" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">Weigh in</text>
+
+          <!-- App Store badge -->
+          <rect x="260" y="80" width="180" height="60" rx="10" fill="#1B1A18"/>
+          <text x="280" y="106" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">Download on the</text>
+          <text x="280" y="126" font-family="-apple-system,sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">App Store</text>
+          <text x="420" y="116" text-anchor="end" font-size="22"></text>
+
+          <!-- Google Play badge -->
+          <rect x="260" y="160" width="180" height="60" rx="10" fill="#1B1A18"/>
+          <text x="280" y="186" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">Get it on</text>
+          <text x="280" y="206" font-family="-apple-system,sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">Google Play</text>
+
+          <!-- Caption -->
+          <rect x="260" y="240" width="180" height="80" rx="10" fill="#FAF7EE" stroke="#E8E2D2"/>
+          <text x="280" y="262" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#6B6863">PUBLISHED BY</text>
+          <text x="280" y="284" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#1B1A18">Mountainview Medicine</text>
+          <text x="280" y="302" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Your developer account.</text>
+          <text x="280" y="313" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Your listing. Your patients.</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT FITS TOGETHER -->
+<section>
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">How it fits together</span>
+      <h2>One platform. Three audiences. Designed to feel native to each.</h2>
+    </div>
+    <div style="max-width:780px; margin:0 auto; font-size:1.0625rem; color:var(--ink-muted); line-height:1.7;">
+      <p style="margin-bottom:20px;">A patient opens your branded app in the morning, taps in their weight, snaps a photo of breakfast, and sees a quick note from their care team. The whole interaction takes under two minutes. Behind the scenes, that data lands in the clinician dashboard the same morning — sitting alongside the patient's eight-week trend, their last side-effect report, and the messages from earlier in the week.</p>
+      <p style="margin-bottom:20px;">A clinician opens the dashboard at the start of clinic. The daily care queue is already organized: who needs urgent follow-up, who has a scheduled check-in, who sent a routine message that can be batched. They reply, update plans, and clear the queue without bouncing between tabs. The activity is captured automatically, so when the practice does its quarterly review, the audit trail writes itself.</p>
+      <p>An admin opens the console once a week to handle the configuration work — adding a new clinician to the team, turning on a new module for a pilot group, reviewing support tickets. Branding changes propagate to the patient app and the dashboard the moment the admin saves them, ready for the next App Store push. The platform is built so the right people can change the right things — without anyone needing to file an engineering ticket to update a logo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+  <div class="container">
+    <h2>See it the way your patients and clinicians will.</h2>
+    <p>Try the demos right now — interactive, no signup, no email required.</p>
+    <div class="cta-row">
+      <a href="demo.html" class="btn btn-primary">Try the patient demo</a>
+      <a href="demo.html" class="btn btn-primary">Try the clinician demo</a>
+      <a href="contact.html" class="btn btn-secondary">Talk to founders</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<script>
+  // Theme management
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>
