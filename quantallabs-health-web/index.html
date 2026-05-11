@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quantal Health — The care platform GLP-1 clinics actually want</title>
+  <meta name="description" content="A white-label care platform for weight-loss clinics treating GLP-1 patients. Your branded patient app, your clinician dashboard, your dedicated environment." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* Brand palette */
+    :root{
+      --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+      --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+      --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+      --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
+      --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+      --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+      --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+      --border:var(--paper-dark); --border-strong:#D4CFC2;
+      --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+      --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+      --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+      --font-hero:clamp(2.75rem, 5vw, 4.5rem);
+      --font-h1:2.5rem; --font-h2:2rem; --font-h3:1.375rem; --font-h4:1.125rem;
+      --font-body-large:1.25rem; --font-body:1rem; --font-small:0.875rem; --font-eyebrow:0.75rem;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+      font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+      -webkit-font-smoothing:antialiased; line-height:1.55;
+      transition:background 0.2s ease, color 0.2s ease;}
+
+    /* Dark mode */
+    [data-theme="dark"],
+    [data-theme="system"].sys-dark {
+      --bg:#1B1A18; --bg-clean:#252320; --surface:#252320;
+      --paper-light:#1F1D1B; --paper-dark:#2C2A27;
+      --text:#F4EFE2; --text-secondary:#B8B3A8; --text-muted:#7A7570;
+      --border:rgba(244,239,226,0.10); --border-strong:rgba(244,239,226,0.18);
+      --ink-muted:#B8B3A8; --ink-soft:#7A7570;
+      --shadow-sm:0 1px 2px rgb(0 0 0 / 0.30);
+      --shadow-md:0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+      --shadow-lg:0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+    }
+    [data-theme="dark"] .topbar,
+    [data-theme="system"].sys-dark .topbar { background:rgba(27,26,24,0.92); }
+    [data-theme="dark"] .topnav-cta,
+    [data-theme="system"].sys-dark .topnav-cta { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .topnav-cta:hover,
+    [data-theme="system"].sys-dark .topnav-cta:hover { background:var(--quantum-dark); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary,
+    [data-theme="system"].sys-dark .btn-primary { background:var(--quantum); color:#1B1A18; }
+    [data-theme="dark"] .btn-primary:hover,
+    [data-theme="system"].sys-dark .btn-primary:hover { background:var(--quantum-dark); color:#1B1A18; }
+
+    /* Brand attribution */
+    .brand-attribution {
+      display:block; font-size:0.7rem; font-weight:400; font-style:italic;
+      color:var(--text-muted); letter-spacing:0; line-height:1.1; margin-top:2px;
+    }
+
+    /* Topnav back link */
+    .topnav-back {
+      display:inline-flex; align-items:center;
+      font-size:0.8125rem; color:var(--text-muted); font-weight:400;
+      padding:6px 10px; border-radius:6px; margin-right:8px;
+      transition:color 0.15s, background 0.15s;
+    }
+    .topnav-back:hover { color:var(--text); background:rgba(27,26,24,0.05); text-decoration:none; }
+    [data-theme="dark"] .topnav-back:hover,
+    [data-theme="system"].sys-dark .topnav-back:hover { background:rgba(244,239,226,0.06); }
+
+    /* Settings (theme) toggle */
+    .settings-wrap { position:relative; }
+    .settings-toggle {
+      width:34px; height:34px; border-radius:8px;
+      border:1px solid var(--border-strong); background:none; cursor:pointer;
+      color:var(--text-secondary); display:flex; align-items:center; justify-content:center;
+      transition:background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .settings-toggle:hover { background:var(--bg-clean); color:var(--text); }
+    .settings-toggle svg { width:16px; height:16px; }
+    .settings-panel {
+      position:absolute; top:calc(100% + 8px); right:0; width:210px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; box-shadow:var(--shadow-lg); padding:12px;
+      opacity:0; pointer-events:none; transform:translateY(-4px);
+      transition:opacity 0.15s ease, transform 0.15s ease; z-index:200;
+    }
+    .settings-panel.open { opacity:1; pointer-events:all; transform:translateY(0); }
+    .settings-lbl {
+      font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+      color:var(--text-muted); margin-bottom:8px; padding:0 4px;
+    }
+    .theme-opts { display:flex; flex-direction:column; gap:2px; }
+    .theme-opt {
+      display:flex; align-items:center; gap:9px;
+      padding:8px 10px; border-radius:8px; width:100%;
+      font-size:0.875rem; font-weight:500; color:var(--text-secondary);
+      background:none; border:none; cursor:pointer; font-family:inherit;
+      transition:background 0.15s, color 0.15s;
+    }
+    .theme-opt:hover { background:var(--bg-clean); color:var(--text); }
+    .theme-opt.active { background:var(--bg-clean); color:var(--quantum-dark); font-weight:600; }
+    [data-theme="dark"] .theme-opt.active,
+    [data-theme="system"].sys-dark .theme-opt.active { color:var(--quantum); }
+    .theme-opt svg { width:15px; height:15px; flex-shrink:0; }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    a{color:var(--ink); text-decoration:none}
+    a:hover{color:var(--quantum-dark)}
+    h1,h2,h3,h4{margin:0; line-height:1.15; letter-spacing:-0.015em; color:var(--ink)}
+    h1{font-size:var(--font-hero); font-weight:800; letter-spacing:-0.025em}
+    h2{font-size:var(--font-h2); font-weight:700}
+    h3{font-size:var(--font-h3); font-weight:600}
+    h4{font-size:var(--font-h4); font-weight:600}
+    p{margin:0; color:var(--text-secondary)}
+
+    /* Topbar */
+    .topbar{background:rgba(244,239,226,0.95); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50;}
+    .topbar-inner{max-width:1200px; margin:0 auto; padding:16px 24px;
+      display:flex; align-items:center; gap:32px;}
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none;}
+    .brand-text{font-weight:400; color:var(--ink-muted); font-size:1.125rem; letter-spacing:-0.01em;}
+    .brand-text strong{font-weight:700; color:var(--ink);}
+    .topnav{display:flex; gap:24px; flex:1;}
+    .topnav a{color:var(--ink-muted); font-size:0.9375rem;}
+    .topnav a:hover{color:var(--ink);}
+    .topnav a.active{color:var(--ink); font-weight:600;}
+    .topnav-cta{background:var(--ink); color:var(--paper); padding:10px 18px;
+      border-radius:8px; font-size:0.9375rem; font-weight:600; transition:all 0.15s;}
+    .topnav-cta:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+
+    /* Layout containers */
+    .container{max-width:1200px; margin:0 auto; padding:0 24px;}
+    section{padding:96px 0;}
+    section.hero{padding:128px 0 96px;}
+    section.tight{padding:64px 0;}
+
+    /* Hero */
+    .hero-grid{display:grid; grid-template-columns:1.05fr 1fr; gap:72px; align-items:center;}
+    .eyebrow{display:inline-block; font-size:var(--font-eyebrow); font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase; color:var(--quantum-dark);
+      background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:24px;}
+    .hero p.lede{font-size:var(--font-body-large); color:var(--text-secondary);
+      margin-top:24px; max-width:520px;}
+    .cta-row{display:flex; gap:14px; margin-top:36px; flex-wrap:wrap;}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 22px;
+      border-radius:10px; font-size:1rem; font-weight:600; text-decoration:none;
+      transition:all 0.15s; border:1px solid transparent; cursor:pointer;}
+    .btn-primary{background:var(--ink); color:var(--paper);}
+    .btn-primary:hover{background:var(--quantum-dark); color:var(--bg-clean);}
+    .btn-secondary{background:transparent; color:var(--ink); border-color:var(--border-strong);}
+    .btn-secondary:hover{background:var(--bg-clean); border-color:var(--ink);}
+    .btn svg{width:16px; height:16px;}
+
+    /* Hero illustration */
+    .hero-illustration{position:relative;}
+    .hero-illustration svg{width:100%; height:auto; display:block;
+      filter:drop-shadow(0 18px 40px rgb(27 26 24 / 0.10));}
+
+    /* 3-line pitch */
+    .pitch-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+    .pitch-card{background:var(--surface); border:1px solid var(--border);
+      border-radius:14px; padding:32px; box-shadow:var(--shadow-sm);}
+    .pitch-icon{width:44px; height:44px; border-radius:10px; background:var(--quantum-soft);
+      display:flex; align-items:center; justify-content:center; margin-bottom:20px;}
+    .pitch-icon svg{width:24px; height:24px; color:var(--quantum-dark);}
+    .pitch-card h3{margin-bottom:10px;}
+    .pitch-card p{font-size:0.95rem;}
+
+    /* Trust strip */
+    .trust{background:var(--ink); color:var(--paper); padding:48px 0; text-align:center;}
+    .trust p{color:var(--paper); font-size:1.0625rem; max-width:880px; margin:0 auto;}
+    .trust strong{color:var(--quantum); font-weight:600;}
+
+    /* What you'll see */
+    .modules-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:48px;}
+    .module-tile{background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; overflow:hidden; box-shadow:var(--shadow-md);}
+    .module-preview{background:var(--paper-light); border-bottom:1px solid var(--border);
+      padding:28px 24px; min-height:220px; display:flex; align-items:center; justify-content:center;}
+    .module-preview svg{width:100%; height:auto; max-height:200px;}
+    .module-body{padding:24px 28px 32px;}
+    .module-body h3{margin-bottom:8px;}
+    .module-body p{font-size:0.95rem;}
+
+    /* Section header */
+    .section-head{text-align:center; max-width:680px; margin:0 auto 56px;}
+    .section-head h2{margin-bottom:14px;}
+    .section-head p{font-size:var(--font-body-large);}
+
+    /* Bottom CTA */
+    .bottom-cta{background:var(--paper-light); border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border); padding:96px 0; text-align:center;}
+    .bottom-cta h2{max-width:680px; margin:0 auto 16px;}
+    .bottom-cta p{max-width:560px; margin:0 auto 32px;}
+    .bottom-cta .cta-row{justify-content:center;}
+
+    /* Footer */
+    .footer{background:var(--ink); color:var(--ink-soft); padding:64px 0 32px;}
+    .footer-inner{max-width:1200px; margin:0 auto; padding:0 24px;
+      display:grid; grid-template-columns:1.5fr 2.5fr; gap:48px;}
+    .footer-tagline{color:var(--ink-soft); font-size:0.9375rem; margin-top:16px; max-width:280px;}
+    .footer-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+    .footer-col h4{color:var(--paper); font-size:0.875rem; text-transform:uppercase;
+      letter-spacing:0.08em; margin-bottom:16px;}
+    .footer-col a{display:block; color:var(--ink-soft); font-size:0.9375rem;
+      padding:6px 0; text-decoration:none;}
+    .footer-col a:hover{color:var(--quantum);}
+    .footer-bottom{max-width:1200px; margin:48px auto 0; padding:24px 24px 0;
+      border-top:1px solid #2a2926; display:flex; justify-content:space-between;
+      align-items:center; color:var(--ink-soft); font-size:0.875rem;}
+    .footer-bottom p{color:var(--ink-soft); font-size:0.875rem;}
+
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr; gap:48px;}
+      .pitch-grid{grid-template-columns:1fr;}
+      .modules-grid{grid-template-columns:1fr;}
+      .topnav{display:none;}
+      .footer-inner{grid-template-columns:1fr;}
+      .footer-cols{grid-template-columns:repeat(2,1fr);}
+      section{padding:64px 0;}
+      section.hero{padding:80px 0 64px;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Now accepting design partners</span>
+        <h1>The care platform GLP-1 clinics actually want.</h1>
+        <p class="lede">A branded patient app and a clinician dashboard, purpose-built for weight-loss clinics treating patients on Wegovy, Ozempic, Zepbound, Mounjaro, and Saxenda. Your brand on the App Store, your team's view of every patient, and your data in its own dedicated environment — without the months of engineering it usually takes to build.</p>
+        <div class="cta-row">
+          <a href="demo.html" class="btn btn-primary">
+            Try the demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="contact.html" class="btn btn-secondary">Talk to founders</a>
+        </div>
+      </div>
+
+      <!-- Hero illustration: phone (patient app) + browser (dashboard) both branded "Mountainview Medicine" -->
+      <div class="hero-illustration" aria-hidden="true">
+        <svg viewBox="0 0 640 460" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FAF7EE"/>
+              <stop offset="100%" stop-color="#F4EFE2"/>
+            </linearGradient>
+            <linearGradient id="greenBar" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#16a34a"/>
+              <stop offset="100%" stop-color="#22c55e"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Background panel -->
+          <rect x="0" y="0" width="640" height="460" rx="16" fill="url(#bgGrad)"/>
+
+          <!-- Browser frame (clinician dashboard) -->
+          <g transform="translate(160,60)">
+            <rect x="0" y="0" width="460" height="320" rx="12" fill="#FFFFFF" stroke="#E8E2D2" stroke-width="1.5"/>
+            <rect x="0" y="0" width="460" height="34" rx="12" fill="#F4EFE2"/>
+            <rect x="0" y="22" width="460" height="12" fill="#F4EFE2"/>
+            <circle cx="16" cy="17" r="5" fill="#EF4444"/>
+            <circle cx="34" cy="17" r="5" fill="#F59E0B"/>
+            <circle cx="52" cy="17" r="5" fill="#10B981"/>
+            <rect x="80" y="9" width="180" height="16" rx="4" fill="#FFFFFF" stroke="#E8E2D2"/>
+
+            <!-- Branded header bar -->
+            <rect x="0" y="34" width="460" height="38" fill="url(#greenBar)"/>
+            <text x="20" y="58" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF">Mountainview Medicine</text>
+            <text x="170" y="58" font-family="-apple-system,sans-serif" font-size="11" fill="#FFFFFF" opacity="0.85">Care Dashboard</text>
+            <circle cx="430" cy="53" r="11" fill="#FFFFFF" opacity="0.25"/>
+
+            <!-- Sidebar -->
+            <rect x="0" y="72" width="120" height="248" fill="#FAF7EE"/>
+            <rect x="14" y="92" width="92" height="22" rx="5" fill="#16a34a" opacity="0.12"/>
+            <rect x="22" y="100" width="60" height="6" rx="2" fill="#16a34a"/>
+            <rect x="14" y="124" width="80" height="6" rx="2" fill="#C9C4BC"/>
+            <rect x="14" y="142" width="70" height="6" rx="2" fill="#C9C4BC"/>
+            <rect x="14" y="160" width="86" height="6" rx="2" fill="#C9C4BC"/>
+            <rect x="14" y="178" width="64" height="6" rx="2" fill="#C9C4BC"/>
+
+            <!-- Main content: patient list -->
+            <text x="140" y="100" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#1B1A18">Patient roster</text>
+            <text x="140" y="118" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">240 active · 12 need attention</text>
+
+            <g transform="translate(140,130)">
+              <!-- Row 1: Jane Doe -->
+              <rect x="0" y="0" width="304" height="44" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <circle cx="20" cy="22" r="11" fill="#FBE9C0"/>
+              <text x="20" y="26" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#B8810F">JD</text>
+              <text x="40" y="20" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#1B1A18">Jane Doe</text>
+              <text x="40" y="34" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Wegovy 1.0mg · wk 8 · −10.8 lb</text>
+              <rect x="240" y="14" width="50" height="16" rx="8" fill="#10B981" opacity="0.18"/>
+              <text x="265" y="25" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#10B981">on track</text>
+
+              <!-- Row 2 -->
+              <rect x="0" y="52" width="304" height="44" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <circle cx="20" cy="74" r="11" fill="#FBE9C0"/>
+              <text x="20" y="78" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#B8810F">MR</text>
+              <text x="40" y="72" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#1B1A18">Maria Reyes</text>
+              <text x="40" y="86" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Zepbound 5mg · wk 4 · new check-in</text>
+              <rect x="240" y="66" width="50" height="16" rx="8" fill="#F59E0B" opacity="0.2"/>
+              <text x="265" y="77" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#B8810F">review</text>
+
+              <!-- Row 3 -->
+              <rect x="0" y="104" width="304" height="44" rx="6" fill="#FFFFFF" stroke="#E8E2D2"/>
+              <circle cx="20" cy="126" r="11" fill="#FBE9C0"/>
+              <text x="20" y="130" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#B8810F">AT</text>
+              <text x="40" y="124" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#1B1A18">Alex Tran</text>
+              <text x="40" y="138" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Ozempic 0.5mg · wk 12 · −7.4 lb</text>
+              <rect x="240" y="118" width="50" height="16" rx="8" fill="#10B981" opacity="0.18"/>
+              <text x="265" y="129" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#10B981">on track</text>
+            </g>
+          </g>
+
+          <!-- Phone (patient app) overlapping the browser -->
+          <g transform="translate(20,150)">
+            <rect x="0" y="0" width="180" height="290" rx="22" fill="#1B1A18"/>
+            <rect x="6" y="6" width="168" height="278" rx="18" fill="#FFFFFF"/>
+            <!-- Notch -->
+            <rect x="68" y="10" width="44" height="8" rx="4" fill="#1B1A18"/>
+
+            <!-- App branded header -->
+            <rect x="6" y="26" width="168" height="42" fill="url(#greenBar)"/>
+            <text x="22" y="48" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">Mountainview</text>
+            <text x="22" y="60" font-family="-apple-system,sans-serif" font-size="8" fill="#FFFFFF" opacity="0.85">Hi Jane — week 8</text>
+
+            <!-- Today card -->
+            <rect x="14" y="80" width="152" height="72" rx="8" fill="#FAF7EE"/>
+            <text x="22" y="98" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#6B6863">TODAY</text>
+            <text x="22" y="118" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#1B1A18">207.6 lb</text>
+            <text x="22" y="134" font-family="-apple-system,sans-serif" font-size="9" fill="#10B981" font-weight="600">−1.2 lb this week</text>
+            <text x="22" y="146" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Feeling: good</text>
+
+            <!-- Quick actions -->
+            <rect x="14" y="162" width="72" height="56" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <circle cx="50" cy="180" r="10" fill="#FBE9C0"/>
+            <text x="50" y="184" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11">📷</text>
+            <text x="50" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">Log meal</text>
+
+            <rect x="94" y="162" width="72" height="56" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <circle cx="130" cy="180" r="10" fill="#FBE9C0"/>
+            <text x="130" y="184" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11">⚖️</text>
+            <text x="130" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#1B1A18">Weigh in</text>
+
+            <!-- Message preview -->
+            <rect x="14" y="228" width="152" height="48" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <circle cx="28" cy="252" r="9" fill="#16a34a" opacity="0.18"/>
+            <text x="28" y="256" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#16a34a">SC</text>
+            <text x="44" y="248" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#1B1A18">Dr. Sarah Chen</text>
+            <text x="44" y="262" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Great progress this week!</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3-LINE PITCH -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <h2>Your brand. Your team's tools. Your patients' data.</h2>
+      <p>One platform that ships as your clinic — not as ours. Built so you keep the relationship with the patient, the data, and the brand. We stay invisible. Most clinics doing GLP-1 work today are running their workflow on a generic tracking app, a couple of spreadsheets, and a personal phone. We built the alternative — a paired patient app and clinician dashboard, designed specifically for the rhythm of GLP-1 care, and shipped under your name.</p>
+    </div>
+
+    <div class="pitch-grid">
+      <div class="pitch-card">
+        <div class="pitch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+        </div>
+        <h3>Your branded patient app</h3>
+        <p>Your logo. Your colors. Your name on the App Store and Google Play. Patients download an app that looks and feels like your practice — because it is your practice. The trust you've built with your patients stays with you, instead of getting lent to a third-party app they've never heard of.</p>
+      </div>
+
+      <div class="pitch-card">
+        <div class="pitch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M2 8h20M8 22h8"/></svg>
+        </div>
+        <h3>Your clinician dashboard</h3>
+        <p>Your team's view of every patient's progress in one place — daily check-ins, weight trends, food logs, side effects, and messages. Designed around the way GLP-1 clinics already work, not around a generic chronic-care template that asks your clinicians to translate every screen.</p>
+      </div>
+
+      <div class="pitch-card">
+        <div class="pitch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7v6c0 5 4 9 9 10 5-1 9-5 9-10V7l-9-5z"/></svg>
+        </div>
+        <h3>Your dedicated environment</h3>
+        <p>Your patient data lives in its own dedicated infrastructure — never co-mingled with another clinic's. HIPAA-aligned by design, with a signed data agreement on every contract and every vendor we use to operate it. The trust signal is engineered in, not bolted on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="trust">
+  <div class="container">
+    <p><strong>HIPAA-aligned</strong> &nbsp;·&nbsp; <strong>Now accepting design partners</strong> &nbsp;·&nbsp; <strong>Built for weight-loss clinics treating GLP-1 patients</strong></p>
+    <p style="margin-top:18px; font-size:0.95rem;">A signed HIPAA-compliant data agreement on every contract, encryption at every layer, and a dedicated environment per clinic. The trust signal is built in, not borrowed.</p>
+  </div>
+</section>
+
+<!-- WHAT YOU'LL SEE -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <h2>What you'll see when you try it.</h2>
+      <p>Three of the modules your patients and your team rely on every day. Click through the demo for the full tour — daily logging, AI-assisted food logging, and the messaging thread that keeps patients connected to their care team between visits.</p>
+    </div>
+
+    <div class="modules-grid">
+      <!-- Daily logging -->
+      <div class="module-tile">
+        <div class="module-preview">
+          <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="280" height="200" rx="10" fill="#FAF7EE"/>
+            <rect x="20" y="20" width="240" height="36" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="32" y="42" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#1B1A18">Today</text>
+            <text x="240" y="42" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">May 10</text>
+            <!-- Weight card -->
+            <rect x="20" y="64" width="116" height="60" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="30" y="80" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#6B6863">WEIGHT</text>
+            <text x="30" y="102" font-family="-apple-system,sans-serif" font-size="20" font-weight="700" fill="#1B1A18">207.6</text>
+            <text x="80" y="102" font-family="-apple-system,sans-serif" font-size="11" fill="#6B6863">lb</text>
+            <text x="30" y="118" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#10B981">−1.2 this wk</text>
+            <!-- Feeling card -->
+            <rect x="144" y="64" width="116" height="60" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="154" y="80" font-family="-apple-system,sans-serif" font-size="9" font-weight="600" fill="#6B6863">FEELING</text>
+            <text x="154" y="106" font-family="-apple-system,sans-serif" font-size="22">😊</text>
+            <text x="186" y="103" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#1B1A18">Good</text>
+            <!-- Sparkline -->
+            <rect x="20" y="132" width="240" height="48" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <polyline fill="none" stroke="#16a34a" stroke-width="2" points="32,168 60,160 88,164 116,156 144,150 172,148 200,144 228,142 248,138"/>
+            <circle cx="248" cy="138" r="3" fill="#16a34a"/>
+          </svg>
+        </div>
+        <div class="module-body">
+          <h3>Daily logging</h3>
+          <p>One screen, one minute. Patients tap their weight and how they're feeling — and your team sees it that morning. No menu diving, no scrolling. Designed so adherence stays high because the friction stays low.</p>
+        </div>
+      </div>
+
+      <!-- AI Food Vision -->
+      <div class="module-tile">
+        <div class="module-preview">
+          <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="280" height="200" rx="10" fill="#FAF7EE"/>
+            <!-- Camera frame -->
+            <rect x="20" y="20" width="116" height="160" rx="10" fill="#1B1A18"/>
+            <rect x="28" y="36" width="100" height="120" rx="6" fill="#FBE9C0"/>
+            <circle cx="78" cy="96" r="34" fill="#E8A412" opacity="0.7"/>
+            <circle cx="62" cy="80" r="10" fill="#16a34a"/>
+            <circle cx="94" cy="86" r="8" fill="#EF4444" opacity="0.6"/>
+            <rect x="50" y="118" width="56" height="16" rx="3" fill="#B8810F" opacity="0.6"/>
+            <text x="78" y="170" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#FFFFFF" opacity="0.8">Snap your meal</text>
+            <!-- Result card -->
+            <rect x="148" y="36" width="112" height="128" rx="8" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="158" y="56" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#1B1A18">Detected</text>
+            <text x="158" y="72" font-family="-apple-system,sans-serif" font-size="10" fill="#6B6863">Grilled chicken bowl</text>
+            <line x1="158" y1="82" x2="252" y2="82" stroke="#E8E2D2"/>
+            <text x="158" y="100" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Calories</text>
+            <text x="252" y="100" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#1B1A18">540</text>
+            <text x="158" y="118" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Protein</text>
+            <text x="252" y="118" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#1B1A18">42 g</text>
+            <text x="158" y="136" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Carbs</text>
+            <text x="252" y="136" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#1B1A18">38 g</text>
+            <text x="158" y="154" font-family="-apple-system,sans-serif" font-size="9" fill="#6B6863">Fat</text>
+            <text x="252" y="154" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#1B1A18">18 g</text>
+          </svg>
+        </div>
+        <div class="module-body">
+          <h3>AI Food Vision</h3>
+          <p>Snap a photo of a meal. The app estimates calories and macros, so logging takes seconds instead of skipped days. For prepackaged foods or things the camera can't read, a fast searchable food database backs up the AI.</p>
+        </div>
+      </div>
+
+      <!-- Care messaging -->
+      <div class="module-tile">
+        <div class="module-preview">
+          <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="280" height="200" rx="10" fill="#FAF7EE"/>
+            <!-- Header -->
+            <rect x="20" y="20" width="240" height="32" rx="8" fill="#16a34a"/>
+            <text x="32" y="40" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Dr. Sarah Chen</text>
+            <text x="240" y="40" text-anchor="end" font-family="-apple-system,sans-serif" font-size="9" fill="#FFFFFF" opacity="0.8">Care team</text>
+            <!-- Message from clinician -->
+            <rect x="20" y="64" width="170" height="36" rx="10" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="32" y="80" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">Great progress this week,</text>
+            <text x="32" y="93" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">Jane! Keep it up.</text>
+            <!-- Message from patient -->
+            <rect x="90" y="112" width="170" height="36" rx="10" fill="#FBE9C0"/>
+            <text x="102" y="128" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">Thanks! Slight nausea</text>
+            <text x="102" y="141" font-family="-apple-system,sans-serif" font-size="10" fill="#1B1A18">on day 2 — better now.</text>
+            <!-- Reply -->
+            <rect x="20" y="160" width="240" height="22" rx="11" fill="#FFFFFF" stroke="#E8E2D2"/>
+            <text x="32" y="174" font-family="-apple-system,sans-serif" font-size="9" fill="#C9C4BC">Reply to your care team…</text>
+            <circle cx="244" cy="171" r="8" fill="#16a34a"/>
+            <path d="M240,171 L248,171 M245,168 L248,171 L245,174" stroke="#FFFFFF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="module-body">
+          <h3>Care messaging</h3>
+          <p>HIPAA-aligned, two-way messaging between patients and your care team — replacing the patchwork of texts, calls, and portal logins. Every conversation is logged, searchable, and routed to the right clinician without anyone touching a personal phone.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+  <div class="container">
+    <h2>See it in action.</h2>
+    <p>Click around a working demo of the patient app and the clinician dashboard with our example clinic, Mountainview Medicine, and example patient, Jane Doe. No signup, no email — just click. When you're ready, talk to founders about onboarding your own clinic.</p>
+    <div class="cta-row">
+      <a href="demo.html" class="btn btn-primary">
+        Try the demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="contact.html" class="btn btn-secondary">Talk to founders</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<script>
+  // Theme management
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — Quantal Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1B1A18;
+    --paper: #F4EFE2;
+    --quantum: #E8A412;
+    --ink-muted: #6B6863;
+    --ink-soft: #C9C4BC;
+    --paper-light: #FAF7EE;
+    --paper-dark: #E8E2D2;
+    --quantum-soft: #FBE9C0;
+    --quantum-dark: #B8810F;
+    --success: #10B981;
+    --info: #2563EB;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --bg: var(--paper);
+    --bg-clean: #FFFFFF;
+    --surface: #FFFFFF;
+    --text: var(--ink);
+    --text-secondary: var(--ink-muted);
+    --text-muted: var(--ink-soft);
+    --border: var(--paper-dark);
+    --border-strong: #D4CFC2;
+    --shadow-sm: 0 1px 2px rgb(27 26 24 / 0.04);
+    --shadow-md: 0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+    --shadow-lg: 0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 1rem;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  /* Dark mode */
+  [data-theme="dark"],
+  [data-theme="system"].sys-dark {
+    --bg: #1B1A18; --bg-clean: #252320; --surface: #252320;
+    --paper-light: #1F1D1B; --paper-dark: #2C2A27;
+    --text: #F4EFE2; --text-secondary: #B8B3A8; --text-muted: #7A7570;
+    --border: rgba(244,239,226,0.10); --border-strong: rgba(244,239,226,0.18);
+    --ink-muted: #B8B3A8; --ink-soft: #7A7570;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.30);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+    --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+  }
+  [data-theme="dark"] .topbar,
+  [data-theme="system"].sys-dark .topbar { background: rgba(27,26,24,0.92); }
+  [data-theme="dark"] .topnav-cta,
+  [data-theme="system"].sys-dark .topnav-cta { background: var(--quantum); color: #1B1A18; }
+  [data-theme="dark"] .topnav-cta:hover,
+  [data-theme="system"].sys-dark .topnav-cta:hover { background: var(--quantum-dark); color: #1B1A18; }
+  [data-theme="dark"] .btn-primary,
+  [data-theme="system"].sys-dark .btn-primary { background: var(--quantum); color: #1B1A18; }
+  [data-theme="dark"] .btn-primary:hover,
+  [data-theme="system"].sys-dark .btn-primary:hover { background: var(--quantum-dark); color: #1B1A18; }
+
+  /* Brand attribution */
+  .brand-attribution {
+    display: block; font-size: 0.7rem; font-weight: 400; font-style: italic;
+    color: var(--text-muted); letter-spacing: 0; line-height: 1.1; margin-top: 2px;
+  }
+
+  /* Topnav back link */
+  .topnav-back {
+    display: inline-flex; align-items: center;
+    font-size: 0.8125rem; color: var(--text-muted); font-weight: 400;
+    padding: 6px 10px; border-radius: 6px; margin-right: 8px; text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topnav-back:hover { color: var(--text); background: rgba(27,26,24,0.05); text-decoration: none; }
+  [data-theme="dark"] .topnav-back:hover,
+  [data-theme="system"].sys-dark .topnav-back:hover { background: rgba(244,239,226,0.06); }
+
+  /* Settings (theme) toggle */
+  .settings-wrap { position: relative; }
+  .settings-toggle {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: none; cursor: pointer;
+    color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .settings-toggle:hover { background: var(--bg-clean); color: var(--text); }
+  .settings-toggle svg { width: 16px; height: 16px; }
+  .settings-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 210px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 12px;
+    opacity: 0; pointer-events: none; transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease; z-index: 200;
+  }
+  .settings-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .settings-lbl {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 8px; padding: 0 4px;
+  }
+  .theme-opts { display: flex; flex-direction: column; gap: 2px; }
+  .theme-opt {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 10px; border-radius: 8px; width: 100%;
+    font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .theme-opt:hover { background: var(--bg-clean); color: var(--text); }
+  .theme-opt.active { background: var(--bg-clean); color: var(--quantum-dark); font-weight: 600; }
+  [data-theme="dark"] .theme-opt.active,
+  [data-theme="system"].sys-dark .theme-opt.active { color: var(--quantum); }
+  .theme-opt svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+
+  /* Topnav */
+  .topbar { background: rgba(244, 239, 226, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 32px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-text strong { font-weight: 700; color: var(--ink); }
+  .brand-text { font-weight: 400; color: var(--ink-muted); font-size: 1.125rem; letter-spacing: -0.01em; }
+  .topnav { display: flex; gap: 24px; flex: 1; }
+  .topnav a { color: var(--ink-muted); font-size: 0.9375rem; text-decoration: none; transition: color 0.15s; }
+  .topnav a:hover { color: var(--ink); }
+  .topnav a.active { color: var(--ink); font-weight: 600; }
+  .topnav-cta { background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 8px; font-size: 0.9375rem; font-weight: 600; text-decoration: none; transition: all 0.15s; }
+  .topnav-cta:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 96px 0; }
+
+  /* Hero */
+  .hero { padding: 112px 0 64px; text-align: center; }
+  .eyebrow { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--quantum-dark); background: var(--quantum-soft); padding: 6px 12px; border-radius: 999px; margin-bottom: 24px; }
+  .hero h1 { font-size: clamp(2.5rem, 4.5vw, 4rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 20px; }
+  .hero p.lede { font-size: 1.25rem; color: var(--text-secondary); max-width: 640px; margin: 0 auto; }
+
+  /* Buttons */
+  .btn { display: inline-block; font-size: 1rem; font-weight: 600; padding: 14px 22px; border-radius: 10px; text-decoration: none; transition: all 0.15s; border: none; cursor: pointer; }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary:hover { background: var(--quantum-dark); }
+  .btn-secondary { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+  .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+  .btn-accent { background: var(--quantum); color: var(--ink); }
+  .btn-accent:hover { background: var(--quantum-dark); color: var(--paper); }
+  .btn-tier { display: block; width: 100%; text-align: center; padding: 14px; }
+
+  /* Tier cards */
+  .tier-section { padding-top: 32px; padding-bottom: 96px; }
+  .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
+  .tier-card { background: var(--bg-clean); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); position: relative; }
+  .tier-card.recommended { border: 2px solid var(--quantum); background: var(--paper-light); transform: translateY(-12px); box-shadow: var(--shadow-lg); }
+  .tier-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--quantum); color: var(--ink); font-size: 0.75rem; font-weight: 700; padding: 6px 14px; border-radius: 999px; letter-spacing: 0.04em; }
+  .tier-name { font-size: 0.875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quantum-dark); margin: 0 0 8px; }
+  .tier-tagline { font-size: 1.5rem; font-weight: 700; line-height: 1.2; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .tier-blurb { font-size: 0.9375rem; color: var(--text-secondary); margin: 0 0 28px; line-height: 1.5; min-height: 44px; }
+  .tier-price { font-size: 1rem; color: var(--ink); font-weight: 600; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .tier-price small { display: block; font-weight: 400; color: var(--text-secondary); font-size: 0.8125rem; margin-top: 4px; }
+  .tier-features { list-style: none; padding: 0; margin: 0 0 28px; flex-grow: 1; }
+  .tier-features li { padding: 10px 0; display: flex; gap: 12px; font-size: 0.9375rem; line-height: 1.45; }
+  .tier-features .feat-check { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; background: var(--quantum-soft); color: var(--quantum-dark); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.6875rem; margin-top: 2px; }
+  .tier-features .feat-section { font-weight: 700; padding-bottom: 4px; padding-top: 14px; color: var(--ink); }
+  .tier-features .feat-section:first-child { padding-top: 0; }
+  .tier-features .feat-section em { color: var(--text-secondary); font-style: normal; font-weight: 500; font-size: 0.875rem; }
+
+  /* Universal section */
+  .universal-section { background: var(--ink); color: var(--paper); }
+  .universal-head { text-align: center; max-width: 700px; margin: 0 auto 48px; }
+  .universal-head h2 { color: var(--paper); font-size: 2rem; margin: 0 0 16px; letter-spacing: -0.015em; }
+  .universal-head p { color: var(--ink-soft); font-size: 1.0625rem; margin: 0; }
+  .universal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .universal-item { background: rgba(244, 239, 226, 0.04); border: 1px solid rgba(244, 239, 226, 0.1); border-radius: 12px; padding: 24px; display: flex; gap: 14px; }
+  .universal-icon { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; background: var(--quantum); color: var(--ink); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .universal-item h4 { color: var(--paper); font-size: 0.9375rem; margin: 0 0 6px; font-weight: 700; }
+  .universal-item p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; line-height: 1.5; }
+
+  /* Fee structure */
+  .fees-section { background: var(--paper-light); }
+  .fees-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 980px; margin: 0 auto; }
+  .fee-card { background: var(--bg-clean); border: 1px solid var(--border); border-radius: 14px; padding: 32px; }
+  .fee-tag { display: inline-block; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--quantum-dark); background: var(--quantum-soft); padding: 4px 10px; border-radius: 999px; margin-bottom: 16px; }
+  .fee-card h3 { font-size: 1.375rem; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .fee-card p { color: var(--text-secondary); font-size: 0.9375rem; margin: 0 0 12px; line-height: 1.55; }
+  .fees-note { text-align: center; max-width: 720px; margin: 32px auto 0; color: var(--text-secondary); font-size: 0.9375rem; font-style: italic; }
+
+  /* Section head shared */
+  .section-head { text-align: center; max-width: 740px; margin: 0 auto 56px; }
+  h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 16px; line-height: 1.15; }
+  .section-head p { color: var(--text-secondary); font-size: 1.0625rem; margin: 0; }
+
+  /* FAQ */
+  .faq-list { max-width: 820px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-item summary { padding: 24px 0; cursor: pointer; font-weight: 600; font-size: 1.0625rem; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: '+'; font-size: 1.5rem; color: var(--quantum-dark); font-weight: 400; line-height: 1; }
+  .faq-item[open] summary::after { content: '–'; }
+  .faq-item p { padding: 0 0 24px; color: var(--text-secondary); font-size: 1rem; margin: 0; max-width: 720px; line-height: 1.6; }
+
+  /* Design partner callout */
+  .partner-section { padding: 64px 0; }
+  .partner-card { background: linear-gradient(135deg, var(--quantum-soft) 0%, var(--paper-light) 100%); border: 2px solid var(--quantum); border-radius: 20px; padding: 56px; max-width: 980px; margin: 0 auto; text-align: center; box-shadow: var(--shadow-md); }
+  .partner-card .eyebrow { background: var(--ink); color: var(--quantum); }
+  .partner-card h2 { font-size: 2rem; margin: 0 0 16px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .partner-card p { font-size: 1.0625rem; color: var(--ink); max-width: 620px; margin: 0 auto 28px; }
+
+  /* CTA */
+  .cta-section { text-align: center; padding-top: 64px; padding-bottom: 96px; }
+  .cta-section h2 { font-size: 2.25rem; max-width: 640px; margin: 0 auto 16px; }
+  .cta-section p { color: var(--text-secondary); font-size: 1.125rem; max-width: 580px; margin: 0 auto 32px; }
+  .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* Footer */
+  .footer { background: var(--ink); color: var(--ink-soft); padding: 64px 0 32px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1.5fr 2fr; gap: 64px; }
+  .footer-brand { display: flex; flex-direction: column; gap: 12px; }
+  .footer-brand .brand-text strong { color: var(--paper); }
+  .footer-brand .brand-text { color: var(--ink-soft); }
+  .footer-tagline { color: var(--ink-soft); font-size: 0.9375rem; max-width: 320px; margin: 8px 0 0; }
+  .footer-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .footer-col h4 { color: var(--paper); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 16px; font-weight: 700; }
+  .footer-col a { display: block; color: var(--ink-soft); text-decoration: none; font-size: 0.9375rem; padding: 4px 0; transition: color 0.15s; }
+  .footer-col a:hover { color: var(--paper); }
+  .footer-bottom { max-width: 1200px; margin: 48px auto 0; padding: 24px 24px 0; border-top: 1px solid rgba(244, 239, 226, 0.1); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 0.8125rem; }
+  .footer-bottom p { margin: 0; }
+
+  @media (max-width: 900px) {
+    .tier-grid { grid-template-columns: 1fr; gap: 16px; }
+    .tier-card.recommended { transform: none; }
+    .fees-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .footer-cols { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 64px 0; }
+    .hero { padding: 64px 0 32px; }
+    .partner-card { padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html" class="active">Pricing</a>
+      <a href="demo.html">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Pricing</span>
+    <h1>Pricing that scales with your practice.</h1>
+    <p class="lede">Three tiers. Pick the one that fits your patient volume and clinical workflow. Move up or down anytime as your practice grows.</p>
+  </div>
+</section>
+
+<section class="tier-section">
+  <div class="container">
+    <div class="tier-grid">
+
+      <div class="tier-card">
+        <h3 class="tier-name">Lite</h3>
+        <p class="tier-tagline">For small practices getting started</p>
+        <p class="tier-blurb">The essentials to move off spreadsheets and into a branded patient app, without changing how your team works.</p>
+        <div class="tier-price">
+          Contact sales for pricing
+          <small>One-time setup + annual platform fee</small>
+        </div>
+        <ul class="tier-features">
+          <li class="feat-section">Patient app (basic)</li>
+          <li><span class="feat-check">&#10003;</span><span>Weight logging</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Notifications and reminders</span></li>
+          <li><span class="feat-check">&#10003;</span><span>In-app messaging with your care team</span></li>
+          <li class="feat-section">Clinician dashboard (basic)</li>
+          <li><span class="feat-check">&#10003;</span><span>Patient roster</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Per-patient view with weight history</span></li>
+          <li class="feat-section">Capacity &amp; support</li>
+          <li><span class="feat-check">&#10003;</span><span>Up to 50 patients <em>(soft limit, contact sales for more)</em></span></li>
+          <li><span class="feat-check">&#10003;</span><span>Email support, 24-hour response, business hours</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Standard onboarding (4-6 weeks)</span></li>
+        </ul>
+        <a href="contact.html" class="btn btn-secondary btn-tier">Talk to sales</a>
+      </div>
+
+      <div class="tier-card recommended">
+        <span class="tier-badge">Most popular</span>
+        <h3 class="tier-name">Standard</h3>
+        <p class="tier-tagline">For growing practices</p>
+        <p class="tier-blurb">The full clinical workflow — wearables, food logging, symptom tracking, and the dashboard your team will actually use every day.</p>
+        <div class="tier-price">
+          Contact sales for pricing
+          <small>One-time setup + annual platform fee</small>
+        </div>
+        <ul class="tier-features">
+          <li class="feat-section">Everything in Lite, plus:</li>
+          <li><span class="feat-check">&#10003;</span><span>Manual food logging</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Wearables sync (Apple HealthKit + Google Health Connect)</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Symptom tracking</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Trends and insights for clinicians</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Two-way care messaging</span></li>
+          <li class="feat-section">Capacity &amp; support</li>
+          <li><span class="feat-check">&#10003;</span><span>Up to 250 patients <em>(soft limit, contact sales for more)</em></span></li>
+          <li><span class="feat-check">&#10003;</span><span>Email + Slack support</span></li>
+        </ul>
+        <a href="contact.html" class="btn btn-accent btn-tier">Talk to sales</a>
+      </div>
+
+      <div class="tier-card">
+        <h3 class="tier-name">Pro</h3>
+        <p class="tier-tagline">For larger practices</p>
+        <p class="tier-blurb">Everything in Standard, plus AI-powered features and clinical safety tooling for high-volume programs.</p>
+        <div class="tier-price">
+          Contact sales for pricing
+          <small>One-time setup + annual platform fee</small>
+        </div>
+        <ul class="tier-features">
+          <li class="feat-section">Everything in Standard, plus:</li>
+          <li><span class="feat-check">&#10003;</span><span>AI Food Vision — snap a meal, get the macros</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Red-flag pattern detection (clinical safety alerts)</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Higher patient capacity</span></li>
+          <li class="feat-section">Capacity &amp; support</li>
+          <li><span class="feat-check">&#10003;</span><span>Priority support</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Dedicated onboarding lead</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Custom branding flexibility</span></li>
+        </ul>
+        <a href="contact.html" class="btn btn-secondary btn-tier">Talk to sales</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="universal-section">
+  <div class="container">
+    <div class="universal-head">
+      <h2>What's included with every tier</h2>
+      <p>The commitments below are universal — they don't change between Lite, Standard, and Pro. They're how we operate, not features we sell.</p>
+    </div>
+    <div class="universal-grid">
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>Your branded app</h4>
+          <p>In your own App Store and Play Store accounts. Your name, your logo, your colors.</p>
+        </div>
+      </div>
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>Your dedicated, HIPAA-compliant environment</h4>
+          <p>We don't pool patient data across clinics. Your data lives in its own environment.</p>
+        </div>
+      </div>
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>HIPAA-compliant data agreements</h4>
+          <p>Signed with us. Signed with every downstream vendor we work with.</p>
+        </div>
+      </div>
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>99.5% uptime target</h4>
+          <p>Tracked monthly. We publish status to you in your monthly summary.</p>
+        </div>
+      </div>
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>4-hour recovery time objective</h4>
+          <p>In the unlikely event of an outage, full recovery within four hours.</p>
+        </div>
+      </div>
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>Quantal Ops handles infrastructure</h4>
+          <p>You never see a server, a console, or an alert. We run it; you practice medicine.</p>
+        </div>
+      </div>
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>Annual disaster-recovery drill</h4>
+          <p>We test recovery against your environment every year and share the results.</p>
+        </div>
+      </div>
+      <div class="universal-item">
+        <div class="universal-icon">&#10003;</div>
+        <div>
+          <h4>Activity logs for every patient-data read and write</h4>
+          <p>Queryable on request. The receipts exist if you ever need them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fees-section">
+  <div class="container">
+    <div class="section-head">
+      <h2>How fees work</h2>
+      <p>Two charges, no surprises. We don't believe in usage meters that punish you for growing your practice.</p>
+    </div>
+    <div class="fees-grid">
+      <div class="fee-card">
+        <span class="fee-tag">One-time</span>
+        <h3>Setup fee</h3>
+        <p>Covers your first 2-4 weeks of onboarding: your Apple Developer enrollment guidance, your dedicated environment provisioning, and your first app submission to the App Store and Play Store.</p>
+        <p>This is paid once, at kickoff. There's no recurring component.</p>
+      </div>
+      <div class="fee-card">
+        <span class="fee-tag">Recurring</span>
+        <h3>Annual platform fee</h3>
+        <p>Covers ongoing operations, releases (typically 6-8 per year), security patches, and the full lifecycle of your app and environment.</p>
+        <p>All fees scale with patient volume — your sales contact will price based on your specifics, not a published rate card.</p>
+      </div>
+    </div>
+    <p class="fees-note">No per-patient overage fees buried in fine print. If you outgrow your tier, you move tiers — that's the conversation.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <h2>Frequently asked questions</h2>
+      <p>The questions clinic owners ask before signing. If yours isn't here, just ask.</p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Can I switch tiers later?</summary>
+        <p>Yes, anytime. Upgrades take effect immediately; downgrades take effect at your next annual renewal. There are no penalties or lock-ins for moving between tiers.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What if I outgrow Pro?</summary>
+        <p>Talk to us. We have an enterprise tier for larger groups, multi-location practices, and clinics with complex clinical workflows. Pricing is custom and the conversation is direct with our founders.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is there a free trial?</summary>
+        <p>No traditional free trial — provisioning a dedicated environment and submitting a branded app to the stores is real work that takes weeks. But our design partner program offers reduced terms for qualified clinics willing to onboard with us during the first cohort. See the section below.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How is this different from buying a phone app from a development shop?</summary>
+        <p>Different in many ways. With a development shop, you typically pay a six-figure project fee, wait 9-12 months for a custom build, and then own a piece of software you also have to operate, secure, patch, host, and keep HIPAA-compliant — usually by hiring an engineering team or outsourcing to a managed services firm.</p>
+        <p>With Quantal: you own the App Store listing, you own the data, you own the branding — and you keep all of it if you ever leave us. We handle operations, security, hosting, patches, compliance, and store submissions on your behalf, on a known annual fee. The economics and the timeline are not comparable.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What if I want to leave?</summary>
+        <p>We hand you everything: an export of your data, a transfer of your App Store and Play Store listings, and a transition of the cloud resources we operated for your environment. There's a 30-day grace period during which we keep your environment running so you can complete the transition without disruption to your patients.</p>
+        <p>No data hostage situations. No surprise off-boarding fees. The exit is documented in the contract you sign.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need any technical staff to use Quantal?</summary>
+        <p>No. The whole point is that you don't. We handle infrastructure, deployments, monitoring, and store submissions. Your clinical and front-office teams use the dashboard; that's it. If you have technical staff, they're welcome in the conversation, but they aren't required.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Who actually owns the data?</summary>
+        <p>You do. Patient data is collected under your clinic's name, lives in your dedicated environment, and is governed by your privacy notice. We process it on your behalf under a HIPAA-compliant data agreement. If you leave, the data leaves with you.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="partner-section">
+  <div class="container">
+    <div class="partner-card">
+      <span class="eyebrow">Limited cohort</span>
+      <h2>Become a design partner</h2>
+      <p>We're currently accepting design partners — practices willing to onboard with us during the first cohort. Discounted terms in exchange for monthly product calls and feedback that shapes the platform. If you've ever wanted real input into the tools you use, this is that moment.</p>
+      <a href="contact.html" class="btn btn-primary">Apply to be a design partner</a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to talk specifics?</h2>
+    <p>Pricing depends on your patient volume, tier, and onboarding scope. The fastest path to a real number is a 30-minute call with our founders.</p>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn btn-primary">Talk to founders to discuss pricing</a>
+      <a href="demo.html" class="btn btn-secondary">Try the demo first</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="brand">
+        <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+          <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+          <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+        </svg>
+        <span class="brand-text">
+          <strong>Quantal</strong> Health
+          <span class="brand-attribution">by Quantal AI</span>
+        </span>
+      </a>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<script>
+  // Theme management
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>

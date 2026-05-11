@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantal Health — Clinician dashboard demo</title>
+<meta name="description" content="Click through a working demo of the Quantal clinician dashboard, branded for our demo clinic Mountainview Medicine." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* Marketing-site brand tokens */
+  :root {
+    --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+    --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+    --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+    --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
+    --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+    --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+    --bg-subtle:#FAF7EE; --bg-muted:#f9fafb;
+    --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+    --border:var(--paper-dark); --border-strong:#D4CFC2;
+    --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+    --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+    --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+
+    /* Demo tenant brand (Mountainview Medicine) */
+    --demo-tenant-primary: #16a34a;
+    --demo-tenant-primary-dark: #15803d;
+    --demo-tenant-primary-light: #dcfce7;
+
+    /* Browser-frame internal palette (for the dashboard inside the frame) */
+    --i-text: #111827;
+    --i-text-secondary: #4b5563;
+    --i-text-muted: #6b7280;
+    --i-border: #e5e7eb;
+    --i-border-strong: #d1d5db;
+    --i-bg-subtle: #f9fafb;
+    --i-bg-muted: #f3f4f6;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--quantum-dark); }
+
+  /* Dark mode (marketing chrome only — dashboard browser frame keeps internal palette) */
+  [data-theme="dark"],
+  [data-theme="system"].sys-dark {
+    --bg:#1B1A18; --bg-clean:#252320; --surface:#252320;
+    --bg-subtle:#1F1D1B;
+    --paper-light:#1F1D1B; --paper-dark:#2C2A27;
+    --text:#F4EFE2; --text-secondary:#B8B3A8; --text-muted:#7A7570;
+    --border:rgba(244,239,226,0.10); --border-strong:rgba(244,239,226,0.18);
+    --ink-muted:#B8B3A8; --ink-soft:#7A7570;
+    --shadow-sm:0 1px 2px rgb(0 0 0 / 0.30);
+    --shadow-md:0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+    --shadow-lg:0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+  }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color:var(--text); }
+  [data-theme="dark"] .topbar,
+  [data-theme="system"].sys-dark .topbar { background:rgba(27,26,24,0.92); }
+  [data-theme="dark"] .topnav-cta,
+  [data-theme="system"].sys-dark .topnav-cta { background:var(--quantum); color:#1B1A18; }
+  [data-theme="dark"] .topnav-cta:hover,
+  [data-theme="system"].sys-dark .topnav-cta:hover { background:var(--quantum-dark); color:#1B1A18; }
+
+  /* Brand attribution */
+  .brand-attribution {
+    display: block; font-size: 0.7rem; font-weight: 400; font-style: italic;
+    color: var(--text-muted); letter-spacing: 0; line-height: 1.1; margin-top: 2px;
+  }
+
+  /* Topnav back link */
+  .topnav-back {
+    display: inline-flex; align-items: center;
+    font-size: 0.8125rem; color: var(--text-muted); font-weight: 400;
+    padding: 6px 10px; border-radius: 6px; margin-right: 8px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topnav-back:hover { color: var(--text); background: rgba(27,26,24,0.05); text-decoration: none; }
+  [data-theme="dark"] .topnav-back:hover,
+  [data-theme="system"].sys-dark .topnav-back:hover { background: rgba(244,239,226,0.06); }
+
+  /* Settings (theme) toggle */
+  .settings-wrap { position: relative; }
+  .settings-toggle {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: none; cursor: pointer;
+    color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .settings-toggle:hover { background: var(--bg-clean); color: var(--text); }
+  .settings-toggle svg { width: 16px; height: 16px; }
+  .settings-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 210px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 12px;
+    opacity: 0; pointer-events: none; transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease; z-index: 200;
+  }
+  .settings-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .settings-lbl {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 8px; padding: 0 4px;
+  }
+  .theme-opts { display: flex; flex-direction: column; gap: 2px; }
+  .theme-opt {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 10px; border-radius: 8px; width: 100%;
+    font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .theme-opt:hover { background: var(--bg-clean); color: var(--text); }
+  .theme-opt.active { background: var(--bg-clean); color: var(--quantum-dark); font-weight: 600; }
+  [data-theme="dark"] .theme-opt.active,
+  [data-theme="system"].sys-dark .theme-opt.active { color: var(--quantum); }
+  .theme-opt svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+
+  /* ======================================================
+     Marketing-site topnav
+     ====================================================== */
+  .topbar { background: rgba(244,239,226,0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px;
+    display: flex; align-items: center; gap: 32px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-text { font-weight: 400; color: var(--ink-muted); font-size: 1.125rem; letter-spacing: -0.01em; }
+  .brand-text strong { font-weight: 700; color: var(--ink); }
+  .topnav { display: flex; gap: 24px; flex: 1; }
+  .topnav a { color: var(--ink-muted); font-size: 0.9375rem; }
+  .topnav a:hover { color: var(--ink); }
+  .topnav a.active { color: var(--ink); font-weight: 600; }
+  .topnav-cta { background: var(--ink); color: var(--paper); padding: 10px 18px;
+    border-radius: 8px; font-size: 0.9375rem; font-weight: 600; transition: all 0.15s; }
+  .topnav-cta:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+
+  /* ======================================================
+     Page intro
+     ====================================================== */
+  .page-intro {
+    max-width: 1180px; margin: 0 auto; padding: 56px 24px 24px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.875rem; color: var(--ink-muted); margin-bottom: 18px;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--ink); text-decoration: none; }
+  .eyebrow {
+    display:inline-block; font-size:0.75rem; font-weight:700;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--quantum-dark);
+    background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:20px;
+  }
+  .page-intro h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 800;
+    line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px; color: var(--ink);
+  }
+  .page-intro .lede {
+    font-size: 1.0625rem; color: var(--ink-muted); max-width: 880px; margin: 0;
+  }
+
+  /* ======================================================
+     Demo wrapper: full-width browser frame (no annotation column)
+     ====================================================== */
+  .demo-wrap {
+    max-width: 1400px; margin: 24px auto 48px; padding: 0 24px;
+  }
+
+  /* Browser frame */
+  .browser-frame {
+    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    box-shadow: var(--shadow-lg); background: white;
+  }
+  .browser-chrome {
+    background: var(--paper-light); padding: 10px 14px;
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid var(--i-border);
+  }
+  .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .browser-dot.red { background: #ef4444; }
+  .browser-dot.yellow { background: #f59e0b; }
+  .browser-dot.green { background: #10b981; }
+  .browser-url {
+    margin-left: 16px; font-size: 12px; color: var(--i-text-muted);
+    font-family: "SF Mono", Monaco, monospace;
+    background: white; padding: 4px 12px; border-radius: 4px; border: 1px solid var(--i-border);
+    flex: 1; max-width: 480px;
+  }
+  .browser-body { background: white; min-height: 720px; display: flex; flex-direction: column; }
+
+  /* Dashboard layout */
+  .dash-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; border-bottom: 1px solid var(--i-border); background: white;
+  }
+  .dash-header-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; color: var(--demo-tenant-primary-dark); font-size: 1.05rem;
+  }
+  .dash-header-brand svg { flex: none; }
+  .dash-header-user { display: flex; align-items: center; gap: 12px; }
+  .user-avatar {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--demo-tenant-primary); color: white;
+    display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.82rem;
+  }
+  .user-name { font-size: 0.9rem; font-weight: 600; color: var(--i-text); }
+  .user-role { font-size: 0.75rem; color: var(--i-text-muted); }
+  .signout-link { font-size: 0.82rem; color: var(--i-text-muted); cursor: pointer; }
+  .signout-link:hover { color: var(--demo-tenant-primary); }
+
+  .dash-body { display: flex; flex: 1; min-height: 0; }
+
+  /* Sidebar */
+  .sidebar { width: 220px; flex: none; background: var(--i-bg-subtle); border-right: 1px solid var(--i-border); padding: 16px 8px; }
+  .sidebar-section { margin-bottom: 18px; }
+  .sidebar-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--i-text-muted); font-weight: 600; padding: 0 12px 8px; }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+    border-radius: 6px; color: var(--i-text-secondary); cursor: pointer; font-size: 0.92rem; user-select: none;
+    margin-bottom: 2px;
+  }
+  .sidebar-link:hover { background: var(--i-bg-muted); color: var(--i-text); }
+  .sidebar-link.active { background: var(--demo-tenant-primary-light); color: var(--demo-tenant-primary-dark); font-weight: 600; }
+  .sidebar-link svg { flex: none; }
+  .sidebar-link .badge { margin-left: auto; background: var(--demo-tenant-primary); color: white; font-size: 0.7rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+
+  /* Main content */
+  .main { flex: 1; padding: 24px; overflow-y: auto; min-width: 0; color: var(--i-text); }
+  .main h2 { margin: 0 0 6px; font-size: 1.4rem; font-weight: 700; color: var(--i-text); }
+  .main .section-sub { margin: 0 0 18px; color: var(--i-text-secondary); font-size: 0.92rem; }
+
+  /* View visibility */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Filter chips */
+  .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .chip {
+    background: white; border: 1px solid var(--i-border-strong); color: var(--i-text-secondary);
+    padding: 5px 12px; border-radius: 999px; font-size: 0.82rem; cursor: pointer; user-select: none;
+  }
+  .chip:hover { border-color: var(--demo-tenant-primary); color: var(--demo-tenant-primary-dark); }
+  .chip.active { background: var(--demo-tenant-primary); border-color: var(--demo-tenant-primary); color: white; font-weight: 600; }
+
+  /* Patient roster table */
+  .roster-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--i-border); border-radius: 8px; overflow: hidden; }
+  .roster-table thead { background: var(--i-bg-subtle); }
+  .roster-table th { text-align: left; padding: 10px 14px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--i-text-muted); font-weight: 600; border-bottom: 1px solid var(--i-border); }
+  .roster-table td { padding: 12px 14px; border-bottom: 1px solid var(--i-border); font-size: 0.9rem; vertical-align: middle; color: var(--i-text); }
+  .roster-table tbody tr { cursor: pointer; transition: background 0.1s; }
+  .roster-table tbody tr:hover { background: var(--i-bg-subtle); }
+  .roster-table tbody tr:last-child td { border-bottom: none; }
+
+  .pt-cell { display: flex; align-items: center; gap: 10px; }
+  .pt-avatar {
+    width: 32px; height: 32px; border-radius: 50%; color: white;
+    display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.78rem; flex: none;
+  }
+  .pt-name { font-weight: 600; color: var(--i-text); }
+  .pt-meta { font-size: 0.78rem; color: var(--i-text-muted); }
+
+  .status-pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+  .pill-stable { background: #dcfce7; color: #166534; }
+  .pill-titrating { background: #dbeafe; color: #1e40af; }
+  .pill-needs-review { background: #fef3c7; color: #92400e; }
+  .pill-pre-checkin { background: #f3e8ff; color: #6b21a8; }
+
+  .trend-arrow { font-size: 0.85rem; font-weight: 600; }
+  .trend-down { color: var(--success); }
+  .trend-flat { color: var(--i-text-muted); }
+  .trend-up { color: var(--danger); }
+
+  .qa-link { font-size: 0.8rem; color: var(--demo-tenant-primary-dark); margin-right: 8px; cursor: pointer; }
+  .qa-link:hover { text-decoration: underline; }
+
+  /* Pagination */
+  .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; font-size: 0.85rem; color: var(--i-text-muted); }
+  .pagination-controls { display: flex; gap: 4px; }
+  .pagination-btn {
+    background: white; border: 1px solid var(--i-border-strong); padding: 4px 10px; border-radius: 5px;
+    cursor: pointer; color: var(--i-text-secondary); font-family: inherit; font-size: 0.85rem;
+  }
+  .pagination-btn:hover:not(:disabled) { border-color: var(--demo-tenant-primary); }
+  .pagination-btn.active { background: var(--demo-tenant-primary); color: white; border-color: var(--demo-tenant-primary); }
+  .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Patient detail */
+  .pt-detail-header {
+    display: flex; align-items: flex-start; gap: 16px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--i-border); margin-bottom: 16px;
+  }
+  .pt-detail-avatar {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--demo-tenant-primary);
+    color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.1rem; flex: none;
+  }
+  .pt-detail-meta h2 { margin: 0 0 2px; font-size: 1.4rem; }
+  .pt-detail-meta .pt-detail-sub { color: var(--i-text-secondary); font-size: 0.92rem; }
+  .pt-detail-actions { margin-left: auto; display: flex; gap: 6px; }
+
+  .ds-back-link { color: var(--i-text-muted); cursor: pointer; font-size: 0.85rem; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px; }
+  .ds-back-link:hover { color: var(--demo-tenant-primary); }
+
+  .btn { background: var(--demo-tenant-primary); color: white; border: none; padding: 7px 14px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 600; font-family: inherit; }
+  .btn:hover { background: var(--demo-tenant-primary-dark); }
+  .btn-secondary { background: white; color: var(--i-text); border: 1px solid var(--i-border-strong); }
+  .btn-secondary:hover { background: var(--i-bg-subtle); border-color: var(--demo-tenant-primary); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--i-border); margin-bottom: 20px; }
+  .tab {
+    padding: 10px 16px; cursor: pointer; font-size: 0.92rem; color: var(--i-text-secondary);
+    border-bottom: 2px solid transparent; user-select: none; font-weight: 500;
+  }
+  .tab:hover { color: var(--i-text); }
+  .tab.active { color: var(--demo-tenant-primary-dark); border-bottom-color: var(--demo-tenant-primary); font-weight: 600; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Cards & grids */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  @media (max-width: 900px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card { background: white; border: 1px solid var(--i-border); border-radius: 8px; padding: 14px; }
+  .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--i-text-muted); font-weight: 600; }
+  .stat-value { font-size: 1.6rem; font-weight: 700; margin-top: 4px; line-height: 1.1; color: var(--i-text); }
+  .stat-sub { font-size: 0.78rem; color: var(--i-text-secondary); margin-top: 4px; }
+  .stat-positive { color: var(--success); }
+  .stat-card-tinted { background: var(--demo-tenant-primary-light); border-color: var(--demo-tenant-primary); }
+
+  .card { background: white; border: 1px solid var(--i-border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .card-title { font-size: 1rem; font-weight: 600; margin: 0 0 12px; color: var(--i-text); }
+
+  /* Weight chart */
+  .chart-wrap { background: white; border: 1px solid var(--i-border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .chart-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .chart-title { font-size: 1rem; font-weight: 600; color: var(--i-text); }
+  .chart-legend { font-size: 0.78rem; color: var(--i-text-muted); }
+
+  /* Activity feed */
+  .feed-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--i-border); }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-icon {
+    width: 32px; height: 32px; border-radius: 50%; flex: none;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    background: var(--i-bg-muted);
+  }
+  .feed-icon.weight { background: var(--demo-tenant-primary-light); color: var(--demo-tenant-primary-dark); }
+  .feed-icon.meal { background: #fef3c7; color: #92400e; }
+  .feed-icon.message { background: #dbeafe; color: #1e40af; }
+  .feed-icon.symptom { background: #fee2e2; color: #991b1b; }
+  .feed-content { flex: 1; min-width: 0; }
+  .feed-content .feed-text { font-size: 0.9rem; color: var(--i-text); }
+  .feed-content .feed-time { font-size: 0.78rem; color: var(--i-text-muted); margin-top: 2px; }
+  .ai-badge {
+    display: inline-block; background: #ede9fe; color: #5b21b6;
+    font-size: 0.7rem; font-weight: 600; padding: 1px 7px; border-radius: 999px;
+    margin-left: 6px; vertical-align: middle;
+  }
+
+  /* Care plan */
+  .care-plan-note {
+    background: var(--i-bg-subtle); padding: 12px 14px; border-radius: 6px;
+    border-left: 3px solid var(--demo-tenant-primary); font-size: 0.92rem; line-height: 1.55; color: var(--i-text);
+  }
+  .care-plan-meta { font-size: 0.78rem; color: var(--i-text-muted); margin-top: 6px; }
+
+  /* Logs table */
+  .logs-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; color: var(--i-text); }
+  .logs-table th { text-align: left; padding: 8px 12px; font-size: 0.75rem; text-transform: uppercase; color: var(--i-text-muted); font-weight: 600; border-bottom: 1px solid var(--i-border); }
+  .logs-table td { padding: 8px 12px; border-bottom: 1px solid var(--i-border); }
+  .log-type-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 600; }
+  .log-type-meal { background: #fef3c7; color: #92400e; }
+  .log-type-weight { background: var(--demo-tenant-primary-light); color: var(--demo-tenant-primary-dark); }
+  .log-type-symptom { background: #fee2e2; color: #991b1b; }
+
+  /* Messages thread */
+  .msg-list { background: white; border: 1px solid var(--i-border); border-radius: 8px; overflow: hidden; }
+  .msg-list-item { padding: 12px 14px; border-bottom: 1px solid var(--i-border); cursor: pointer; display: flex; gap: 12px; }
+  .msg-list-item:hover { background: var(--i-bg-subtle); }
+  .msg-list-item:last-child { border-bottom: none; }
+  .msg-list-item.unread { background: #f0f9ff; }
+  .msg-list-item.unread:hover { background: #e0f2fe; }
+  .msg-list-item .msg-meta { flex: 1; min-width: 0; }
+  .msg-list-item .msg-from { font-weight: 600; font-size: 0.9rem; color: var(--i-text); }
+  .msg-list-item .msg-preview { font-size: 0.85rem; color: var(--i-text-secondary); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .msg-list-item .msg-time { font-size: 0.75rem; color: var(--i-text-muted); flex: none; }
+  .msg-list-item .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--demo-tenant-primary); flex: none; align-self: center; }
+
+  .msg-thread { background: white; border: 1px solid var(--i-border); border-radius: 8px; padding: 16px; }
+  .msg-bubble { max-width: 70%; padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; font-size: 0.9rem; line-height: 1.5; }
+  .msg-bubble.from-patient { background: var(--i-bg-muted); color: var(--i-text); }
+  .msg-bubble.from-clinician { background: var(--demo-tenant-primary); color: white; margin-left: auto; }
+  .msg-bubble-time { font-size: 0.7rem; opacity: 0.75; margin-top: 4px; }
+  .msg-input-row { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--i-border); }
+  .msg-input-row input {
+    flex: 1; padding: 8px 12px; border: 1px solid var(--i-border-strong); border-radius: 6px; font-family: inherit; font-size: 0.9rem;
+  }
+
+  /* Notes */
+  .notes-area {
+    width: 100%; min-height: 220px; padding: 14px; border: 1px solid var(--i-border);
+    border-radius: 8px; font-family: inherit; font-size: 0.92rem; resize: vertical; line-height: 1.55; color: var(--i-text);
+  }
+
+  /* Tasks */
+  .task-card {
+    background: white; border: 1px solid var(--i-border); border-left: 3px solid var(--demo-tenant-primary);
+    border-radius: 6px; padding: 14px 16px; margin-bottom: 12px;
+  }
+  .task-card.urgent { border-left-color: var(--warning); }
+  .task-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; color: var(--i-text); }
+  .task-meta { font-size: 0.8rem; color: var(--i-text-muted); }
+  .task-actions { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .task-list-inline { font-size: 0.85rem; margin-top: 8px; padding-left: 18px; color: var(--i-text-secondary); }
+  .task-list-inline li { margin-bottom: 3px; }
+
+  /* Reports */
+  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 1100px) { .report-grid { grid-template-columns: 1fr; } }
+  .metric-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--i-border); font-size: 0.9rem; color: var(--i-text); }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-row .metric-label { color: var(--i-text-secondary); }
+  .metric-row .metric-value { font-weight: 600; }
+  .progress-bar { height: 6px; background: var(--i-bg-muted); border-radius: 999px; overflow: hidden; margin-top: 4px; }
+  .progress-fill { height: 100%; background: var(--demo-tenant-primary); }
+
+  /* Settings */
+  .settings-block { background: white; border: 1px solid var(--i-border); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+  .settings-block .key-val { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--i-border); font-size: 0.9rem; color: var(--i-text); }
+  .settings-block .key-val:last-child { border-bottom: none; }
+  .settings-block .key-val .k { color: var(--i-text-muted); }
+
+  /* Outro */
+  .outro {
+    max-width: 720px; margin: 0 auto; padding: 32px 24px 56px;
+    text-align: center;
+  }
+  .outro p { color: var(--ink-muted); font-size: 1.0625rem; margin-bottom: 20px; }
+  .outro-cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-outro {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px;
+    border-radius: 10px; font-size: 0.9375rem; font-weight: 600; text-decoration: none;
+    transition: all 0.15s; border: 1px solid transparent;
+  }
+  .btn-outro-primary { background: var(--ink); color: var(--paper); }
+  .btn-outro-primary:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+  .btn-outro-secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+  .btn-outro-secondary:hover { background: var(--bg-clean); border-color: var(--ink); }
+
+  /* Marketing-site footer */
+  .footer { background: var(--ink); color: var(--ink-soft); padding: 64px 0 32px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: grid; grid-template-columns: 1.5fr 2.5fr; gap: 48px; }
+  .footer-brand p { color: var(--ink-soft); }
+  .footer-tagline { color: var(--ink-soft); font-size: 0.9375rem; margin-top: 16px; max-width: 280px; }
+  .footer-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+  .footer-col h4 { color: var(--paper); font-size: 0.875rem; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 16px; }
+  .footer-col a { display: block; color: var(--ink-soft); font-size: 0.9375rem;
+    padding: 6px 0; text-decoration: none; }
+  .footer-col a:hover { color: var(--quantum); }
+  .footer-bottom { max-width: 1200px; margin: 48px auto 0; padding: 24px 24px 0;
+    border-top: 1px solid #2a2926; display: flex; justify-content: space-between;
+    align-items: center; color: var(--ink-soft); font-size: 0.875rem; }
+  .footer-bottom p { color: var(--ink-soft); font-size: 0.875rem; }
+
+  @media (max-width: 900px) {
+    .topnav { display: none; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-cols { grid-template-columns: repeat(2,1fr); }
+    .page-intro { padding: 40px 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html" class="active">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-intro">
+  <a href="demo.html" class="back-link">&larr; Back to demos</a>
+  <span class="eyebrow">Clinician dashboard</span>
+  <h1>This is what Dr. Chen sees on her dashboard.</h1>
+  <p class="lede">
+    Dr. Sarah Chen is the lead clinician at our demo clinic Mountainview Medicine. Click around &mdash; every patient row, every tab, every message. All data is fictional.
+  </p>
+</div>
+
+<div class="demo-wrap">
+
+  <!-- Browser frame -->
+  <div class="browser-frame">
+    <div class="browser-chrome">
+      <span class="browser-dot red"></span>
+      <span class="browser-dot yellow"></span>
+      <span class="browser-dot green"></span>
+      <span class="browser-url">https://mountainview-medicine.quantal.health</span>
+    </div>
+
+    <div class="browser-body">
+
+      <!-- Dashboard header (in-browser, with tenant brand) -->
+      <div class="dash-header">
+        <div class="dash-header-brand">
+          <svg width="28" height="28" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Mountainview Medicine">
+            <circle cx="16" cy="16" r="14" fill="#16a34a"/>
+            <path d="M8 22 L12 14 L16 18 L20 10 L24 22 Z" fill="white"/>
+          </svg>
+          <span>Mountainview Medicine</span>
+          <span style="font-weight: 400; color: var(--i-text-muted); font-size: 0.85rem; margin-left: 6px;">· Provider Portal</span>
+        </div>
+        <div class="dash-header-user">
+          <div style="text-align: right; display: flex; flex-direction: column;">
+            <span class="user-name">Dr. Sarah Chen, MD</span>
+            <span class="user-role">Founder · Lead Clinician</span>
+          </div>
+          <div class="user-avatar">SC</div>
+          <span class="signout-link">Sign out</span>
+        </div>
+      </div>
+
+      <div class="dash-body">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <div class="sidebar-label">Workspace</div>
+            <div class="sidebar-link active" data-view="patients">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
+              Patients
+              <span class="badge">60</span>
+            </div>
+            <div class="sidebar-link" data-view="messages">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18v12H7l-4 4z"/></svg>
+              Messages
+              <span class="badge">4</span>
+            </div>
+            <div class="sidebar-link" data-view="tasks">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5h14v14H5z"/><path d="M8 12l3 3 6-6"/></svg>
+              Tasks
+              <span class="badge">3</span>
+            </div>
+            <div class="sidebar-link" data-view="reports">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V8m6 12V4m6 16v-8m6 8v-6"/></svg>
+              Reports
+            </div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Practice</div>
+            <div class="sidebar-link" data-view="settings">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12c0 .7-.1 1.3-.3 1.9l2 1.6-2 3.4-2.4-.7c-.9.7-1.9 1.2-3 1.5L13 22h-2l-.3-2.3c-1.1-.3-2.1-.8-3-1.5l-2.4.7-2-3.4 2-1.6c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9l-2-1.6 2-3.4 2.4.7c.9-.7 1.9-1.2 3-1.5L11 2h2l.3 2.3c1.1.3 2.1.8 3 1.5l2.4-.7 2 3.4-2 1.6c.2.6.3 1.2.3 1.9z"/></svg>
+              Settings
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main">
+
+          <!-- VIEW 1: Patient roster -->
+          <div id="view-patients" class="view active">
+            <h2>Active patients <span style="color: var(--i-text-muted); font-weight: 400;">· 60 total</span></h2>
+            <p class="section-sub">All Mountainview Medicine patients on Wegovy, Ozempic, Zepbound, Mounjaro, or Saxenda.</p>
+
+            <div class="chip-row" id="filter-chips">
+              <span class="chip active" data-filter="all">All</span>
+              <span class="chip" data-filter="titrating">On titration</span>
+              <span class="chip" data-filter="stable">Stable</span>
+              <span class="chip" data-filter="needs-review">Needs review</span>
+              <span class="chip" data-filter="pre-checkin">Pre-checkin</span>
+            </div>
+
+            <table class="roster-table">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Patient</th>
+                  <th style="width: 18%;">Drug · dose</th>
+                  <th style="width: 8%;">Week</th>
+                  <th style="width: 12%;">Last weight</th>
+                  <th style="width: 8%;">Trend</th>
+                  <th style="width: 13%;">Status</th>
+                  <th style="width: 13%;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="roster-tbody"><!-- populated by JS --></tbody>
+            </table>
+
+            <div class="pagination">
+              <span>Showing 1–10 of 60 patients</span>
+              <div class="pagination-controls">
+                <button class="pagination-btn" disabled>&lsaquo; Prev</button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">4</button>
+                <button class="pagination-btn">5</button>
+                <button class="pagination-btn">6</button>
+                <button class="pagination-btn">Next &rsaquo;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 2: Patient detail (Jane Doe) -->
+          <div id="view-patient-detail" class="view">
+            <span class="ds-back-link" id="back-to-roster">&larr; Back to patients</span>
+            <div class="pt-detail-header">
+              <div class="pt-detail-avatar">JD</div>
+              <div class="pt-detail-meta">
+                <h2>Jane Doe <span style="font-weight: 400; color: var(--i-text-muted);">· 47 · MRN 4082-A</span></h2>
+                <div class="pt-detail-sub">Wegovy 0.5mg &rarr; 1.0mg titration · Week 8 · Started March 2026</div>
+              </div>
+              <div class="pt-detail-actions">
+                <button class="btn-secondary toggle-btn" type="button">Schedule visit</button>
+                <button class="btn" type="button">Message Jane</button>
+              </div>
+            </div>
+
+            <div class="tabs">
+              <div class="tab active" data-tab="overview">Overview</div>
+              <div class="tab" data-tab="logs">Logs</div>
+              <div class="tab" data-tab="messages">Messages</div>
+              <div class="tab" data-tab="notes">Notes</div>
+            </div>
+
+            <!-- Overview tab -->
+            <div id="tab-overview" class="tab-panel active">
+              <div class="stat-grid">
+                <div class="stat-card stat-card-tinted">
+                  <div class="stat-label">Weight delta</div>
+                  <div class="stat-value stat-positive">−10.8 lb</div>
+                  <div class="stat-sub">Over 8 weeks (−4.9%)</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Avg daily kcal</div>
+                  <div class="stat-value">1,420</div>
+                  <div class="stat-sub">Last 7 days</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Avg sleep</div>
+                  <div class="stat-value">7.2h</div>
+                  <div class="stat-sub">Last 7 days · wearable-derived</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Side effects</div>
+                  <div class="stat-value" style="font-size: 1.05rem; padding-top: 8px;">Mild nausea (resolved)</div>
+                  <div class="stat-sub">No active symptoms</div>
+                </div>
+              </div>
+
+              <div class="chart-wrap">
+                <div class="chart-header">
+                  <span class="chart-title">Weight trend · 8 weeks</span>
+                  <span class="chart-legend">218.4 lb &rarr; 207.6 lb · −10.8 lb</span>
+                </div>
+                <svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 240px; display: block;">
+                  <g stroke="#e5e7eb" stroke-width="1">
+                    <line x1="60" y1="40" x2="680" y2="40"/>
+                    <line x1="60" y1="90" x2="680" y2="90"/>
+                    <line x1="60" y1="140" x2="680" y2="140"/>
+                    <line x1="60" y1="190" x2="680" y2="190"/>
+                  </g>
+                  <g font-family="-apple-system, sans-serif" font-size="11" fill="#6b7280">
+                    <text x="50" y="44" text-anchor="end">220</text>
+                    <text x="50" y="94" text-anchor="end">215</text>
+                    <text x="50" y="144" text-anchor="end">210</text>
+                    <text x="50" y="194" text-anchor="end">205</text>
+                  </g>
+                  <g font-family="-apple-system, sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">
+                    <text x="80" y="215">W1</text>
+                    <text x="166" y="215">W2</text>
+                    <text x="252" y="215">W3</text>
+                    <text x="338" y="215">W4</text>
+                    <text x="424" y="215">W5</text>
+                    <text x="510" y="215">W6</text>
+                    <text x="596" y="215">W7</text>
+                    <text x="660" y="215">W8</text>
+                  </g>
+                  <path d="M 80 56 L 166 72 L 252 88 L 338 110 L 424 119 L 510 136 L 596 151 L 660 164 L 660 200 L 80 200 Z"
+                        fill="#dcfce7" opacity="0.6"/>
+                  <path d="M 80 56 L 166 72 L 252 88 L 338 110 L 424 119 L 510 136 L 596 151 L 660 164"
+                        stroke="#16a34a" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                  <g fill="#16a34a">
+                    <circle cx="80" cy="56" r="4"/>
+                    <circle cx="166" cy="72" r="4"/>
+                    <circle cx="252" cy="88" r="4"/>
+                    <circle cx="338" cy="110" r="4"/>
+                    <circle cx="424" cy="119" r="4"/>
+                    <circle cx="510" cy="136" r="4"/>
+                    <circle cx="596" cy="151" r="4"/>
+                    <circle cx="660" cy="164" r="5" stroke="white" stroke-width="2"/>
+                  </g>
+                  <g font-family="-apple-system, sans-serif" font-size="11" fill="#15803d" font-weight="600">
+                    <text x="80" y="44" text-anchor="middle">218.4</text>
+                    <text x="660" y="180" text-anchor="middle">207.6</text>
+                  </g>
+                  <line x1="80" y1="40" x2="80" y2="200" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 3"/>
+                  <text x="84" y="50" font-family="-apple-system, sans-serif" font-size="10" fill="#1d4ed8">Wegovy 0.5mg start</text>
+                </svg>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">Recent activity</h3>
+                <div class="feed-item">
+                  <div class="feed-icon weight">&#9636;</div>
+                  <div class="feed-content">
+                    <div class="feed-text">Logged weight: <strong>207.6 lb</strong></div>
+                    <div class="feed-time">Today, 8:14 AM · self-reported</div>
+                  </div>
+                </div>
+                <div class="feed-item">
+                  <div class="feed-icon meal">&#9633;</div>
+                  <div class="feed-content">
+                    <div class="feed-text">
+                      Logged meal: <strong>greek yogurt + granola, 290 kcal</strong>
+                      <span class="ai-badge">AI Vision · accepted unmodified</span>
+                    </div>
+                    <div class="feed-time">Today, 9:02 AM</div>
+                  </div>
+                </div>
+                <div class="feed-item">
+                  <div class="feed-icon message">&#9700;</div>
+                  <div class="feed-content">
+                    <div class="feed-text">Sent message to Dr. Chen: <em>"the nausea has stopped — should we still increase to 1.0mg next week?"</em></div>
+                    <div class="feed-time">Yesterday, 7:45 PM</div>
+                  </div>
+                </div>
+                <div class="feed-item">
+                  <div class="feed-icon meal">&#9633;</div>
+                  <div class="feed-content">
+                    <div class="feed-text">Logged meal: <strong>grilled chicken salad, 410 kcal</strong> (manual)</div>
+                    <div class="feed-time">Yesterday, 12:30 PM</div>
+                  </div>
+                </div>
+                <div class="feed-item">
+                  <div class="feed-icon symptom">!</div>
+                  <div class="feed-content">
+                    <div class="feed-text">Logged side effect: <strong>nausea, mild</strong> &middot; resolved next day</div>
+                    <div class="feed-time">3 days ago · 2:10 PM</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">Care plan</h3>
+                <div class="care-plan-note">
+                  <strong>Subjective:</strong> Patient reports mild nausea on weeks 5–6, fully resolved by week 7. No vomiting, no GI distress, sleep stable.<br>
+                  <strong>Objective:</strong> 8-week weight loss of 10.8 lb (4.9%). BMI dropped from 32.4 to 30.8. Adherence 96%. Wearable HR baseline stable.<br>
+                  <strong>Assessment:</strong> Tolerating 0.5mg Wegovy well. Clinically appropriate to consider titration to 1.0mg per manufacturer guidance.<br>
+                  <strong>Plan:</strong> Discuss titration at next visit (scheduled May 14). Continue food + weight logging. Patient knows to message me if nausea recurs at higher dose.
+                </div>
+                <div class="care-plan-meta">Last updated by Dr. Sarah Chen · 2 days ago</div>
+              </div>
+            </div>
+
+            <!-- Logs tab -->
+            <div id="tab-logs" class="tab-panel">
+              <div class="card">
+                <h3 class="card-title">Patient logs · last 7 days</h3>
+                <table class="logs-table">
+                  <thead>
+                    <tr>
+                      <th>When</th>
+                      <th>Type</th>
+                      <th>Detail</th>
+                      <th>Source</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Today, 9:02 AM</td><td><span class="log-type-pill log-type-meal">meal</span></td><td>Greek yogurt + granola · 290 kcal</td><td>AI Vision (accepted)</td></tr>
+                    <tr><td>Today, 8:14 AM</td><td><span class="log-type-pill log-type-weight">weight</span></td><td>207.6 lb</td><td>Manual</td></tr>
+                    <tr><td>Yesterday, 7:30 PM</td><td><span class="log-type-pill log-type-meal">meal</span></td><td>Salmon + asparagus · 460 kcal</td><td>Manual</td></tr>
+                    <tr><td>Yesterday, 12:30 PM</td><td><span class="log-type-pill log-type-meal">meal</span></td><td>Grilled chicken salad · 410 kcal</td><td>Manual</td></tr>
+                    <tr><td>Yesterday, 7:50 AM</td><td><span class="log-type-pill log-type-meal">meal</span></td><td>Oatmeal w/ berries · 320 kcal</td><td>Manual</td></tr>
+                    <tr><td>2 days ago, 8:02 AM</td><td><span class="log-type-pill log-type-weight">weight</span></td><td>208.4 lb</td><td>Manual</td></tr>
+                    <tr><td>3 days ago, 2:10 PM</td><td><span class="log-type-pill log-type-symptom">symptom</span></td><td>Nausea, mild</td><td>Manual</td></tr>
+                    <tr><td>3 days ago, 8:08 AM</td><td><span class="log-type-pill log-type-weight">weight</span></td><td>208.9 lb</td><td>Manual</td></tr>
+                    <tr><td>4 days ago, 6:42 PM</td><td><span class="log-type-pill log-type-meal">meal</span></td><td>Turkey wrap · 380 kcal</td><td>AI Vision (edited from "panini")</td></tr>
+                    <tr><td>5 days ago, 8:15 AM</td><td><span class="log-type-pill log-type-weight">weight</span></td><td>209.6 lb</td><td>Manual</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Messages tab -->
+            <div id="tab-messages" class="tab-panel">
+              <div class="msg-thread">
+                <div class="msg-bubble from-patient">
+                  Hi Dr. Chen — I had two days of mild nausea last week but it's gone now. Sleep has been good. Down to 207 even.
+                  <div class="msg-bubble-time">3 days ago · 4:18 PM</div>
+                </div>
+                <div class="msg-bubble from-clinician">
+                  That's great progress, Jane. Mild nausea in the first weeks of titration is common and usually self-limiting. Good that it resolved. Keep logging meals and let me know if anything changes.
+                  <div class="msg-bubble-time">3 days ago · 5:04 PM</div>
+                </div>
+                <div class="msg-bubble from-patient">
+                  Thanks. One more thing — am I still on track to move up to 1.0mg next week?
+                  <div class="msg-bubble-time">2 days ago · 9:22 AM</div>
+                </div>
+                <div class="msg-bubble from-clinician">
+                  Let's discuss at your visit on the 14th. We'll go through your logs together. Bring any questions you have.
+                  <div class="msg-bubble-time">2 days ago · 11:48 AM</div>
+                </div>
+                <div class="msg-bubble from-patient" style="border: 2px solid var(--demo-tenant-primary);">
+                  Hi Dr. Chen, the nausea has stopped — should we still increase to 1.0mg next week?
+                  <div class="msg-bubble-time">Yesterday · 7:45 PM &middot; <strong>unread</strong></div>
+                </div>
+                <div class="msg-input-row">
+                  <input type="text" placeholder="Reply to Jane (clinical-language check on send)…" id="msg-reply-input">
+                  <button class="btn" id="msg-send-btn">Send</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notes tab -->
+            <div id="tab-notes" class="tab-panel">
+              <div class="card">
+                <h3 class="card-title">Private clinician notes</h3>
+                <p class="section-sub" style="margin-bottom: 12px;">Visible only to assigned care team. Not part of patient-facing record.</p>
+                <textarea class="notes-area" placeholder="Type private notes here…">Patient is highly engaged. 96% logging adherence. Down 4.9% in 8w which is on the higher end of typical for this population — confirms good med response.
+
+Risk-aware around the titration step-up. The mild nausea fully resolved on its own which is reassuring.
+
+For May 14 visit:
+- Confirm BP / HR / weight in clinic.
+- Discuss step to 1.0mg.
+- Reinforce continued logging.
+- Schedule next follow-up at week 12.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 3: Messages queue -->
+          <div id="view-messages" class="view">
+            <h2>Messages</h2>
+            <p class="section-sub">Inbox across all 60 patients.</p>
+
+            <div class="chip-row">
+              <span class="chip active">Unread (4)</span>
+              <span class="chip">Replied</span>
+              <span class="chip">Archived</span>
+            </div>
+
+            <div style="display: flex; gap: 16px; margin-bottom: 14px; align-items: center;">
+              <span style="font-size: 0.85rem; color: var(--i-text-muted);">Sort:</span>
+              <select style="padding: 5px 10px; border: 1px solid var(--i-border-strong); border-radius: 5px; font-family: inherit; font-size: 0.85rem;">
+                <option>Most recent</option>
+                <option>Unread first</option>
+                <option>By patient (A–Z)</option>
+              </select>
+            </div>
+
+            <div class="msg-list">
+              <div class="msg-list-item unread" data-patient="jane">
+                <span class="unread-dot"></span>
+                <div class="pt-avatar" style="background: #16a34a;">JD</div>
+                <div class="msg-meta">
+                  <div class="msg-from">Jane Doe</div>
+                  <div class="msg-preview">Hi Dr. Chen, the nausea has stopped — should we still increase to 1.0mg next week?</div>
+                </div>
+                <div class="msg-time">Yesterday 7:45 PM</div>
+              </div>
+              <div class="msg-list-item unread">
+                <span class="unread-dot"></span>
+                <div class="pt-avatar" style="background: #f59e0b;">RP</div>
+                <div class="msg-meta">
+                  <div class="msg-from">Rosa Padilla</div>
+                  <div class="msg-preview">My pen feels like it might be empty — how do I tell? I have my next injection tomorrow.</div>
+                </div>
+                <div class="msg-time">Yesterday 5:12 PM</div>
+              </div>
+              <div class="msg-list-item unread">
+                <span class="unread-dot"></span>
+                <div class="pt-avatar" style="background: #8b5cf6;">DK</div>
+                <div class="msg-meta">
+                  <div class="msg-from">David Kim</div>
+                  <div class="msg-preview">Some headaches this week — not bad, just wanted to let you know. Logged it in the app.</div>
+                </div>
+                <div class="msg-time">2 days ago 11:08 AM</div>
+              </div>
+              <div class="msg-list-item unread">
+                <span class="unread-dot"></span>
+                <div class="pt-avatar" style="background: #06b6d4;">PA</div>
+                <div class="msg-meta">
+                  <div class="msg-from">Priya Iyer-Anand</div>
+                  <div class="msg-preview">Thank you for the food guide PDF — really helpful. Down 6 lb so far this month!</div>
+                </div>
+                <div class="msg-time">2 days ago 9:34 AM</div>
+              </div>
+              <div class="msg-list-item">
+                <div style="width: 8px;"></div>
+                <div class="pt-avatar" style="background: #ef4444;">MO</div>
+                <div class="msg-meta">
+                  <div class="msg-from">Marcus Okafor</div>
+                  <div class="msg-preview">Got it, will keep logging. See you at the 14th.</div>
+                </div>
+                <div class="msg-time">3 days ago</div>
+              </div>
+              <div class="msg-list-item">
+                <div style="width: 8px;"></div>
+                <div class="pt-avatar" style="background: #2563eb;">LT</div>
+                <div class="msg-meta">
+                  <div class="msg-from">Linh Tran</div>
+                  <div class="msg-preview">Got the form back to you. Question about insurance — does my plan cover it after refill 4?</div>
+                </div>
+                <div class="msg-time">3 days ago</div>
+              </div>
+              <div class="msg-list-item">
+                <div style="width: 8px;"></div>
+                <div class="pt-avatar" style="background: #f97316;">AB</div>
+                <div class="msg-meta">
+                  <div class="msg-from">Aaron Burton</div>
+                  <div class="msg-preview">All good here, no issues. Keep up the great work.</div>
+                </div>
+                <div class="msg-time">4 days ago</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 4: Tasks -->
+          <div id="view-tasks" class="view">
+            <h2>Tasks</h2>
+            <p class="section-sub">Clinician work queue. Auto-generated from logs and scheduling rules.</p>
+
+            <div class="task-card urgent">
+              <div class="task-title">Review Jane Doe's titration request</div>
+              <div class="task-meta">Patient asked about step-up to 1.0mg · scheduled visit May 14 · created yesterday</div>
+              <div class="task-actions">
+                <button class="btn-secondary toggle-btn">Acknowledge</button>
+                <button class="btn">Approve at visit</button>
+                <button class="btn-secondary toggle-btn">Defer to visit</button>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <div class="task-title">Weekly weight trend review for 12 patients (≥5% change)</div>
+              <div class="task-meta">Auto-flagged · review their 30-day trends</div>
+              <ul class="task-list-inline">
+                <li>Jane Doe — −4.9% over 8w (loss)</li>
+                <li>Marcus Okafor — −6.1% over 10w (loss)</li>
+                <li>Priya Iyer-Anand — −5.3% over 4w (loss · faster than typical, consider review)</li>
+                <li>Linh Tran — −5.5% over 12w (loss)</li>
+                <li>+ 8 more</li>
+              </ul>
+              <div class="task-actions"><button class="btn-secondary toggle-btn">Open trend list</button></div>
+            </div>
+
+            <div class="task-card">
+              <div class="task-title">3 patients haven't logged in 7+ days</div>
+              <div class="task-meta">Possible disengagement</div>
+              <ul class="task-list-inline">
+                <li>Aaron Burton — last log 9 days ago</li>
+                <li>Robert Hayes — last log 11 days ago</li>
+                <li>Sienna Park — last log 14 days ago</li>
+              </ul>
+              <div class="task-actions"><button class="btn">Send check-in message</button></div>
+            </div>
+          </div>
+
+          <!-- VIEW 5: Reports -->
+          <div id="view-reports" class="view">
+            <h2>Reports</h2>
+            <p class="section-sub">Aggregate dashboards across all 60 Mountainview Medicine patients.</p>
+
+            <div class="report-grid">
+              <div class="card">
+                <h3 class="card-title">Patient outcomes · avg weight change at week 8</h3>
+                <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 220px; display: block;">
+                  <g font-family="-apple-system, sans-serif" font-size="11" fill="#6b7280">
+                    <text x="50" y="200" text-anchor="middle">Wegovy</text>
+                    <text x="150" y="200" text-anchor="middle">Ozempic</text>
+                    <text x="250" y="200" text-anchor="middle">Zepbound</text>
+                    <text x="350" y="200" text-anchor="middle">Mounjaro</text>
+                    <text x="450" y="200" text-anchor="middle">Saxenda</text>
+                  </g>
+                  <g>
+                    <rect x="20" y="60" width="60" height="120" rx="4" fill="#16a34a"/>
+                    <rect x="120" y="80" width="60" height="100" rx="4" fill="#16a34a"/>
+                    <rect x="220" y="50" width="60" height="130" rx="4" fill="#16a34a"/>
+                    <rect x="320" y="65" width="60" height="115" rx="4" fill="#16a34a"/>
+                    <rect x="420" y="115" width="60" height="65" rx="4" fill="#16a34a" fill-opacity="0.7"/>
+                  </g>
+                  <g font-family="-apple-system, sans-serif" font-size="12" font-weight="600" fill="white" text-anchor="middle">
+                    <text x="50" y="80">−4.8%</text>
+                    <text x="150" y="100">−4.1%</text>
+                    <text x="250" y="70">−5.4%</text>
+                    <text x="350" y="85">−4.6%</text>
+                    <text x="450" y="135" fill="#15803d">−2.6%</text>
+                  </g>
+                </svg>
+                <p style="font-size: 0.78rem; color: var(--i-text-muted); margin: 8px 0 0;">n = 60. Avg loss 4.4% at week 8. Anonymized aggregates only.</p>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">Compliance metrics</h3>
+                <div class="metric-row">
+                  <span class="metric-label">Patients logging weight ≥1×/week</span>
+                  <span class="metric-value">54 / 60 (90%)</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 90%;"></div></div>
+                <div style="height: 12px;"></div>
+                <div class="metric-row">
+                  <span class="metric-label">Patients logging meals ≥3×/week</span>
+                  <span class="metric-value">42 / 60 (70%)</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
+                <div style="height: 12px;"></div>
+                <div class="metric-row">
+                  <span class="metric-label">Patients with ≥1 message exchange / month</span>
+                  <span class="metric-value">48 / 60 (80%)</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div>
+                <div style="height: 12px;"></div>
+                <div class="metric-row">
+                  <span class="metric-label">Patients who logged ≥1 side effect</span>
+                  <span class="metric-value">22 / 60 (37%)</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 37%; background: var(--warning);"></div></div>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">Provider workload — Dr. Chen</h3>
+                <div class="metric-row"><span class="metric-label">Messages handled this week</span><span class="metric-value">37</span></div>
+                <div class="metric-row"><span class="metric-label">Tasks closed this week</span><span class="metric-value">14</span></div>
+                <div class="metric-row"><span class="metric-label">Avg response time (24h coverage hours)</span><span class="metric-value">2h 14min</span></div>
+                <div class="metric-row"><span class="metric-label">Visits completed this month</span><span class="metric-value">22</span></div>
+                <div class="metric-row"><span class="metric-label">Pending pre-visit forms</span><span class="metric-value">3</span></div>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">Patient panel composition</h3>
+                <div class="metric-row"><span class="metric-label">Active patients</span><span class="metric-value">60</span></div>
+                <div class="metric-row"><span class="metric-label">Pending verification</span><span class="metric-value">4</span></div>
+                <div class="metric-row"><span class="metric-label">On titration (any drug)</span><span class="metric-value">18</span></div>
+                <div class="metric-row"><span class="metric-label">At maintenance dose</span><span class="metric-value">38</span></div>
+                <div class="metric-row"><span class="metric-label">Avg weeks on therapy</span><span class="metric-value">14.2</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 6: Settings -->
+          <div id="view-settings" class="view">
+            <h2>Settings</h2>
+            <p class="section-sub">Personal and clinic settings. Most administrative functions live in the admin console.</p>
+
+            <div class="settings-block">
+              <h3 class="card-title">Your clinic — Mountainview Medicine</h3>
+              <div class="key-val"><span class="k">Display name</span><span>Mountainview Medicine</span></div>
+              <div class="key-val"><span class="k">Custom domain</span><span>mountainview-medicine.quantal.health</span></div>
+              <div class="key-val"><span class="k">Tier</span><span>Pro</span></div>
+              <div class="key-val"><span class="k">Active clinicians</span><span>4</span></div>
+              <div class="key-val"><span class="k">Active patients</span><span>240</span></div>
+              <div class="key-val"><span class="k">Clinical template</span><span>Weight Loss Clinic v1</span></div>
+            </div>
+
+            <div class="settings-block">
+              <h3 class="card-title">Your profile — Dr. Sarah Chen</h3>
+              <div class="key-val"><span class="k">Email</span><span>sarah.chen@mountainview-medicine.com</span></div>
+              <div class="key-val"><span class="k">Role</span><span>Owner · Clinician Admin</span></div>
+              <div class="key-val"><span class="k">NPI</span><span>1234567890</span></div>
+              <div class="key-val"><span class="k">Notification preferences</span><span>Email + in-app</span></div>
+              <div class="key-val"><span class="k">2FA</span><span style="color: var(--success); font-weight: 600;">Enabled</span></div>
+            </div>
+
+            <div class="settings-block" style="background: #dbeafe; border-color: #93c5fd; border-left: 3px solid var(--info);">
+              <h3 class="card-title" style="color: #1d4ed8;">Need to change clinic config?</h3>
+              <p style="margin: 0 0 12px; font-size: 0.92rem; color: var(--i-text-secondary);">
+                Branding, billing, user management, integrations, module enablement, and clinical template selection all live in the admin console.
+                Switch to the admin role (Maria Rodriguez) to access.
+              </p>
+              <a href="demo-admin.html" class="btn" style="display: inline-block; text-decoration: none;">Open admin console &rarr;</a>
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Outro -->
+<div class="outro">
+  <p>See the patient app demo or talk to founders.</p>
+  <div class="outro-cta-row">
+    <a href="demo-patient.html" class="btn-outro btn-outro-secondary">See the patient app</a>
+    <a href="contact.html" class="btn-outro btn-outro-primary">
+      Talk to founders
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E8A412"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // Patient roster data
+  const patients = [
+    { id: 'jane',    initials: 'JD', color: '#16a34a', name: 'Jane Doe',           sex: 'F', drug: 'Wegovy 0.5mg',   week: 8,  weight: '207.6 lb', trend: 'down', trendVal: '−10.8 lb', status: 'titrating',     statusLabel: 'Titrating' },
+    { id: 'marcus',  initials: 'MO', color: '#ef4444', name: 'Marcus Okafor',      sex: 'M', drug: 'Ozempic 1.0mg',  week: 10, weight: '189.1 lb', trend: 'down', trendVal: '−12.3 lb', status: 'stable',        statusLabel: 'Stable' },
+    { id: 'priya',   initials: 'PA', color: '#06b6d4', name: 'Priya Iyer-Anand',   sex: 'F', drug: 'Zepbound 5mg',   week: 4,  weight: '172.4 lb', trend: 'down', trendVal: '−9.6 lb',  status: 'needs-review',  statusLabel: 'Needs review' },
+    { id: 'rosa',    initials: 'RP', color: '#f59e0b', name: 'Rosa Padilla',       sex: 'F', drug: 'Wegovy 1.0mg',   week: 16, weight: '162.8 lb', trend: 'flat', trendVal: '−0.2 lb',  status: 'stable',        statusLabel: 'Stable' },
+    { id: 'david',   initials: 'DK', color: '#8b5cf6', name: 'David Kim',          sex: 'M', drug: 'Mounjaro 7.5mg', week: 6,  weight: '244.2 lb', trend: 'down', trendVal: '−7.1 lb',  status: 'titrating',     statusLabel: 'Titrating' },
+    { id: 'linh',    initials: 'LT', color: '#2563eb', name: 'Linh Tran',          sex: 'F', drug: 'Wegovy 1.7mg',   week: 12, weight: '194.0 lb', trend: 'down', trendVal: '−15.2 lb', status: 'stable',        statusLabel: 'Stable' },
+    { id: 'aaron',   initials: 'AB', color: '#f97316', name: 'Aaron Burton',      sex: 'M', drug: 'Saxenda 3.0mg',  week: 14, weight: '218.7 lb', trend: 'flat', trendVal: '−0.5 lb',  status: 'pre-checkin',   statusLabel: 'Pre-checkin' },
+    { id: 'sienna',  initials: 'SP', color: '#0891b2', name: 'Sienna Park',        sex: 'F', drug: 'Ozempic 0.5mg',  week: 2,  weight: '198.3 lb', trend: 'down', trendVal: '−2.1 lb',  status: 'titrating',     statusLabel: 'Titrating' },
+    { id: 'robert',  initials: 'RH', color: '#16a34a', name: 'Robert Hayes',       sex: 'M', drug: 'Mounjaro 5mg',   week: 20, weight: '231.5 lb', trend: 'flat', trendVal: '−0.8 lb',  status: 'pre-checkin',   statusLabel: 'Pre-checkin' },
+    { id: 'amara',   initials: 'AO', color: '#8b5cf6', name: 'Amara Olusola',      sex: 'F', drug: 'Wegovy 0.25mg',  week: 1,  weight: '203.9 lb', trend: 'flat', trendVal: '0.0 lb',   status: 'titrating',     statusLabel: 'Titrating' }
+  ];
+
+  function renderRoster(filter) {
+    const tbody = document.getElementById('roster-tbody');
+    tbody.innerHTML = '';
+    const visible = filter && filter !== 'all'
+      ? patients.filter(p => p.status === filter)
+      : patients;
+
+    if (visible.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 24px; color: var(--i-text-muted); font-style: italic;">No patients match this filter on page 1.</td></tr>';
+      return;
+    }
+
+    visible.forEach(p => {
+      const tr = document.createElement('tr');
+      tr.dataset.patientId = p.id;
+      const trendArrow = p.trend === 'down' ? '↓' : (p.trend === 'up' ? '↑' : '→');
+      const trendClass = 'trend-' + p.trend;
+      tr.innerHTML = `
+        <td>
+          <div class="pt-cell">
+            <div class="pt-avatar" style="background: ${p.color};">${p.initials}</div>
+            <div>
+              <div class="pt-name">${p.name}</div>
+              <div class="pt-meta">${p.sex} · MRN ${1000 + Math.floor(Math.random() * 9000)}-${'ABCDEFG'[Math.floor(Math.random()*7)]}</div>
+            </div>
+          </div>
+        </td>
+        <td><span style="font-weight: 500;">${p.drug}</span></td>
+        <td>W${p.week}</td>
+        <td>${p.weight}</td>
+        <td><span class="trend-arrow ${trendClass}">${trendArrow} ${p.trendVal}</span></td>
+        <td><span class="status-pill pill-${p.status}">${p.statusLabel}</span></td>
+        <td>
+          <span class="qa-link" data-action="message">Message</span>
+          <span class="qa-link" data-action="visit">Visit</span>
+        </td>
+      `;
+      tr.addEventListener('click', (e) => {
+        if (e.target.classList.contains('qa-link')) return;
+        if (p.id === 'jane') {
+          openPatientDetail();
+        } else {
+          alert(`In a full demo, this would open ${p.name}'s detail page. For this preview, only Jane Doe's detail is fully populated.`);
+        }
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Sidebar nav
+  const sidebarLinks = document.querySelectorAll('.sidebar-link');
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const view = link.dataset.view;
+      switchView(view);
+      sidebarLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  function switchView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('view-' + viewId);
+    if (target) target.classList.add('active');
+  }
+
+  function openPatientDetail() {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-patient-detail').classList.add('active');
+  }
+
+  document.getElementById('back-to-roster').addEventListener('click', () => {
+    switchView('patients');
+  });
+
+  // Filter chips
+  document.querySelectorAll('#filter-chips .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#filter-chips .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderRoster(chip.dataset.filter);
+    });
+  });
+
+  // Patient detail tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabId = tab.dataset.tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+    });
+  });
+
+  // Messages list click → open Jane's detail Messages tab
+  document.querySelectorAll('.msg-list-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (item.dataset.patient === 'jane') {
+        openPatientDetail();
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelector('.tab[data-tab="messages"]').classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-messages').classList.add('active');
+      } else {
+        alert('In a full demo, this would open the message thread. For this preview, only Jane Doe\'s thread is fully populated.');
+      }
+    });
+  });
+
+  // Send a reply (demo: mock append, with clinical-language check)
+  document.getElementById('msg-send-btn').addEventListener('click', () => {
+    const input = document.getElementById('msg-reply-input');
+    const text = input.value.trim();
+    if (!text) return;
+    const forbidden = ['recommend', 'should hold', 'titrate up', 'consider'];
+    const violations = forbidden.filter(w => text.toLowerCase().includes(w));
+    if (violations.length > 0) {
+      alert('Clinical-language check: prescriptive language detected — "' + violations.join(', ') + '". Patient-facing in-app messages avoid prescriptive verbs. Edit the message and try again.');
+      return;
+    }
+    const thread = document.querySelector('.msg-thread');
+    const inputRow = document.querySelector('.msg-input-row');
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble from-clinician';
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    bubble.innerHTML = text + '<div class="msg-bubble-time">Just now · ' + timeStr + '</div>';
+    thread.insertBefore(bubble, inputRow);
+    input.value = '';
+  });
+
+  // Initial render
+  renderRoster('all');
+
+  // Quick-action link clicks
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('qa-link')) {
+      e.stopPropagation();
+      const action = e.target.dataset.action;
+      if (action === 'message') {
+        alert('Quick-action: open message composer. (Demo placeholder.)');
+      } else if (action === 'visit') {
+        alert('Quick-action: schedule visit. (Demo placeholder.)');
+      }
+    }
+  });
+
+  // Pagination buttons (cosmetic)
+  document.querySelectorAll('.pagination-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (btn.disabled) return;
+      if (!isNaN(parseInt(btn.textContent))) {
+        document.querySelectorAll('.pagination-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    });
+  });
+
+  // Schedule visit button (demo)
+  document.querySelectorAll('button.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (btn.textContent.trim() === 'Schedule visit') {
+        alert('Schedule visit: opens calendar with Jane\'s available slots. (Demo placeholder.)');
+      }
+    });
+  });
+
+  document.querySelector('.dash-header-user .signout-link').addEventListener('click', () => {
+    alert('Sign out: returns to the sign-in page. (Demo placeholder.)');
+  });
+
+})();
+</script>
+
+<script>
+  // Theme management (marketing chrome)
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>
