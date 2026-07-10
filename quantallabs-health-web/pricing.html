@@ -6,22 +6,22 @@
 <title>Pricing — Quantal Health</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
     --ink: #1B1A18;
     --paper: #F4EFE2;
-    --quantum: #E8A412;
+    --quantum: #E53535;
     --ink-muted: #6B6863;
     --ink-soft: #C9C4BC;
     --paper-light: #FAF7EE;
     --paper-dark: #E8E2D2;
-    --quantum-soft: #FBE9C0;
-    --quantum-dark: #B8810F;
+    --quantum-soft: #FBE4E1;
+    --quantum-dark: #B4271F;
     --success: #10B981;
     --info: #2563EB;
     --warning: #F59E0B;
-    --danger: #EF4444;
+    --danger: #C81E1E;
     --bg: var(--paper);
     --bg-clean: #FFFFFF;
     --surface: #FFFFFF;
@@ -157,6 +157,7 @@
 
   /* Tier cards */
   .tier-section { padding-top: 32px; padding-bottom: 96px; }
+  .config-note { max-width: 760px; margin: 0 auto 40px; text-align: center; font-size: 0.9375rem; line-height: 1.55; color: var(--text-secondary); }
   .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
   .tier-card { background: var(--bg-clean); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); position: relative; }
   .tier-card.recommended { border: 2px solid var(--quantum); background: var(--paper-light); transform: translateY(-12px); box-shadow: var(--shadow-lg); }
@@ -298,6 +299,28 @@
   [data-theme="dark"] .universal-head h2,
   [data-theme="system"].sys-dark .universal-head h2 { color: var(--paper); }
 </style>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <!-- Quantal Health rebrand refinements: red signature accent, Geist display, mono/dotted eyebrow, active-nav dot, white CTA text -->
+  <style>
+    h1,h2,h3,h4,h5,h6,.hero-title,.section-title{font-family:"Geist","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-0.01em;}
+    /* Mono + dotted eyebrow */
+    .eyebrow{font-family:"Geist Mono","SFMono-Regular",ui-monospace,SFMono-Regular,monospace;letter-spacing:0.14em;}
+    .eyebrow::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--quantum);margin-right:8px;vertical-align:middle;position:relative;top:-1px;}
+    /* Active-nav dot */
+    .topnav a.active{position:relative;}
+    .topnav a.active::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--quantum);}
+    /* White CTA text on the red brand accent, all themes */
+    .btn-primary,.topnav-cta,
+    [data-theme="dark"] .btn-primary,[data-theme="system"].sys-dark .btn-primary,
+    [data-theme="dark"] .topnav-cta,[data-theme="system"].sys-dark .topnav-cta{color:#fff;}
+    .btn-primary:hover,.topnav-cta:hover,
+    [data-theme="dark"] .btn-primary:hover,[data-theme="system"].sys-dark .btn-primary:hover,
+    [data-theme="dark"] .topnav-cta:hover,[data-theme="system"].sys-dark .topnav-cta:hover{color:#fff;}
+    /* Dark-mode accent overrides */
+    [data-theme="dark"] .eyebrow,[data-theme="system"].sys-dark .eyebrow{background:rgba(229,53,53,0.16);color:#F7C9C4;}
+    [data-theme="dark"] .eyebrow::before,[data-theme="system"].sys-dark .eyebrow::before{background:var(--quantum);}
+    :focus-visible{outline:2px solid var(--quantum);outline-offset:2px;}
+  </style>
 </head>
 <body>
 
@@ -356,81 +379,81 @@
 <section class="hero">
   <div class="container">
     <span class="eyebrow">Pricing</span>
-    <h1>Pricing that scales with your practice.</h1>
-    <p class="lede">Three tiers. Pick the one that fits your patient volume and clinical workflow. Move up or down anytime as your practice grows.</p>
+    <h1>Pricing built around your clinic.</h1>
+    <p class="lede">There's no published rate card. Every clinic gets a scoped order form based on your patient volume, the surfaces you turn on, and how you want to onboard &mdash; priced in a direct conversation with the founders. The configurations below are illustrative starting points, not fixed packages.</p>
   </div>
 </section>
 
 <section class="tier-section">
   <div class="container">
+    <p class="config-note">Example configurations &mdash; illustrative shapes at different scales, not fixed packages you pick from. Your actual scope, capacity, and price are set together in your order form.</p>
     <div class="tier-grid">
 
       <div class="tier-card">
-        <h3 class="tier-name">Lite</h3>
-        <p class="tier-tagline">For small practices getting started</p>
+        <h3 class="tier-name">Starter shape</h3>
+        <p class="tier-tagline">A small practice getting started</p>
         <p class="tier-blurb">The essentials to move off spreadsheets and into a branded patient app, without changing how your team works.</p>
         <div class="tier-price">
-          Contact sales for pricing
+          Scoped in your order form
           <small>One-time setup + annual platform fee</small>
         </div>
         <ul class="tier-features">
-          <li class="feat-section">Patient app (basic)</li>
+          <li class="feat-section">Patient app</li>
           <li><span class="feat-check">&#10003;</span><span>Weight logging</span></li>
           <li><span class="feat-check">&#10003;</span><span>Notifications and reminders</span></li>
           <li><span class="feat-check">&#10003;</span><span>In-app messaging with your care team</span></li>
-          <li class="feat-section">Clinician dashboard (basic)</li>
+          <li class="feat-section">Clinician dashboard</li>
           <li><span class="feat-check">&#10003;</span><span>Patient roster</span></li>
           <li><span class="feat-check">&#10003;</span><span>Per-patient view with weight history</span></li>
           <li class="feat-section">Capacity &amp; support</li>
-          <li><span class="feat-check">&#10003;</span><span>Up to 50 patients <em>(soft limit, contact sales for more)</em></span></li>
-          <li><span class="feat-check">&#10003;</span><span>Email support, 24-hour response, business hours</span></li>
-          <li><span class="feat-check">&#10003;</span><span>Standard onboarding (4-6 weeks)</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Sized to a small early panel</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Email support, business hours</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Guided onboarding</span></li>
         </ul>
-        <a href="contact.html" class="btn btn-secondary btn-tier">Talk to sales</a>
+        <a href="contact.html" class="btn btn-secondary btn-tier">Talk to founders</a>
       </div>
 
       <div class="tier-card recommended">
-        <span class="tier-badge">Most popular</span>
-        <h3 class="tier-name">Standard</h3>
-        <p class="tier-tagline">For growing practices</p>
-        <p class="tier-blurb">The full clinical workflow — wearables, food logging, symptom tracking, and the dashboard your team will actually use every day.</p>
+        <span class="tier-badge">Common shape</span>
+        <h3 class="tier-name">Growing practice</h3>
+        <p class="tier-tagline">A practice running a full program</p>
+        <p class="tier-blurb">The full clinical workflow &mdash; wearables, food logging, symptom tracking, and the dashboard your team will actually use every day.</p>
         <div class="tier-price">
-          Contact sales for pricing
+          Scoped in your order form
           <small>One-time setup + annual platform fee</small>
         </div>
         <ul class="tier-features">
-          <li class="feat-section">Everything in Lite, plus:</li>
+          <li class="feat-section">Everything in Starter, plus:</li>
           <li><span class="feat-check">&#10003;</span><span>Manual food logging</span></li>
           <li><span class="feat-check">&#10003;</span><span>Wearables sync (Apple HealthKit + Google Health Connect)</span></li>
           <li><span class="feat-check">&#10003;</span><span>Symptom tracking</span></li>
           <li><span class="feat-check">&#10003;</span><span>Trends and insights for clinicians</span></li>
           <li><span class="feat-check">&#10003;</span><span>Two-way care messaging</span></li>
           <li class="feat-section">Capacity &amp; support</li>
-          <li><span class="feat-check">&#10003;</span><span>Up to 250 patients <em>(soft limit, contact sales for more)</em></span></li>
+          <li><span class="feat-check">&#10003;</span><span>Sized to a growing panel</span></li>
           <li><span class="feat-check">&#10003;</span><span>Email + Slack support</span></li>
         </ul>
-        <a href="contact.html" class="btn btn-accent btn-tier">Talk to sales</a>
+        <a href="contact.html" class="btn btn-accent btn-tier">Talk to founders</a>
       </div>
 
       <div class="tier-card">
-        <h3 class="tier-name">Pro</h3>
-        <p class="tier-tagline">For larger practices</p>
-        <p class="tier-blurb">Everything in Standard, plus AI-powered features and clinical safety tooling for high-volume programs.</p>
+        <h3 class="tier-name">High-volume shape</h3>
+        <p class="tier-tagline">A larger, higher-volume program</p>
+        <p class="tier-blurb">Everything in the growing-practice shape, plus AI-assisted logging and priority onboarding for high-volume clinics.</p>
         <div class="tier-price">
-          Contact sales for pricing
+          Scoped in your order form
           <small>One-time setup + annual platform fee</small>
         </div>
         <ul class="tier-features">
-          <li class="feat-section">Everything in Standard, plus:</li>
-          <li><span class="feat-check">&#10003;</span><span>AI Food Vision — snap a meal, get the macros</span></li>
-          <li><span class="feat-check">&#10003;</span><span>Red-flag pattern detection (clinical safety alerts)</span></li>
-          <li><span class="feat-check">&#10003;</span><span>Higher patient capacity</span></li>
+          <li class="feat-section">Everything in Growing practice, plus:</li>
+          <li><span class="feat-check">&#10003;</span><span>AI Food Vision &mdash; snap a meal, get an estimated macro breakdown</span></li>
+          <li><span class="feat-check">&#10003;</span><span>Sized for higher patient capacity</span></li>
           <li class="feat-section">Capacity &amp; support</li>
           <li><span class="feat-check">&#10003;</span><span>Priority support</span></li>
           <li><span class="feat-check">&#10003;</span><span>Dedicated onboarding lead</span></li>
           <li><span class="feat-check">&#10003;</span><span>Custom branding flexibility</span></li>
         </ul>
-        <a href="contact.html" class="btn btn-secondary btn-tier">Talk to sales</a>
+        <a href="contact.html" class="btn btn-secondary btn-tier">Talk to founders</a>
       </div>
 
     </div>
@@ -440,8 +463,8 @@
 <section class="universal-section">
   <div class="container">
     <div class="universal-head">
-      <h2>What's included with every tier</h2>
-      <p>The commitments below are universal — they don't change between Lite, Standard, and Pro. They're how we operate, not features we sell.</p>
+      <h2>What's included in every engagement</h2>
+      <p>The commitments below are universal — they don't change with the shape of your configuration. They're how we operate, not features we sell.</p>
     </div>
     <div class="universal-grid">
       <div class="universal-item">
@@ -454,14 +477,14 @@
       <div class="universal-item">
         <div class="universal-icon">&#10003;</div>
         <div>
-          <h4>Your dedicated, HIPAA-compliant environment</h4>
-          <p>We don't pool patient data across clinics. Your data lives in its own environment.</p>
+          <h4>Your dedicated, HIPAA-aligned environment</h4>
+          <p>We don't pool patient data across clinics. Your data lives in its own environment, with its own database and encryption keys.</p>
         </div>
       </div>
       <div class="universal-item">
         <div class="universal-icon">&#10003;</div>
         <div>
-          <h4>HIPAA-compliant data agreements</h4>
+          <h4>HIPAA-aligned data agreements</h4>
           <p>Signed with us. Signed with every downstream vendor we work with.</p>
         </div>
       </div>
@@ -524,7 +547,7 @@
         <p>All fees scale with patient volume — your sales contact will price based on your specifics, not a published rate card.</p>
       </div>
     </div>
-    <p class="fees-note">No per-patient overage fees buried in fine print. If you outgrow your tier, you move tiers — that's the conversation.</p>
+    <p class="fees-note">No per-patient overage fees buried in fine print. As your panel grows, we re-scope your environment together at renewal — that's the conversation.</p>
   </div>
 </section>
 
@@ -536,12 +559,12 @@
     </div>
     <div class="faq-list">
       <details class="faq-item">
-        <summary>Can I switch tiers later?</summary>
-        <p>Yes, anytime. Upgrades take effect immediately; downgrades take effect at your next annual renewal. There are no penalties or lock-ins for moving between tiers.</p>
+        <summary>Can I change my configuration later?</summary>
+        <p>Yes. There are no fixed packages to switch between — as your needs change, we adjust the surfaces you're running and re-scope your environment together, typically at your annual renewal. No penalties, no lock-ins.</p>
       </details>
       <details class="faq-item">
-        <summary>What if I outgrow Pro?</summary>
-        <p>Talk to us. We have an enterprise tier for larger groups, multi-location practices, and clinics with complex clinical workflows. Pricing is custom and the conversation is direct with our founders.</p>
+        <summary>What if I run a large or multi-location group?</summary>
+        <p>Talk to us. Larger groups, multi-location practices, and clinics with complex workflows are scoped the same way — a bespoke order form — with the conversation direct with our founders.</p>
       </details>
       <details class="faq-item">
         <summary>Is there a free trial?</summary>
@@ -549,7 +572,7 @@
       </details>
       <details class="faq-item">
         <summary>How is this different from buying a phone app from a development shop?</summary>
-        <p>Different in many ways. With a development shop, you typically pay a six-figure project fee, wait 9-12 months for a custom build, and then own a piece of software you also have to operate, secure, patch, host, and keep HIPAA-compliant — usually by hiring an engineering team or outsourcing to a managed services firm.</p>
+        <p>Different in many ways. With a development shop, you typically pay a six-figure project fee, wait 9-12 months for a custom build, and then own a piece of software you also have to operate, secure, patch, host, and keep HIPAA-aligned — usually by hiring an engineering team or outsourcing to a managed services firm.</p>
         <p>With Quantal: you own the App Store listing, you own the data, you own the branding — and you keep all of it if you ever leave us. We handle operations, security, hosting, patches, compliance, and store submissions on your behalf, on a known annual fee. The economics and the timeline are not comparable.</p>
       </details>
       <details class="faq-item">
@@ -563,7 +586,7 @@
       </details>
       <details class="faq-item">
         <summary>Who actually owns the data?</summary>
-        <p>You do. Patient data is collected under your clinic's name, lives in your dedicated environment, and is governed by your privacy notice. We process it on your behalf under a HIPAA-compliant data agreement. If you leave, the data leaves with you.</p>
+        <p>You do. Patient data is collected under your clinic's name, lives in your dedicated environment, and is governed by your privacy notice. We process it on your behalf under a HIPAA-aligned data agreement. If you leave, the data leaves with you.</p>
       </details>
     </div>
   </div>
@@ -613,6 +636,7 @@
         <a href="for-clinics.html">For Clinics</a>
         <a href="pricing.html">Pricing</a>
         <a href="demo.html">Try the demo</a>
+        <a href="design-partner.html">Design partners</a>
       </div>
       <div class="footer-col">
         <h4>Trust</h4>
@@ -628,7 +652,7 @@
   </div>
   <div class="footer-bottom">
     <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
-    <p>Now accepting design partners.</p>
+    <p class="footer-legal"><a href="privacy.html" style="color:var(--paper)">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html" style="color:var(--paper)">Terms of Service</a> &nbsp;&middot;&nbsp; Now accepting design partners.</p>
   </div>
 </footer>
 

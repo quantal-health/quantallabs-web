@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Quantal Health">
+  <title>Quantal Health favicon</title>
+  <!-- Dark rounded tile (matches app-icon treatment) -->
+  <rect width="32" height="32" rx="7" fill="#1B1A18"/>
+  <!-- Q ring in Paper -->
+  <circle cx="15" cy="14.5" r="7.5" stroke="#F4EFE2" stroke-width="2.2" fill="none"/>
+  <!-- Quantum dot (red) — replaces the retired amber dot -->
+  <circle cx="20.9" cy="20.3" r="2.8" fill="#E53535"/>
+</svg>

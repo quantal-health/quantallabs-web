@@ -7,15 +7,15 @@
 <meta name="description" content="Click through a working demo of the Quantal admin console, branded for our demo clinic Mountainview Medicine. Try the live branding preview." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   /* Marketing-site brand tokens */
   :root {
-    --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+    --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E53535;
     --ink-muted:#6B6863; --ink-soft:#C9C4BC;
     --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
-    --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
-    --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+    --quantum-soft:#FBE4E1; --quantum-dark:#B4271F;
+    --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#C81E1E;
     --success-light:#d1fae5; --warning-light:#fef3c7; --danger-light:#fee2e2;
     --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
     --bg-subtle:#FAF7EE;
@@ -771,6 +771,28 @@
   [data-theme="dark"] .page-intro .lede,
   [data-theme="system"].sys-dark .page-intro .lede { color: var(--text-secondary); }
 </style>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <!-- Quantal Health rebrand refinements: red signature accent, Geist display, mono/dotted eyebrow, active-nav dot, white CTA text -->
+  <style>
+    h1,h2,h3,h4,h5,h6,.hero-title,.section-title{font-family:"Geist","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-0.01em;}
+    /* Mono + dotted eyebrow */
+    .eyebrow{font-family:"Geist Mono","SFMono-Regular",ui-monospace,SFMono-Regular,monospace;letter-spacing:0.14em;}
+    .eyebrow::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--quantum);margin-right:8px;vertical-align:middle;position:relative;top:-1px;}
+    /* Active-nav dot */
+    .topnav a.active{position:relative;}
+    .topnav a.active::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--quantum);}
+    /* White CTA text on the red brand accent, all themes */
+    .btn-primary,.topnav-cta,
+    [data-theme="dark"] .btn-primary,[data-theme="system"].sys-dark .btn-primary,
+    [data-theme="dark"] .topnav-cta,[data-theme="system"].sys-dark .topnav-cta{color:#fff;}
+    .btn-primary:hover,.topnav-cta:hover,
+    [data-theme="dark"] .btn-primary:hover,[data-theme="system"].sys-dark .btn-primary:hover,
+    [data-theme="dark"] .topnav-cta:hover,[data-theme="system"].sys-dark .topnav-cta:hover{color:#fff;}
+    /* Dark-mode accent overrides */
+    [data-theme="dark"] .eyebrow,[data-theme="system"].sys-dark .eyebrow{background:rgba(229,53,53,0.16);color:#F7C9C4;}
+    [data-theme="dark"] .eyebrow::before,[data-theme="system"].sys-dark .eyebrow::before{background:var(--quantum);}
+    :focus-visible{outline:2px solid var(--quantum);outline-offset:2px;}
+  </style>
 </head>
 <body>
 
@@ -1017,7 +1039,7 @@
                 </div>
 
                 <div class="form-row">
-                  <label for="disclaimer-text">Disclaimer text <span class="helper-text">(HIPAA-compliant boilerplate; review with counsel)</span></label>
+                  <label for="disclaimer-text">Disclaimer text <span class="helper-text">(HIPAA-aligned boilerplate; review with counsel)</span></label>
                   <textarea id="disclaimer-text" rows="3">This app does not provide medical advice. Information shown is for tracking purposes only. Always consult your clinician for medical decisions. Your data is protected under HIPAA and stored on Mountainview Medicine's behalf by Quantal Health.</textarea>
                 </div>
               </div>
@@ -1434,6 +1456,7 @@
         <a href="for-clinics.html">For Clinics</a>
         <a href="pricing.html">Pricing</a>
         <a href="demo.html">Try the demo</a>
+        <a href="design-partner.html">Design partners</a>
       </div>
       <div class="footer-col">
         <h4>Trust</h4>
@@ -1449,7 +1472,7 @@
   </div>
   <div class="footer-bottom">
     <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
-    <p>Now accepting design partners.</p>
+    <p class="footer-legal"><a href="privacy.html" style="color:var(--paper)">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html" style="color:var(--paper)">Terms of Service</a> &nbsp;&middot;&nbsp; Now accepting design partners.</p>
   </div>
 </footer>
 
@@ -1466,7 +1489,7 @@
     { id: 'messaging',    name: 'Messaging',                             desc: 'Patient ↔ clinician async messaging',          tiers: ['standard','pro'],        on: true,  safety: true,  approved: true },
     { id: 'notifications',name: 'Notifications',                         desc: 'Push + email reminders',                       tiers: ['lite','standard','pro'], on: true,  safety: false },
     { id: 'trends',       name: 'Trends &amp; Insights',                 desc: 'Weight trajectory, projections',               tiers: ['standard','pro'],        on: true,  safety: false },
-    { id: 'red_flag',     name: 'Red-flag rules engine',                 desc: 'Automated symptom triage',                     tiers: ['pro'],                   on: false, safety: true,  approved: false },
+    { id: 'cohort',       name: 'Cohort analytics',                      desc: 'Aggregate panel trends across your patients',  tiers: ['pro'],                   on: false, safety: false, approved: false },
   ];
   const currentTier = 'pro';
   const tierRank = { lite: 1, standard: 2, pro: 3 };
@@ -1546,7 +1569,7 @@
     const map = {
       auth: '🔐', log_weight: '⚖️', log_symptoms: '📋', log_other: '💧',
       food_manual: '🍽️', food_ai: '📸', wearables: '⌚', messaging: '💬',
-      notifications: '🔔', trends: '📈', red_flag: '🚩'
+      notifications: '🔔', trends: '📈', cohort: '📊'
     };
     return map[id] || '📦';
   }
