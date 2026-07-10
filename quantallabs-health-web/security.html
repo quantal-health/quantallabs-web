@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Security & HIPAA — Quantal Health</title>
-<meta name="description" content="How Quantal Health protects your patients' data. HIPAA from day one — built in, not bolted on.">
+<meta name="description" content="How Quantal Health protects your patients' data. HIPAA-aligned from day one — built in, not bolted on.">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
     --ink: #1B1A18;
     --paper: #F4EFE2;
-    --quantum: #E8A412;
+    --quantum: #E53535;
     --ink-muted: #6B6863;
     --ink-soft: #C9C4BC;
     --paper-light: #FAF7EE;
     --paper-dark: #E8E2D2;
-    --quantum-soft: #FBE9C0;
-    --quantum-dark: #B8810F;
+    --quantum-soft: #FBE4E1;
+    --quantum-dark: #B4271F;
     --success: #10B981;
     --info: #2563EB;
     --warning: #F59E0B;
-    --danger: #EF4444;
+    --danger: #C81E1E;
     --bg: var(--paper);
     --bg-clean: #FFFFFF;
     --surface: #FFFFFF;
@@ -463,6 +463,28 @@
   /* .reviewer-callout, .footer use var(--ink) bg — keep dark in both modes (inverse panels). */
   /* .bullet-check uses var(--ink) bg with paper text — that's a tiny round chip, leave it. */
 </style>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <!-- Quantal Health rebrand refinements: red signature accent, Geist display, mono/dotted eyebrow, active-nav dot, white CTA text -->
+  <style>
+    h1,h2,h3,h4,h5,h6,.hero-title,.section-title{font-family:"Geist","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-0.01em;}
+    /* Mono + dotted eyebrow */
+    .eyebrow{font-family:"Geist Mono","SFMono-Regular",ui-monospace,SFMono-Regular,monospace;letter-spacing:0.14em;}
+    .eyebrow::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--quantum);margin-right:8px;vertical-align:middle;position:relative;top:-1px;}
+    /* Active-nav dot */
+    .topnav a.active{position:relative;}
+    .topnav a.active::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--quantum);}
+    /* White CTA text on the red brand accent, all themes */
+    .btn-primary,.topnav-cta,
+    [data-theme="dark"] .btn-primary,[data-theme="system"].sys-dark .btn-primary,
+    [data-theme="dark"] .topnav-cta,[data-theme="system"].sys-dark .topnav-cta{color:#fff;}
+    .btn-primary:hover,.topnav-cta:hover,
+    [data-theme="dark"] .btn-primary:hover,[data-theme="system"].sys-dark .btn-primary:hover,
+    [data-theme="dark"] .topnav-cta:hover,[data-theme="system"].sys-dark .topnav-cta:hover{color:#fff;}
+    /* Dark-mode accent overrides */
+    [data-theme="dark"] .eyebrow,[data-theme="system"].sys-dark .eyebrow{background:rgba(229,53,53,0.16);color:#F7C9C4;}
+    [data-theme="dark"] .eyebrow::before,[data-theme="system"].sys-dark .eyebrow::before{background:var(--quantum);}
+    :focus-visible{outline:2px solid var(--quantum);outline-offset:2px;}
+  </style>
 </head>
 <body>
 
@@ -525,7 +547,7 @@
     <div class="container">
       <span class="eyebrow">Security & HIPAA</span>
       <h1 class="hero-title">Your patients' data, protected by design.</h1>
-      <p class="hero-subtitle">We built Quantal Health for HIPAA from day one — not bolted it on later.</p>
+      <p class="hero-subtitle">We built Quantal Health for HIPAA-aligned from day one — not bolted it on later.</p>
     </div>
   </section>
 
@@ -558,8 +580,8 @@
           <div class="pillar-icon">
             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 14h6"/><path d="M9 18h6"/></svg>
           </div>
-          <h3>HIPAA-compliant agreements with every vendor</h3>
-          <p>We don't work with infrastructure or AI vendors who can't sign HIPAA-compliant data agreements. You sign one with us; we maintain the rest of the chain.</p>
+          <h3>HIPAA-aligned agreements with every vendor</h3>
+          <p>We don't work with infrastructure or AI vendors who can't sign HIPAA-aligned data agreements. You sign one with us; we maintain the rest of the chain.</p>
         </div>
       </div>
     </div>
@@ -612,10 +634,10 @@
     </div>
   </section>
 
-  <!-- HIPAA from day one -->
+  <!-- HIPAA-aligned from day one -->
   <section class="section" style="background: var(--paper-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
     <div class="container">
-      <h2>What we mean by "HIPAA from day one"</h2>
+      <h2>What we mean by "HIPAA-aligned from day one"</h2>
       <p class="section-intro">HIPAA isn't a checkbox we ticked at the end. It shaped how we wrote the code. A few specifics:</p>
 
       <ul class="bullet-list">
@@ -629,11 +651,11 @@
         </li>
         <li>
           <span class="bullet-check">&#10003;</span>
-          <p><strong>HIPAA agreements with every link in the chain.</strong> Our cloud infrastructure provider, our monitoring tools, our AI providers — every vendor that could conceivably touch your patient data has signed a HIPAA-compliant data agreement with us.</p>
+          <p><strong>HIPAA agreements with every link in the chain.</strong> Our cloud infrastructure provider, our monitoring tools, our AI providers — every vendor that could conceivably touch your patient data has signed a HIPAA-aligned data agreement with us.</p>
         </li>
         <li>
           <span class="bullet-check">&#10003;</span>
-          <p><strong>One agreement covers everything.</strong> Your clinic signs one HIPAA-compliant data agreement with us. We handle every downstream agreement so you don't have to chase paperwork from our vendors.</p>
+          <p><strong>One agreement covers everything.</strong> Your clinic signs one HIPAA-aligned data agreement with us. We handle every downstream agreement so you don't have to chase paperwork from our vendors.</p>
         </li>
       </ul>
     </div>
@@ -668,7 +690,7 @@
             </tr>
             <tr>
               <td class="risk">A vendor without a HIPAA agreement gets involved</td>
-              <td class="response">We never use a vendor that hasn't signed a HIPAA-compliant data agreement with us. Your agreement with us covers our entire vendor chain — no surprise gaps.</td>
+              <td class="response">We never use a vendor that hasn't signed a HIPAA-aligned data agreement with us. Your agreement with us covers our entire vendor chain — no surprise gaps.</td>
             </tr>
             <tr>
               <td class="risk">A breach happens and notification is late</td>
@@ -762,6 +784,7 @@
         <a href="for-clinics.html">For Clinics</a>
         <a href="pricing.html">Pricing</a>
         <a href="demo.html">Try the demo</a>
+        <a href="design-partner.html">Design partners</a>
       </div>
       <div class="footer-col">
         <h4>Trust</h4>
@@ -776,7 +799,7 @@
     </div>
     <div class="footer-bottom">
       <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
-      <p>Now accepting design partners.</p>
+      <p class="footer-legal"><a href="privacy.html" style="color:var(--paper)">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html" style="color:var(--paper)">Terms of Service</a> &nbsp;&middot;&nbsp; Now accepting design partners.</p>
     </div>
   </div>
 </footer>
