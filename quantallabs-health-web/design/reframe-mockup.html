@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quantal Health — any-specialization reframe (design mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* ---- Live theme tokens (Quantum Red on Paper) — copied verbatim, unchanged ---- */
+  :root{
+    --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E53535;
+    --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+    --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+    --quantum-soft:#FBE4E1; --quantum-dark:#B4271F;
+    --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#C81E1E;
+    --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+    --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+    --border:var(--paper-dark); --border-strong:#D4CFC2;
+    --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+    --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+    --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+    --font-hero:clamp(2.75rem, 5vw, 4.5rem);
+    --font-body-large:1.25rem; --font-body:1rem; --font-small:0.875rem; --font-eyebrow:0.75rem;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55;}
+  h1,h2,h3{font-family:"Geist","Inter",sans-serif; letter-spacing:-0.01em; line-height:1.08; margin:0;}
+  h1{font-size:var(--font-hero); font-weight:700;}
+  h2{font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:700; margin-bottom:14px;}
+  h3{font-size:1.15rem; font-weight:600;}
+  p{margin:0;}
+  .container{max-width:1200px; margin:0 auto; padding:0 24px;}
+  .eyebrow{display:inline-block; font-size:var(--font-eyebrow); font-weight:700;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--quantum-dark);
+    background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:24px;
+    font-family:"Geist Mono",ui-monospace,monospace;}
+  .eyebrow::before{content:""; display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--quantum); margin-right:8px; vertical-align:middle; position:relative; top:-1px;}
+  .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 22px; border-radius:10px;
+    font-size:1rem; font-weight:600; text-decoration:none; border:1px solid transparent; cursor:pointer;}
+  .btn-primary{background:var(--ink); color:var(--paper);}
+  .btn-secondary{background:transparent; color:var(--ink); border-color:var(--border-strong);}
+  .cta-row{display:flex; gap:14px; margin-top:36px; flex-wrap:wrap;}
+
+  /* annotation ribbon so a human reviewer knows what they're looking at */
+  .note{background:var(--ink); color:var(--paper); font-family:"Geist Mono",monospace;
+    font-size:12px; letter-spacing:0.06em; padding:10px 24px; text-align:center;}
+  .note b{color:#F7C9C4;}
+
+  /* HERO */
+  section.hero{padding:96px 0 72px;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr 1fr; gap:64px; align-items:center;}
+  .hero p.lede{font-size:var(--font-body-large); color:var(--text-secondary); margin-top:24px; max-width:540px;}
+  .hero p.lede strong{color:var(--text);}
+  .hero-art{background:linear-gradient(135deg,var(--paper-light),var(--paper-dark));
+    border:1px solid var(--border); border-radius:16px; height:340px; display:flex;
+    align-items:center; justify-content:center; color:var(--text-muted); font-size:14px;
+    box-shadow:var(--shadow-md); text-align:center; padding:24px;}
+
+  /* SPECIALTY SECTION */
+  section.spec{padding:80px 0; background:var(--paper-light); border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+  .section-head{text-align:center; max-width:720px; margin:0 auto 48px;}
+  .section-head p{font-size:var(--font-body-large); color:var(--text-secondary); margin-top:12px;}
+  .spec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:960px; margin:0 auto;}
+  .spec-card{background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:20px 22px; box-shadow:var(--shadow-sm);}
+  .spec-card.live{border-color:var(--quantum); box-shadow:0 0 0 1px var(--quantum), var(--shadow-md);}
+  .spec-card h3{margin-bottom:8px;}
+  .status{display:inline-flex; align-items:center; gap:7px; font-family:"Geist Mono",monospace;
+    font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:500;}
+  .status .dot{width:8px; height:8px; border-radius:50%;}
+  .status.live{color:var(--quantum-dark);}
+  .status.live .dot{background:var(--quantum); box-shadow:0 0 0 4px var(--quantum-soft);}
+  .status.req{color:var(--text-muted);}
+  .status.req .dot{background:var(--ink-soft);}
+  .spec-card p{font-size:var(--font-small); color:var(--text-secondary); margin-top:6px;}
+
+  /* 3-STEP STRIP */
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:24px; max-width:960px;
+    margin:56px auto 0; }
+  .step{position:relative; padding-left:0;}
+  .step .num{font-family:"Geist Mono",monospace; font-size:13px; color:var(--quantum-dark);
+    font-weight:500; letter-spacing:0.08em;}
+  .step h3{margin:10px 0 6px; font-size:1.05rem;}
+  .step p{font-size:var(--font-small); color:var(--text-secondary);}
+
+  /* FLAGSHIP BAND */
+  section.flag{padding:72px 0;}
+  .flag-head{max-width:720px; margin:0 auto 8px; text-align:center;}
+  .flag-head .eyebrow::before{background:var(--quantum);}
+  .flag-caption{display:inline-block; margin-top:14px; font-family:"Geist Mono",monospace;
+    font-size:12px; color:var(--text-muted); letter-spacing:0.04em;}
+  .demo-row{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:960px; margin:40px auto 0;}
+  .demo-tile{background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:20px; box-shadow:var(--shadow-sm); min-height:150px;}
+  .demo-tile .cap{display:inline-block; margin-top:10px; font-family:"Geist Mono",monospace;
+    font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--quantum-dark);
+    background:var(--quantum-soft); padding:3px 8px; border-radius:999px;}
+  .demo-tile h3{font-size:1.05rem;}
+  .demo-tile p{font-size:var(--font-small); color:var(--text-secondary); margin-top:6px;}
+
+  @media(max-width:820px){
+    .hero-grid{grid-template-columns:1fr; gap:40px;}
+    .spec-grid,.steps,.demo-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="note">DESIGN MOCKUP · <b>not production</b> · shows the reframed hero + the new "Built to your specialization" section + reframed GLP-1 flagship band. Theme tokens are the live ones, unchanged.</div>
+
+<!-- ============ REFRAMED HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Now accepting design partners</span>
+        <h1>The care platform that ships as your clinic&nbsp;— not ours.</h1>
+        <p class="lede"><strong>Your brand. Your patients. Your data.</strong> A branded patient app and a clinician dashboard, in your name and built to your specialty — your listing on the App Store, your team's view of every patient, and your data in its own dedicated environment with its own database and encryption keys. <strong>Live today with GLP-1 clinics; your modules next.</strong></p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#">Try the demo →</a>
+          <a class="btn btn-secondary" href="#">Talk to founders</a>
+        </div>
+      </div>
+      <div class="hero-art">Existing Mountainview Medicine phone&nbsp;+&nbsp;dashboard SVG stays here<br>(now reads as "an example," not "the product")</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEW: BUILT TO YOUR SPECIALIZATION ============ -->
+<section class="spec" id="specializations">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Built to your requirements</span>
+      <h2>Any specialization. Built to your requirements.</h2>
+      <p>GLP-1 is where we went deep first — real clinics, live under their own brand. The same core platform configures to how your specialty works.</p>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card live">
+        <span class="status live"><span class="dot"></span>Live now</span>
+        <h3>GLP-1 &amp; metabolic care</h3>
+        <p>In production today, under real clinics' own brands. Our flagship implementation.</p>
+      </div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Primary care</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Behavioral health</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Women's health</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Cardiometabolic</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Endocrinology</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Longevity</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Chronic care</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Pediatrics</h3></div>
+    </div>
+
+    <div class="steps">
+      <div class="step"><span class="num">01</span><h3>Map your workflow</h3><p>We learn how your specialty actually runs — the visits, the data, the follow-ups.</p></div>
+      <div class="step"><span class="num">02</span><h3>Configure the modules</h3><p>Logging, wearables, trends, messaging, notifications, app shell, admin console.</p></div>
+      <div class="step"><span class="num">03</span><h3>Ship as your branded app</h3><p>Your name on the App Store, your dedicated data environment, your team's dashboard.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REFRAMED GLP-1 FLAGSHIP BAND ============ -->
+<section class="flag">
+  <div class="container">
+    <div class="flag-head">
+      <span class="eyebrow">Live in production</span>
+      <h2>Our GLP-1 flagship</h2>
+      <span class="flag-caption">GLP-1 is where we went deep first. Here's what a live clinic runs today.</span>
+    </div>
+    <div class="demo-row">
+      <div class="demo-tile"><h3>Daily logging</h3><p>Weight, feeling, dose adherence — the rhythm of the patient's care model.</p></div>
+      <div class="demo-tile"><h3>AI Food Vision</h3><p>Photo-based food logging.</p><span class="cap">Example — built for our GLP-1 flagship</span></div>
+      <div class="demo-tile"><h3>Care messaging</h3><p>Secure clinician–patient messaging inside the branded app.</p></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
