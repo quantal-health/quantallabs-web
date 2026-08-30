@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantal Health — Admin console demo</title>
+<meta name="description" content="Click through a working demo of the Quantal admin console, branded for our demo clinic Mountainview Medicine. Try the live branding preview." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* Marketing-site brand tokens */
+  :root {
+    --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+    --ink-muted:#6B6863; --ink-soft:#C9C4BC;
+    --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
+    --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
+    --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+    --success-light:#d1fae5; --warning-light:#fef3c7; --danger-light:#fee2e2;
+    --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
+    --bg-subtle:#FAF7EE;
+    --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
+    --border:var(--paper-dark); --border-strong:#D4CFC2;
+    --shadow-sm:0 1px 2px rgb(27 26 24 / 0.04);
+    --shadow-md:0 2px 4px rgb(27 26 24 / 0.06), 0 4px 12px rgb(27 26 24 / 0.04);
+    --shadow-lg:0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+
+    /* Demo tenant - Mountainview Medicine */
+    --demo-tenant-primary: #16a34a;
+    --demo-tenant-primary-dark: #15803d;
+    --demo-tenant-secondary: #0891b2;
+
+    /* Browser-frame internal palette */
+    --i-text: #111827;
+    --i-text-secondary: #4b5563;
+    --i-text-muted: #6b7280;
+    --i-border: #e5e7eb;
+    --i-border-strong: #d1d5db;
+    --i-bg-subtle: #f9fafb;
+    --i-bg-muted: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--quantum-dark); }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* Dark mode (marketing chrome only — admin console keeps internal palette) */
+  [data-theme="dark"],
+  [data-theme="system"].sys-dark {
+    --bg:#1B1A18; --bg-clean:#252320; --surface:#252320;
+    --bg-subtle:#1F1D1B;
+    --paper-light:#1F1D1B; --paper-dark:#2C2A27;
+    --text:#F4EFE2; --text-secondary:#B8B3A8; --text-muted:#7A7570;
+    --border:rgba(244,239,226,0.10); --border-strong:rgba(244,239,226,0.18);
+    --ink-muted:#B8B3A8; --ink-soft:#7A7570;
+    --shadow-sm:0 1px 2px rgb(0 0 0 / 0.30);
+    --shadow-md:0 2px 4px rgb(0 0 0 / 0.35), 0 4px 12px rgb(0 0 0 / 0.30);
+    --shadow-lg:0 4px 8px rgb(0 0 0 / 0.40), 0 12px 32px rgb(0 0 0 / 0.50);
+  }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color:var(--text); }
+  [data-theme="dark"] .topbar,
+  [data-theme="system"].sys-dark .topbar { background:rgba(27,26,24,0.92); }
+  [data-theme="dark"] .topnav-cta,
+  [data-theme="system"].sys-dark .topnav-cta { background:var(--quantum); color:#1B1A18; }
+  [data-theme="dark"] .topnav-cta:hover,
+  [data-theme="system"].sys-dark .topnav-cta:hover { background:var(--quantum-dark); color:#1B1A18; }
+
+  /* Brand attribution */
+  .brand-attribution {
+    display: block; font-size: 0.7rem; font-weight: 400; font-style: italic;
+    color: var(--text-muted); letter-spacing: 0; line-height: 1.1; margin-top: 2px;
+  }
+
+  /* Topnav back link */
+  .topnav-back {
+    display: inline-flex; align-items: center;
+    font-size: 0.8125rem; color: var(--text-muted); font-weight: 400;
+    padding: 6px 10px; border-radius: 6px; margin-right: 8px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topnav-back:hover { color: var(--text); background: rgba(27,26,24,0.05); text-decoration: none; }
+  [data-theme="dark"] .topnav-back:hover,
+  [data-theme="system"].sys-dark .topnav-back:hover { background: rgba(244,239,226,0.06); }
+
+  /* Settings (theme) toggle */
+  .settings-wrap { position: relative; }
+  .settings-toggle {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: none; cursor: pointer;
+    color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .settings-toggle:hover { background: var(--bg-clean); color: var(--text); }
+  .settings-toggle svg { width: 16px; height: 16px; }
+  .settings-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 210px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 12px;
+    opacity: 0; pointer-events: none; transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease; z-index: 200;
+  }
+  .settings-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .settings-lbl {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 8px; padding: 0 4px;
+  }
+  .theme-opts { display: flex; flex-direction: column; gap: 2px; }
+  .theme-opt {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 10px; border-radius: 8px; width: 100%;
+    font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .theme-opt:hover { background: var(--bg-clean); color: var(--text); }
+  .theme-opt.active { background: var(--bg-clean); color: var(--quantum-dark); font-weight: 600; }
+  [data-theme="dark"] .theme-opt.active,
+  [data-theme="system"].sys-dark .theme-opt.active { color: var(--quantum); }
+  .theme-opt svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+
+  /* ======================================================
+     Marketing-site topnav
+     ====================================================== */
+  .topbar { background: rgba(244,239,226,0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px;
+    display: flex; align-items: center; gap: 32px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-text { font-weight: 400; color: var(--ink-muted); font-size: 1.125rem; letter-spacing: -0.01em; }
+  .brand-text strong { font-weight: 700; color: var(--ink); }
+  .topnav { display: flex; gap: 24px; flex: 1; }
+  .topnav a { color: var(--ink-muted); font-size: 0.9375rem; }
+  .topnav a:hover { color: var(--ink); }
+  .topnav a.active { color: var(--ink); font-weight: 600; }
+  .topnav-cta { background: var(--ink); color: var(--paper); padding: 10px 18px;
+    border-radius: 8px; font-size: 0.9375rem; font-weight: 600; transition: all 0.15s; }
+  .topnav-cta:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+
+  /* ======================================================
+     Page intro
+     ====================================================== */
+  .page-intro {
+    max-width: 1180px; margin: 0 auto; padding: 56px 24px 24px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.875rem; color: var(--ink-muted); margin-bottom: 18px;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--ink); text-decoration: none; }
+  .eyebrow {
+    display:inline-block; font-size:0.75rem; font-weight:700;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--quantum-dark);
+    background:var(--quantum-soft); padding:6px 12px; border-radius:999px; margin-bottom:20px;
+  }
+  .page-intro h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 800;
+    line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px; color: var(--ink);
+  }
+  .page-intro .lede {
+    font-size: 1.0625rem; color: var(--ink-muted); max-width: 880px; margin: 0;
+  }
+
+  /* Demo stage: full-width browser frame */
+  .stage {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px 24px 64px;
+  }
+
+  /* Browser frame */
+  .browser-frame {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: white;
+  }
+  .browser-chrome {
+    background: var(--paper-light);
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid var(--i-border);
+  }
+  .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .browser-dot.red { background: #ef4444; }
+  .browser-dot.yellow { background: #f59e0b; }
+  .browser-dot.green { background: #10b981; }
+  .browser-url {
+    margin-left: 14px;
+    flex: 1;
+    background: white;
+    border: 1px solid var(--i-border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--i-text-secondary);
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .browser-url::before { content: "\1F512"; font-size: 10px; }
+  .browser-body {
+    background: white;
+    min-height: 720px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    color: var(--i-text);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: #fafafa;
+    border-right: 1px solid var(--i-border);
+    padding: 16px 0;
+    display: flex; flex-direction: column;
+  }
+  .sidebar-header {
+    padding: 0 16px 16px;
+    border-bottom: 1px solid var(--i-border);
+    margin-bottom: 8px;
+  }
+  .tenant-badge { display: flex; align-items: center; gap: 10px; }
+  .tenant-logo {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--demo-tenant-primary);
+    color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.875rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .tenant-name { font-weight: 600; font-size: 0.875rem; line-height: 1.2; color: var(--i-text); }
+  .tenant-tier { font-size: 0.7rem; color: var(--i-text-muted); }
+  .nav-list { list-style: none; padding: 0; margin: 0; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 16px;
+    color: var(--i-text-secondary);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    font-size: 0.875rem;
+    user-select: none;
+  }
+  .nav-item:hover { background: #f3f4f6; color: var(--i-text); }
+  .nav-item.active {
+    background: white;
+    border-left-color: var(--demo-tenant-primary);
+    color: var(--demo-tenant-primary-dark);
+    font-weight: 600;
+  }
+  .nav-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.85; }
+
+  /* Main content */
+  .content { padding: 24px 28px; overflow: hidden; }
+  .view-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 16px; }
+  .view-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 2px; color: var(--i-text); }
+  .view-sub { color: var(--i-text-muted); font-size: 0.875rem; margin: 0; }
+  .view { display: none; }
+  .view.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Tier progress */
+  .tier-card {
+    background: white;
+    border: 1px solid var(--i-border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .tier-current { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .tier-current .label { font-size: 0.75rem; color: var(--i-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .tier-current .value { font-size: 1.125rem; font-weight: 700; color: var(--demo-tenant-primary-dark); display: flex; align-items: center; gap: 8px; }
+  .tier-pill {
+    display: inline-block; padding: 2px 10px; border-radius: 999px;
+    font-size: 0.75rem; font-weight: 600;
+    background: var(--demo-tenant-primary); color: white;
+  }
+  .tier-progress {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    background: var(--i-bg-muted);
+    border-radius: 999px;
+    overflow: hidden;
+    height: 36px;
+    position: relative;
+  }
+  .tier-step {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8125rem; font-weight: 600;
+    color: var(--i-text-muted);
+    background: var(--i-bg-muted);
+    transition: background 0.2s, color 0.2s;
+  }
+  .tier-step.filled { background: var(--demo-tenant-primary); color: white; }
+  .tier-step.current { background: var(--demo-tenant-primary-dark); color: white; }
+
+  .btn { font-size: 0.875rem; font-weight: 500; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--i-border); background: white; color: var(--i-text); transition: background 0.15s, border-color 0.15s; }
+  .btn:hover { background: var(--i-bg-subtle); }
+  .btn-primary { background: var(--info); border-color: var(--info); color: white; }
+  .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+  .btn-tenant { background: var(--demo-tenant-primary); border-color: var(--demo-tenant-primary); color: white; }
+  .btn-tenant:hover { background: var(--demo-tenant-primary-dark); border-color: var(--demo-tenant-primary-dark); }
+  .btn-ghost { background: transparent; border: 1px solid var(--i-border); }
+  .btn-danger { background: var(--danger); border-color: var(--danger); color: white; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-sm { font-size: 0.75rem; padding: 4px 10px; }
+
+  /* Module table */
+  .module-table {
+    background: white; border: 1px solid var(--i-border); border-radius: 10px; overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .module-row {
+    display: grid; grid-template-columns: 32px 1fr auto auto;
+    align-items: center; gap: 14px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--i-border);
+    transition: background 0.15s;
+  }
+  .module-row:last-child { border-bottom: none; }
+  .module-row:hover { background: var(--i-bg-subtle); }
+  .module-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: var(--i-bg-muted);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.875rem;
+  }
+  .module-name { font-weight: 600; font-size: 0.875rem; color: var(--i-text); }
+  .module-desc { font-size: 0.75rem; color: var(--i-text-muted); margin-top: 1px; }
+  .module-status { font-size: 0.7rem; }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .pill-success { background: var(--success-light); color: #047857; }
+  .pill-warning { background: var(--warning-light); color: #92400e; }
+  .pill-danger { background: var(--danger-light); color: #991b1b; }
+  .pill-muted { background: var(--i-bg-muted); color: var(--i-text-muted); }
+  .pill-locked { background: #ede9fe; color: #6d28d9; }
+  .badge-safety {
+    display: inline-block;
+    background: var(--warning-light);
+    color: #92400e;
+    border: 1px solid #fcd34d;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-left: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Toggle */
+  .toggle {
+    position: relative;
+    width: 38px; height: 22px;
+    background: #cbd5e1;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.18s;
+    flex-shrink: 0;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 18px; height: 18px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+  .toggle.on { background: var(--demo-tenant-primary); }
+  .toggle.on::after { transform: translateX(16px); }
+  .toggle.disabled { opacity: 0.45; cursor: not-allowed; background: #cbd5e1; }
+  .toggle.disabled.on { background: #94a3b8; }
+
+  /* Cards */
+  .card {
+    background: white;
+    border: 1px solid var(--i-border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
+  }
+  .card-title { font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; color: var(--i-text); }
+  .form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .form-row label { font-size: 0.8125rem; font-weight: 600; color: var(--i-text-secondary); }
+  .form-row .hint { font-size: 0.75rem; color: var(--i-text-muted); }
+  .input, select, textarea {
+    font-family: inherit;
+    font-size: 0.875rem;
+    padding: 8px 11px;
+    border-radius: 6px;
+    border: 1px solid var(--i-border-strong);
+    background: white;
+    color: var(--i-text);
+    width: 100%;
+  }
+  .input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--demo-tenant-primary);
+    outline-offset: -1px;
+    border-color: var(--demo-tenant-primary);
+  }
+  textarea { resize: vertical; min-height: 60px; font-family: inherit; }
+  .radio-group { display: flex; gap: 14px; flex-wrap: wrap; }
+  .radio-group label { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8125rem; cursor: pointer; color: var(--i-text); }
+  .input-row { display: flex; gap: 10px; align-items: center; }
+  .color-picker { display: flex; gap: 8px; align-items: center; }
+  input[type="color"] {
+    width: 36px; height: 36px;
+    border: 1px solid var(--i-border-strong);
+    border-radius: 8px;
+    padding: 0;
+    cursor: pointer;
+    background: white;
+  }
+
+  /* AI Vision panel */
+  .ai-vision-panel {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 1px solid #a7f3d0;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .ai-vision-panel.hidden { display: none; }
+
+  /* Branding split */
+  .branding-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 1000px) { .branding-grid { grid-template-columns: 1fr; } }
+
+  /* iPhone preview */
+  .iphone-preview-wrap { position: sticky; top: 80px; }
+  .iphone-frame {
+    width: 240px; height: 480px;
+    margin: 0 auto;
+    background: #1f2937;
+    border-radius: 32px;
+    padding: 8px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+  .iphone-screen {
+    width: 100%; height: 100%;
+    border-radius: 26px;
+    background: #f9fafb;
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+    transition: background 0.3s;
+  }
+  .iphone-notch {
+    position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 16px; border-radius: 999px; background: #1f2937;
+    z-index: 4;
+  }
+  .iphone-statusbar {
+    height: 28px; padding: 4px 14px 0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-size: 0.6rem; color: var(--i-text);
+    font-weight: 600;
+  }
+  .iphone-app-header {
+    padding: 6px 14px 8px;
+    display: flex; align-items: center; gap: 8px;
+    background: var(--preview-primary, #16a34a);
+    color: white;
+    transition: background 0.3s;
+  }
+  .iphone-app-header .app-mark {
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    background: white;
+    color: var(--preview-primary, #16a34a);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.7rem;
+    transition: color 0.3s;
+  }
+  .iphone-app-name {
+    font-size: 0.75rem; font-weight: 600;
+    flex: 1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .iphone-welcome {
+    padding: 14px;
+    background: white;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .iphone-welcome h4 { font-size: 0.7rem; margin: 0 0 4px; color: var(--preview-primary, #16a34a); transition: color 0.3s; }
+  .iphone-welcome p { font-size: 0.65rem; line-height: 1.4; margin: 0; color: var(--i-text-secondary); }
+  .iphone-content {
+    flex: 1;
+    padding: 8px 10px;
+    display: flex; flex-direction: column; gap: 6px;
+    overflow: hidden;
+  }
+  .iphone-tile {
+    background: white;
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-shadow: var(--shadow-sm);
+    font-size: 0.65rem;
+  }
+  .iphone-tile .tile-label { color: var(--i-text-muted); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .iphone-tile .tile-value { font-weight: 700; color: var(--i-text); margin-top: 2px; }
+  .iphone-tile .tile-accent { color: var(--preview-primary, #16a34a); transition: color 0.3s; font-weight: 700; }
+  .iphone-tabbar {
+    display: flex; justify-content: space-around;
+    padding: 6px 0 8px;
+    background: white;
+    border-top: 1px solid var(--i-border);
+  }
+  .iphone-tab {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 0.55rem; color: var(--i-text-muted);
+    flex: 1;
+  }
+  .iphone-tab.active { color: var(--preview-primary, #16a34a); transition: color 0.3s; }
+  .iphone-tab .tab-dot {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    background: currentColor;
+    opacity: 0.85;
+  }
+  .iphone-tab.hidden { display: none; }
+
+  .preview-caption {
+    text-align: center; font-size: 0.7rem; color: var(--i-text-muted);
+    margin-top: 12px;
+    line-height: 1.4;
+  }
+
+  /* User mgmt table */
+  .users-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--i-border); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .users-table th, .users-table td {
+    text-align: left;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--i-border);
+    font-size: 0.875rem;
+    color: var(--i-text);
+  }
+  .users-table th { background: var(--i-bg-subtle); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--i-text-muted); font-weight: 600; }
+  .users-table tr:last-child td { border-bottom: none; }
+  .user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #94a3b8, #64748b);
+    color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 600;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  /* Tickets */
+  .tickets-table { background: white; border: 1px solid var(--i-border); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .ticket-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 110px 140px 120px;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--i-border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .ticket-row:hover { background: var(--i-bg-subtle); }
+  .ticket-row:last-child { border-bottom: none; }
+  .ticket-id { font-size: 0.75rem; color: var(--i-text-muted); font-family: monospace; }
+  .ticket-subject { font-size: 0.875rem; font-weight: 500; color: var(--i-text); }
+  .ticket-thread {
+    background: var(--i-bg-subtle);
+    border-top: 1px solid var(--i-border);
+    padding: 16px 20px;
+    display: none;
+  }
+  .ticket-thread.open { display: block; }
+  .ticket-thread h4 { margin: 0 0 6px; font-size: 0.95rem; color: var(--i-text); }
+  .ticket-thread .thread-msg {
+    background: white;
+    border: 1px solid var(--i-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 0.8125rem;
+    color: var(--i-text);
+  }
+  .ticket-thread .thread-msg .msg-author { font-weight: 600; font-size: 0.75rem; color: var(--i-text-secondary); margin-bottom: 4px; }
+  .ticket-thread textarea { margin-top: 8px; }
+  .ticket-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(2px);
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    max-width: 480px;
+    width: calc(100% - 32px);
+    padding: 22px 24px;
+    animation: slideUp 0.2s ease;
+    color: var(--i-text);
+  }
+  @keyframes slideUp { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal h3 { margin: 0 0 8px; font-size: 1.05rem; font-weight: 700; }
+  .modal p { margin: 0 0 14px; color: var(--i-text-secondary); font-size: 0.875rem; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+  .modal .icon-banner {
+    background: var(--warning-light);
+    border: 1px solid #fcd34d;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #92400e;
+    font-size: 0.8125rem;
+    margin-bottom: 12px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .modal .icon-banner.danger { background: var(--danger-light); border-color: #fca5a5; color: #991b1b; }
+  .modal .icon-banner.info { background: #dbeafe; border-color: #93c5fd; color: #1d4ed8; }
+
+  /* Toast */
+  .toast-container {
+    position: fixed; bottom: 24px; right: 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    z-index: 300;
+  }
+  .toast {
+    background: #111827;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    font-size: 0.8125rem;
+    animation: slideInToast 0.25s ease;
+    max-width: 380px;
+  }
+  @keyframes slideInToast { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .toast.fadeout { opacity: 0; transition: opacity 0.3s; }
+
+  /* Settings */
+  .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .settings-grid { grid-template-columns: 1fr; } }
+
+  .lock-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--i-border);
+  }
+  .lock-row:last-child { border: none; }
+  .lock-label { font-weight: 600; font-size: 0.875rem; color: var(--i-text); }
+  .lock-value { font-size: 0.8125rem; color: var(--i-text-secondary); }
+  .stack { display: flex; flex-direction: column; gap: 2px; }
+  .stack-sm { display: flex; flex-direction: column; gap: 4px; }
+
+  /* Misc */
+  .row-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .text-muted { color: var(--i-text-muted); }
+  .small { font-size: 0.8125rem; }
+  .xs { font-size: 0.75rem; }
+  .mb-12 { margin-bottom: 12px; }
+  .mt-8 { margin-top: 8px; }
+  .helper-text { color: var(--i-text-muted); font-size: 0.75rem; }
+
+  /* Outro */
+  .outro {
+    max-width: 720px; margin: 0 auto; padding: 32px 24px 56px;
+    text-align: center;
+  }
+  .outro p { color: var(--ink-muted); font-size: 1.0625rem; margin-bottom: 20px; }
+  .outro-cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-outro {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px;
+    border-radius: 10px; font-size: 0.9375rem; font-weight: 600; text-decoration: none;
+    transition: all 0.15s; border: 1px solid transparent;
+  }
+  .btn-outro-primary { background: var(--ink); color: var(--paper); }
+  .btn-outro-primary:hover { background: var(--quantum-dark); color: var(--bg-clean); }
+  .btn-outro-secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+  .btn-outro-secondary:hover { background: var(--bg-clean); border-color: var(--ink); }
+
+  /* Marketing-site footer */
+  .footer { background: var(--ink); color: var(--ink-soft); padding: 64px 0 32px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: grid; grid-template-columns: 1.5fr 2.5fr; gap: 48px; }
+  .footer-brand p { color: var(--ink-soft); }
+  .footer-tagline { color: var(--ink-soft); font-size: 0.9375rem; margin-top: 16px; max-width: 280px; }
+  .footer-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+  .footer-col h4 { color: var(--paper); font-size: 0.875rem; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 16px; }
+  .footer-col a { display: block; color: var(--ink-soft); font-size: 0.9375rem;
+    padding: 6px 0; text-decoration: none; }
+  .footer-col a:hover { color: var(--quantum); }
+  .footer-bottom { max-width: 1200px; margin: 48px auto 0; padding: 24px 24px 0;
+    border-top: 1px solid #2a2926; display: flex; justify-content: space-between;
+    align-items: center; color: var(--ink-soft); font-size: 0.875rem; }
+  .footer-bottom p { color: var(--ink-soft); font-size: 0.875rem; }
+
+  @media (max-width: 900px) {
+    .topnav { display: none; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-cols { grid-template-columns: repeat(2,1fr); }
+    .page-intro { padding: 40px 24px 16px; }
+    .browser-body { grid-template-columns: 1fr; }
+  }
+
+  /* Dark-mode visual fixes — text/links/brand mark that hardcoded var(--ink) (which is a fixed
+     black even in dark mode) need to flip to var(--text) so they stay readable. The browser-frame
+     interior intentionally stays light/cream because it represents the actual admin UI for
+     Mountainview Medicine (uses --i-* prefixed vars) — do not theme that. */
+  [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4,
+  [data-theme="system"].sys-dark h1, [data-theme="system"].sys-dark h2,
+  [data-theme="system"].sys-dark h3, [data-theme="system"].sys-dark h4 { color: var(--text); }
+  [data-theme="dark"] a,
+  [data-theme="system"].sys-dark a { color: var(--text); }
+  [data-theme="dark"] a:hover,
+  [data-theme="system"].sys-dark a:hover { color: var(--quantum); }
+  [data-theme="dark"] .brand-text strong,
+  [data-theme="system"].sys-dark .brand-text strong { color: var(--text); }
+  [data-theme="dark"] .brand svg circle:first-of-type,
+  [data-theme="system"].sys-dark .brand svg circle:first-of-type { stroke: var(--text); }
+  [data-theme="dark"] .topnav a:hover,
+  [data-theme="system"].sys-dark .topnav a:hover { color: var(--text); }
+  [data-theme="dark"] .topnav a.active,
+  [data-theme="system"].sys-dark .topnav a.active { color: var(--text); }
+  [data-theme="dark"] .back-link:hover,
+  [data-theme="system"].sys-dark .back-link:hover { color: var(--text); }
+  [data-theme="dark"] .page-intro h1,
+  [data-theme="system"].sys-dark .page-intro h1 { color: var(--text); }
+  [data-theme="dark"] .btn-outro-secondary,
+  [data-theme="system"].sys-dark .btn-outro-secondary { color: var(--text); border-color: var(--border-strong); }
+  [data-theme="dark"] .btn-outro-secondary:hover,
+  [data-theme="system"].sys-dark .btn-outro-secondary:hover { background: var(--bg-clean); border-color: var(--text); }
+  /* Outro paragraph and page-intro lede live OUTSIDE the browser frame, so they need to flip. */
+  [data-theme="dark"] .outro p,
+  [data-theme="system"].sys-dark .outro p { color: var(--text-secondary); }
+  [data-theme="dark"] .page-intro .lede,
+  [data-theme="system"].sys-dark .page-intro .lede { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#1B1A18" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E53535"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Quantal</strong> Health
+        <span class="brand-attribution">by Quantal AI</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
+      <a href="product.html">Product</a>
+      <a href="for-clinics.html">For Clinics</a>
+      <a href="security.html">Security</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="demo.html" class="active">Demo</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a href="contact.html" class="topnav-cta">Talk to founders</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-intro">
+  <a href="demo.html" class="back-link">&larr; Back to demos</a>
+  <span class="eyebrow">Admin console</span>
+  <h1>This is what Maria sees.</h1>
+  <p class="lede">
+    Maria Rodriguez is the practice administrator at Mountainview Medicine. Try the <strong>Branding</strong> tab &mdash; type a different color and watch the patient app preview update in real time. All data is fictional.
+  </p>
+</div>
+
+<div class="stage">
+
+  <!-- Browser frame containing the admin console -->
+  <div class="browser-frame">
+    <div class="browser-chrome">
+      <span class="browser-dot red"></span>
+      <span class="browser-dot yellow"></span>
+      <span class="browser-dot green"></span>
+      <span class="browser-url">mountainview-medicine.quantal.health/admin</span>
+    </div>
+    <div class="browser-body">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="tenant-badge">
+            <span class="tenant-logo" id="tenant-logo-mark">M</span>
+            <div class="stack">
+              <span class="tenant-name" id="tenant-display-name">Mountainview Medicine</span>
+              <span class="tenant-tier"><span class="tier-pill" style="font-size:0.65rem;padding:1px 8px;">Pro</span></span>
+            </div>
+          </div>
+        </div>
+        <ul class="nav-list">
+          <li class="nav-item active" data-view="modules">
+            <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+            Tier &amp; Modules
+          </li>
+          <li class="nav-item" data-view="branding">
+            <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 2.5"/></svg>
+            Branding
+          </li>
+          <li class="nav-item" data-view="users">
+            <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="2.5"/><path d="M3 13c0-2.5 2.2-4.5 5-4.5s5 2 5 4.5"/></svg>
+            User Management
+          </li>
+          <li class="nav-item" data-view="tickets">
+            <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5l5-3 5 3v6l-5 3-5-3V5z"/></svg>
+            Support Tickets
+          </li>
+          <li class="nav-item" data-view="settings">
+            <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.5 1.5M11.5 11.5L13 13M3 13l1.5-1.5M11.5 4.5L13 3"/></svg>
+            Settings
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main content -->
+      <main class="content">
+
+        <!-- VIEW 1: Tier & Modules -->
+        <section class="view active" id="view-modules">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Tier &amp; Modules</h2>
+              <p class="view-sub">Configure which capabilities are exposed to your patients and clinicians.</p>
+            </div>
+            <button class="btn btn-ghost" onclick="openModal('tier-change-modal')">Request tier change</button>
+          </div>
+
+          <div class="tier-card">
+            <div class="tier-current">
+              <div class="stack">
+                <span class="label">Current tier</span>
+                <span class="value">Pro <span class="pill pill-success">Active</span></span>
+              </div>
+              <span class="helper-text">Tier governs the module ceiling. Self-serve modules toggle within your tier; safety-critical modules require Quantal review.</span>
+            </div>
+            <div class="tier-progress">
+              <div class="tier-step filled">Lite</div>
+              <div class="tier-step filled">Standard</div>
+              <div class="tier-step current">Pro</div>
+            </div>
+          </div>
+
+          <h3 style="font-size: 1rem; margin: 18px 0 8px; color: var(--i-text);">Module configuration</h3>
+          <p class="helper-text mb-12">Tier governs the ceiling. Toggling a module ON requires it be available in your tier. Safety-critical modules are gated by Quantal Clinical Reviewer sign-off.</p>
+
+          <div class="module-table" id="module-table">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- AI Vision panel -->
+          <div class="ai-vision-panel" id="ai-vision-panel">
+            <h3 class="card-title" style="margin-bottom: 12px;">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--demo-tenant-primary-dark)" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2"/></svg>
+              AI Food Vision &mdash; scan caps
+            </h3>
+            <p class="helper-text" style="margin-bottom: 14px;">Quantal sets the per-clinic ceiling (Pro: 1&ndash;100 scans/day per patient). You set the value within that ceiling.</p>
+            <div class="settings-grid">
+              <div class="form-row">
+                <label for="scan-cap">Daily per-patient limit</label>
+                <input type="number" id="scan-cap" class="input" min="1" max="100" value="100">
+                <span class="hint">Pro tier ceiling: <strong>100 scans/day per patient</strong>. Default = ceiling.</span>
+              </div>
+              <div class="form-row">
+                <label>Threshold posture</label>
+                <div class="radio-group">
+                  <label><input type="radio" name="threshold" value="soft_only"> Soft only</label>
+                  <label><input type="radio" name="threshold" value="hard_only"> Hard only</label>
+                  <label><input type="radio" name="threshold" value="both" checked> Both</label>
+                </div>
+                <span class="hint"><strong>Soft</strong>: warn patient near limit. <strong>Hard</strong>: block at cap. <strong>Both</strong>: warn, then block.</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+              <button class="btn btn-tenant" onclick="saveScanCap()">Save AI Vision settings</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: Branding -->
+        <section class="view" id="view-branding">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Branding</h2>
+              <p class="view-sub">Your patient app is white-labeled. Edit your colors, logo, copy, and font; preview updates in real time.</p>
+            </div>
+          </div>
+
+          <div class="branding-grid">
+            <!-- Branding form -->
+            <div>
+              <div class="card">
+                <h3 class="card-title">Logo &amp; identity</h3>
+
+                <div class="form-row">
+                  <label>Logo</label>
+                  <div style="border: 2px dashed var(--i-border-strong); border-radius: 8px; padding: 18px; text-align: center; background: var(--i-bg-subtle);">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                      <div id="brand-logo-preview" style="width: 48px; height: 48px; border-radius: 10px; background: var(--demo-tenant-primary); color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem;">M</div>
+                      <div class="stack-sm" style="text-align: left;">
+                        <span class="small" style="font-weight: 600; color: var(--i-text);">mountainview-logo.svg</span>
+                        <span class="helper-text">Drag to replace &middot; PNG / SVG &middot; Max 2MB</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="settings-grid">
+                  <div class="form-row">
+                    <label for="primary-color">Primary color</label>
+                    <div class="color-picker">
+                      <input type="color" id="primary-color" value="#16a34a">
+                      <input type="text" id="primary-color-hex" class="input" value="#16a34a" style="font-family: monospace;">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <label for="secondary-color">Secondary color</label>
+                    <div class="color-picker">
+                      <input type="color" id="secondary-color" value="#0891b2">
+                      <input type="text" id="secondary-color-hex" class="input" value="#0891b2" style="font-family: monospace;">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <label for="app-name">App name <span class="helper-text">(max 30 chars &mdash; Apple display name limit)</span></label>
+                  <input type="text" id="app-name" class="input" value="Mountainview Medicine" maxlength="30">
+                </div>
+
+                <div class="form-row">
+                  <label for="font-family">Font family</label>
+                  <select id="font-family">
+                    <option value="Inter" selected>Inter</option>
+                    <option value="SF Pro">SF Pro</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Lato">Lato</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title">Patient-facing copy</h3>
+
+                <div class="form-row">
+                  <label for="welcome-text">Welcome screen text</label>
+                  <textarea id="welcome-text" rows="2">Welcome to your weight management journey at Mountainview Medicine.</textarea>
+                </div>
+
+                <div class="form-row">
+                  <label for="disclaimer-text">Disclaimer text <span class="helper-text">(HIPAA-compliant boilerplate; review with counsel)</span></label>
+                  <textarea id="disclaimer-text" rows="3">This app does not provide medical advice. Information shown is for tracking purposes only. Always consult your clinician for medical decisions. Your data is protected under HIPAA and stored on Mountainview Medicine's behalf by Quantal Health.</textarea>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn btn-ghost" onclick="resetBranding()">Reset to defaults</button>
+                <button class="btn btn-tenant" onclick="openModal('build-modal')">Save &amp; build</button>
+              </div>
+            </div>
+
+            <!-- iPhone live preview -->
+            <div class="iphone-preview-wrap">
+              <div class="iphone-frame">
+                <div class="iphone-screen" id="preview-screen">
+                  <div class="iphone-notch"></div>
+                  <div class="iphone-statusbar">
+                    <span>9:41</span>
+                    <span>&bull;&bull;&bull;</span>
+                  </div>
+                  <div class="iphone-app-header">
+                    <div class="app-mark" id="preview-mark">M</div>
+                    <div class="iphone-app-name" id="preview-app-name">Mountainview Medicine</div>
+                  </div>
+                  <div class="iphone-welcome">
+                    <h4 id="preview-welcome-title">Welcome back, Jane</h4>
+                    <p id="preview-welcome-body">Welcome to your weight management journey at Mountainview Medicine.</p>
+                  </div>
+                  <div class="iphone-content">
+                    <div class="iphone-tile">
+                      <div class="tile-label">Today's weight</div>
+                      <div class="tile-value">207.6 lb <span class="tile-accent">&darr; 1.3 lb</span></div>
+                    </div>
+                    <div class="iphone-tile">
+                      <div class="tile-label">Wegovy 0.5mg</div>
+                      <div class="tile-value">Week 8 &middot; titrating</div>
+                    </div>
+                  </div>
+                  <div class="iphone-tabbar">
+                    <div class="iphone-tab active" id="tab-home"><div class="tab-dot"></div>Home</div>
+                    <div class="iphone-tab" id="tab-log"><div class="tab-dot"></div>Log</div>
+                    <div class="iphone-tab" id="tab-trends"><div class="tab-dot"></div>Trends</div>
+                    <div class="iphone-tab" id="tab-msg"><div class="tab-dot"></div>Messages</div>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-caption">Live preview &mdash; updates as you edit. Patients see this on next app launch.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: User Management -->
+        <section class="view" id="view-users">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">User Management</h2>
+              <p class="view-sub">Manage clinic staff, clinicians, and admins. Roles control what each user sees.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-ghost" onclick="toast('Manage roles — opens role matrix')">Manage roles</button>
+              <button class="btn btn-tenant" onclick="toast('Invite sent (demo) — would email an invitation link')">Invite user</button>
+            </div>
+          </div>
+
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Email</th>
+                <th>Last active</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="user-avatar" style="background:#0ea5e9;">SC</span>Dr. Sarah Chen</td>
+                <td>Founder + Clinician</td>
+                <td>sarah.chen@mountainview-medicine.com</td>
+                <td>Just now</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#8b5cf6;">MP</span>Dr. Marcus Patel</td>
+                <td>Clinician</td>
+                <td>marcus.patel@mountainview-medicine.com</td>
+                <td>12 min ago</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#ec4899;">JW</span>Dr. Jennifer Wong</td>
+                <td>Clinician</td>
+                <td>jennifer.wong@mountainview-medicine.com</td>
+                <td>2 hours ago</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:linear-gradient(135deg,#c084fc,#ec4899);">MR</span>Maria Rodriguez <span class="xs text-muted">(you)</span></td>
+                <td>Admin</td>
+                <td>maria.rodriguez@mountainview-medicine.com</td>
+                <td>Now</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#f59e0b;">DK</span>David Kim, NP</td>
+                <td>Clinician</td>
+                <td>david.kim@mountainview-medicine.com</td>
+                <td>Yesterday</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#10b981;">PA</span>Priya Anand</td>
+                <td>Ops</td>
+                <td>priya.anand@mountainview-medicine.com</td>
+                <td>3 hours ago</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#ef4444;">RT</span>Rachel Thompson</td>
+                <td>View-only</td>
+                <td>rachel.thompson@mountainview-medicine.com</td>
+                <td>Yesterday</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#6366f1;">TG</span>Tomás García</td>
+                <td>Ops</td>
+                <td>tomas.garcia@mountainview-medicine.com</td>
+                <td>5 days ago</td>
+                <td><span class="pill pill-warning">Invited</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#64748b;">LB</span>Linda Brennan</td>
+                <td>Front-desk staff</td>
+                <td>linda.brennan@mountainview-medicine.com</td>
+                <td>1 hour ago</td>
+                <td><span class="pill pill-success">Active</span></td>
+              </tr>
+              <tr>
+                <td><span class="user-avatar" style="background:#0891b2;">EM</span>Dr. Evan Mitchell</td>
+                <td>Clinician (PRN)</td>
+                <td>evan.mitchell@mountainview-medicine.com</td>
+                <td>2 weeks ago</td>
+                <td><span class="pill pill-muted">Inactive</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="helper-text mt-8">Roles available: <strong>admin</strong> &middot; <strong>clinician</strong> &middot; <strong>ops</strong> &middot; <strong>view-only</strong>.</p>
+        </section>
+
+        <!-- VIEW 4: Support Tickets -->
+        <section class="view" id="view-tickets">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Support tickets &mdash; your clinic</h2>
+              <p class="view-sub">Tickets submitted by patients, clinicians, and staff at Mountainview Medicine. Click to expand thread.</p>
+            </div>
+            <button class="btn btn-tenant" onclick="toast('New ticket form — admin can submit on behalf of a patient')">New ticket</button>
+          </div>
+
+          <div class="tickets-table">
+
+            <div class="ticket-row" onclick="toggleTicket('t1')">
+              <span class="ticket-id">#1</span>
+              <span class="ticket-subject">Patient app crashes when logging weight</span>
+              <span><span class="pill pill-danger">Open</span></span>
+              <span class="small text-muted">Submitted by Jane Doe</span>
+              <span class="small text-muted">2 hours ago</span>
+            </div>
+            <div class="ticket-thread" id="thread-t1">
+              <h4>#1 &mdash; Patient app crashes when logging weight</h4>
+              <div class="thread-msg">
+                <div class="msg-author">Jane Doe (patient) &middot; 2 hours ago</div>
+                When I tap "save" on the weight log screen, the whole app crashes. I'm using iPhone 14, iOS 17.4. Happens every time after I enter my weekly weight.
+              </div>
+              <textarea placeholder="Reply to ticket..."></textarea>
+              <div class="ticket-actions">
+                <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); toast('Marked in-progress')">Mark in-progress</button>
+                <button class="btn btn-sm btn-tenant" onclick="event.stopPropagation(); toast('Reply sent')">Reply</button>
+                <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); toast('Ticket closed')">Close</button>
+              </div>
+            </div>
+
+            <div class="ticket-row" onclick="toggleTicket('t2')">
+              <span class="ticket-id">#2</span>
+              <span class="ticket-subject">Question about AI Vision accuracy</span>
+              <span><span class="pill pill-warning">In Progress</span></span>
+              <span class="small text-muted">Submitted by Dr. Chen</span>
+              <span class="small text-muted">Yesterday</span>
+            </div>
+            <div class="ticket-thread" id="thread-t2">
+              <h4>#2 &mdash; Question about AI Vision accuracy</h4>
+              <div class="thread-msg">
+                <div class="msg-author">Dr. Sarah Chen &middot; Yesterday</div>
+                Several patients are reporting that AI Vision is undercounting their meal portions. Can we get an accuracy report for the last 30 days?
+              </div>
+              <div class="thread-msg">
+                <div class="msg-author">Quantal support &middot; 8 hours ago</div>
+                Hi Dr. Chen &mdash; pulling the metrics for your clinic now. Will share a CSV by end of day. Brief context: AI Vision provides estimates patients can edit; correction rate is the right signal to watch.
+              </div>
+              <textarea placeholder="Reply to ticket..."></textarea>
+              <div class="ticket-actions">
+                <button class="btn btn-sm btn-tenant" onclick="event.stopPropagation(); toast('Reply sent')">Reply</button>
+                <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); toast('Ticket closed')">Close</button>
+              </div>
+            </div>
+
+            <div class="ticket-row" onclick="toggleTicket('t3')">
+              <span class="ticket-id">#3</span>
+              <span class="ticket-subject">Notifications not arriving</span>
+              <span><span class="pill pill-muted">Closed</span></span>
+              <span class="small text-muted">Submitted by patient (anon)</span>
+              <span class="small text-muted">4 days ago</span>
+            </div>
+            <div class="ticket-thread" id="thread-t3">
+              <h4>#3 &mdash; Notifications not arriving</h4>
+              <div class="thread-msg">
+                <div class="msg-author">Patient (anonymous) &middot; 4 days ago</div>
+                I haven't been getting reminder notifications for my weekly weight log.
+              </div>
+              <div class="thread-msg">
+                <div class="msg-author">Quantal support &middot; 3 days ago</div>
+                Resolved: device-level notification permission was disabled in iOS settings. Patient was guided to re-enable. Closing ticket.
+              </div>
+              <div class="ticket-actions">
+                <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); toast('Ticket reopened')">Reopen</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- VIEW 5: Settings -->
+        <section class="view" id="view-settings">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Settings</h2>
+              <p class="view-sub">Clinic-wide configuration for time zone, locale, hours, and infrastructure.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Clinic identity</h3>
+            <div class="settings-grid">
+              <div class="form-row">
+                <label for="tenant-display">Clinic display name</label>
+                <input type="text" id="tenant-display" class="input" value="Mountainview Medicine">
+              </div>
+              <div class="form-row">
+                <label for="privacy-url">Privacy policy URL</label>
+                <input type="text" id="privacy-url" class="input" value="https://mountainview-medicine.com/privacy">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Locale &amp; hours</h3>
+            <div class="settings-grid">
+              <div class="form-row">
+                <label for="tz">Default time zone</label>
+                <select id="tz">
+                  <option selected>US/Eastern</option>
+                  <option>US/Central</option>
+                  <option>US/Mountain</option>
+                  <option>US/Pacific</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="locale">Default locale</label>
+                <select id="locale">
+                  <option selected>en-US</option>
+                  <option>es-US</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Clinic working hours</label>
+              <div class="input-row">
+                <select style="max-width: 140px;">
+                  <option selected>Mon&ndash;Fri</option>
+                  <option>Mon&ndash;Sat</option>
+                </select>
+                <span class="helper-text">from</span>
+                <input type="text" class="input" value="8:00 AM" style="max-width: 100px;">
+                <span class="helper-text">to</span>
+                <input type="text" class="input" value="5:00 PM" style="max-width: 100px;">
+              </div>
+              <span class="helper-text">Used to compute messaging response times and notification quiet hours.</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Infrastructure</h3>
+            <div class="lock-row">
+              <div class="stack-sm">
+                <span class="lock-label">Custom apex domain</span>
+                <span class="lock-value"><strong>mountainview-medicine.com</strong> &middot; CNAME verified &middot; TLS active</span>
+              </div>
+              <span class="pill pill-success">Configured</span>
+            </div>
+            <div class="lock-row">
+              <div class="stack-sm">
+                <span class="lock-label">Patient app subdomain</span>
+                <span class="lock-value"><strong>app.mountainview-medicine.com</strong> &rarr; Quantal-managed</span>
+              </div>
+              <span class="pill pill-success">Active</span>
+            </div>
+            <div class="lock-row">
+              <div class="stack-sm">
+                <span class="lock-label">Admin console subdomain</span>
+                <span class="lock-value"><strong>mountainview-medicine.quantal.health/admin</strong></span>
+              </div>
+              <span class="pill pill-success">Active</span>
+            </div>
+            <p class="helper-text mt-8">Each clinic gets its own dedicated environment with custom domain support.</p>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modals -->
+
+<div class="modal-backdrop" id="tier-change-modal" onclick="closeModalIfBackdrop(event, 'tier-change-modal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Tier change request</h3>
+    <div class="icon-banner info">This opens a conversation with Quantal sales. Tier upgrades require a contract amendment and may include compliance re-review.</div>
+    <p>Your current tier is <strong>Pro</strong>. To request a downgrade or discuss enterprise options, our team will reach out within 1 business day.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('tier-change-modal')">Cancel</button>
+      <button class="btn btn-tenant" onclick="closeModal('tier-change-modal'); toast('Tier change request submitted — Quantal sales notified')">Open conversation</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="safety-module-modal" onclick="closeModalIfBackdrop(event, 'safety-module-modal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3 id="safety-module-title">Enable safety-critical module</h3>
+    <div class="icon-banner">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1L1 14h14L8 1z"/><path d="M8 6v3M8 11.5v.5"/></svg>
+      <div>Enabling this module requires <strong>Quantal Clinical Reviewer approval</strong> before it activates for your patients. Sign-off typically takes 3&ndash;5 business days.</div>
+    </div>
+    <p id="safety-module-body">This module touches clinical workflows. After your request, our Clinical Reviewer will validate copy, rules, and patient-facing flows for your clinic. You'll receive an email when approved.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('safety-module-modal')">Cancel</button>
+      <button class="btn btn-tenant" onclick="confirmSafetyModule()">Submit request</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="disable-module-modal" onclick="closeModalIfBackdrop(event, 'disable-module-modal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Disable module?</h3>
+    <div class="icon-banner danger">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v5M8 11.5v.5"/></svg>
+      <div><strong>Disabling this module hides it from your patients' apps.</strong> Existing patient data is <strong>retained</strong> per HIPAA. Re-enabling restores patient access. Confirm?</div>
+    </div>
+    <p id="disable-module-body">Patients will lose access to this feature on their next app launch. Their existing data remains in the database; nothing is deleted.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="cancelDisable()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDisable()">Disable module</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="build-modal" onclick="closeModalIfBackdrop(event, 'build-modal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Build branded app?</h3>
+    <div class="icon-banner info">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 2.5"/></svg>
+      <div>Building your branded app will trigger our build pipeline and submission to your App Store / Play Store accounts under your developer account.</div>
+    </div>
+    <p>Estimated <strong>4&ndash;6 weeks</strong> for first build cycle (Apple/Google review). Subsequent updates take <strong>3&ndash;5 days</strong>. You'll receive a notification when the build is submitted and again when it's live.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('build-modal')">Cancel</button>
+      <button class="btn btn-tenant" onclick="closeModal('build-modal'); toast('Build pipeline triggered — first cycle ETA 4–6 weeks')">Confirm &amp; build</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Outro -->
+<div class="outro">
+  <p>See the patient or clinician demos, or talk to founders.</p>
+  <div class="outro-cta-row">
+    <a href="demo-patient.html" class="btn-outro btn-outro-secondary">See the patient app</a>
+    <a href="demo-clinician.html" class="btn-outro btn-outro-secondary">See the clinician dashboard</a>
+    <a href="contact.html" class="btn-outro btn-outro-primary">
+      Talk to founders
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-label="Quantal Health" role="img">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
+        <circle cx="78.4" cy="72.2" r="11" fill="#E53535"/>
+      </svg>
+      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="product.html">Overview</a>
+        <a href="for-clinics.html">For Clinics</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="demo.html">Try the demo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Trust</h4>
+        <a href="security.html">Security &amp; HIPAA</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Talk to founders</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
+    <p>Now accepting design partners.</p>
+  </div>
+</footer>
+
+<script>
+  // -------- State --------
+  const modules = [
+    { id: 'auth',         name: 'Auth',                                  desc: 'Patient + clinician sign-in',                  tiers: ['lite','standard','pro'], on: true,  safety: false, disabled: true,  alwaysOn: true },
+    { id: 'log_weight',   name: 'Logging — weight',                      desc: 'Weekly self-reported weight',                  tiers: ['lite','standard','pro'], on: true,  safety: false, disabled: true,  alwaysOn: true },
+    { id: 'log_symptoms', name: 'Logging — symptoms',                    desc: 'Nausea, fatigue, GI tracking',                 tiers: ['standard','pro'],        on: true,  safety: false },
+    { id: 'log_other',    name: 'Logging — hydration / energy / appetite', desc: 'Lifestyle observations',                     tiers: ['standard','pro'],        on: true,  safety: false },
+    { id: 'food_manual',  name: 'Manual food logging',                   desc: 'Patient-entered meals + macros',               tiers: ['standard','pro'],        on: true,  safety: false },
+    { id: 'food_ai',      name: 'AI Food Vision',                        desc: 'Photo-based meal recognition',                 tiers: ['pro'],                   on: true,  safety: true,  approved: true },
+    { id: 'wearables',    name: 'Wearables (HealthKit / Health Connect)', desc: 'Apple Health + Google Health Connect ingest', tiers: ['standard','pro'],        on: true,  safety: false },
+    { id: 'messaging',    name: 'Messaging',                             desc: 'Patient ↔ clinician async messaging',          tiers: ['standard','pro'],        on: true,  safety: true,  approved: true },
+    { id: 'notifications',name: 'Notifications',                         desc: 'Push + email reminders',                       tiers: ['lite','standard','pro'], on: true,  safety: false },
+    { id: 'trends',       name: 'Trends &amp; Insights',                 desc: 'Weight trajectory, projections',               tiers: ['standard','pro'],        on: true,  safety: false },
+    { id: 'red_flag',     name: 'Red-flag rules engine',                 desc: 'Automated symptom triage',                     tiers: ['pro'],                   on: false, safety: true,  approved: false },
+  ];
+  const currentTier = 'pro';
+  const tierRank = { lite: 1, standard: 2, pro: 3 };
+  let pendingDisableId = null;
+  let pendingSafetyId = null;
+
+  // -------- View switching --------
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const view = item.dataset.view;
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById('view-' + view);
+      if (target) target.classList.add('active');
+    });
+  });
+
+  // -------- Module table render --------
+  function renderModules() {
+    const root = document.getElementById('module-table');
+    root.innerHTML = '';
+    modules.forEach(m => {
+      const inTier = m.tiers.includes(currentTier);
+      const row = document.createElement('div');
+      row.className = 'module-row';
+
+      let statusPill = '';
+      if (m.alwaysOn) {
+        statusPill = '<span class="pill pill-success">Active</span>';
+      } else if (m.safety) {
+        if (m.on && m.approved) statusPill = '<span class="pill pill-success">Active</span>';
+        else if (m.on && !m.approved) statusPill = '<span class="pill pill-warning">Pending Quantal review</span>';
+        else statusPill = '<span class="pill pill-muted">Off</span>';
+      } else {
+        statusPill = m.on ? '<span class="pill pill-success">On</span>' : '<span class="pill pill-muted">Off</span>';
+      }
+
+      const safetyBadge = m.safety ? '<span class="badge-safety">Safety-critical</span>' : '';
+      const tierGate = !inTier ? '<span class="pill pill-muted" style="margin-left:6px;">Requires higher tier</span>' : '';
+
+      const toggleClasses = ['toggle'];
+      if (m.on) toggleClasses.push('on');
+      if (!inTier || m.alwaysOn) toggleClasses.push('disabled');
+
+      row.innerHTML = `
+        <div class="module-icon">${moduleIcon(m.id)}</div>
+        <div>
+          <div class="module-name">${m.name}${safetyBadge}${tierGate}</div>
+          <div class="module-desc">${m.desc}</div>
+        </div>
+        <div class="module-status">${statusPill}</div>
+        <div class="${toggleClasses.join(' ')}" data-id="${m.id}"></div>
+      `;
+      root.appendChild(row);
+
+      const toggle = row.querySelector('.toggle');
+      if (!inTier || m.alwaysOn) {
+        toggle.addEventListener('click', () => {
+          if (m.alwaysOn) toast(`${stripHtml(m.name)} is required for all tiers and cannot be disabled`);
+          else toast(`${stripHtml(m.name)} requires a higher tier — contact Quantal sales`);
+        });
+      } else if (m.safety) {
+        toggle.addEventListener('click', () => handleSafetyToggle(m));
+      } else {
+        toggle.addEventListener('click', () => handleSelfServeToggle(m));
+      }
+    });
+
+    updateAiVisionPanel();
+    updatePreviewModuleVisibility();
+  }
+
+  function stripHtml(html) { const tmp = document.createElement('div'); tmp.innerHTML = html; return tmp.textContent; }
+
+  function moduleIcon(id) {
+    const map = {
+      auth: '🔐', log_weight: '⚖️', log_symptoms: '📋', log_other: '💧',
+      food_manual: '🍽️', food_ai: '📸', wearables: '⌚', messaging: '💬',
+      notifications: '🔔', trends: '📈', red_flag: '🚩'
+    };
+    return map[id] || '📦';
+  }
+
+  // -------- Self-serve toggle --------
+  function handleSelfServeToggle(m) {
+    if (m.on) {
+      pendingDisableId = m.id;
+      document.getElementById('disable-module-body').textContent =
+        `Patients will lose access to "${stripHtml(m.name)}" on their next app launch. Their existing data remains in the database; nothing is deleted.`;
+      openModal('disable-module-modal');
+    } else {
+      m.on = true;
+      renderModules();
+      toast(`Module setting saved — patients see "${stripHtml(m.name)}" on next app launch`);
+    }
+  }
+
+  function confirmDisable() {
+    const m = modules.find(x => x.id === pendingDisableId);
+    if (m) {
+      m.on = false;
+      renderModules();
+      toast(`"${stripHtml(m.name)}" disabled — patient data retained per HIPAA`);
+    }
+    pendingDisableId = null;
+    closeModal('disable-module-modal');
+  }
+  function cancelDisable() {
+    pendingDisableId = null;
+    closeModal('disable-module-modal');
+  }
+
+  // -------- Safety-critical toggle --------
+  function handleSafetyToggle(m) {
+    if (m.on && m.approved) {
+      pendingDisableId = m.id;
+      document.getElementById('disable-module-body').textContent =
+        `Disabling "${stripHtml(m.name)}" hides this safety-critical workflow from patients and clinicians. Existing data is retained per HIPAA. Re-enabling requires a fresh Quantal Clinical Reviewer sign-off.`;
+      openModal('disable-module-modal');
+      return;
+    }
+    pendingSafetyId = m.id;
+    document.getElementById('safety-module-title').textContent = `Enable "${stripHtml(m.name)}"`;
+    document.getElementById('safety-module-body').textContent =
+      `Enabling "${stripHtml(m.name)}" requires Quantal Clinical Reviewer approval before it activates for your patients. Approval typically takes 3-5 business days. You'll receive an email when reviewed.`;
+    openModal('safety-module-modal');
+  }
+  function confirmSafetyModule() {
+    const m = modules.find(x => x.id === pendingSafetyId);
+    if (m) {
+      m.on = true;
+      m.approved = false;
+      renderModules();
+      toast(`Request submitted — "${stripHtml(m.name)}" pending Quantal Clinical Reviewer sign-off`);
+    }
+    pendingSafetyId = null;
+    closeModal('safety-module-modal');
+  }
+
+  // -------- AI Vision panel visibility --------
+  function updateAiVisionPanel() {
+    const ai = modules.find(m => m.id === 'food_ai');
+    const panel = document.getElementById('ai-vision-panel');
+    if (ai && ai.on && ai.approved) panel.classList.remove('hidden');
+    else panel.classList.add('hidden');
+  }
+
+  function saveScanCap() {
+    const cap = document.getElementById('scan-cap').value;
+    const posture = document.querySelector('input[name="threshold"]:checked').value;
+    if (cap < 1 || cap > 100) {
+      toast(`Cap out of range — Pro ceiling is 1–100 scans/day`);
+      return;
+    }
+    toast(`AI Vision settings saved — cap ${cap}/day, posture: ${posture.replace('_', ' ')}`);
+  }
+
+  // -------- Modals --------
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  function closeModalIfBackdrop(e, id) { if (e.target.id === id) closeModal(id); }
+
+  // -------- Toasts --------
+  function toast(message) {
+    const container = document.getElementById('toast-container');
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = message;
+    container.appendChild(t);
+    setTimeout(() => t.classList.add('fadeout'), 2700);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  // -------- Branding live preview --------
+  const $primary = document.getElementById('primary-color');
+  const $primaryHex = document.getElementById('primary-color-hex');
+  const $secondary = document.getElementById('secondary-color');
+  const $secondaryHex = document.getElementById('secondary-color-hex');
+  const $appName = document.getElementById('app-name');
+  const $welcome = document.getElementById('welcome-text');
+  const $font = document.getElementById('font-family');
+
+  const $previewScreen = document.getElementById('preview-screen');
+  const $previewMark = document.getElementById('preview-mark');
+  const $previewAppName = document.getElementById('preview-app-name');
+  const $previewWelcomeBody = document.getElementById('preview-welcome-body');
+  const $previewWelcomeTitle = document.getElementById('preview-welcome-title');
+  const $brandLogoPreview = document.getElementById('brand-logo-preview');
+  const $tenantLogoMark = document.getElementById('tenant-logo-mark');
+
+  function applyBrandingToPreview() {
+    const primary = $primaryHex.value || '#16a34a';
+    $previewScreen.style.setProperty('--preview-primary', primary);
+    $previewScreen.querySelector('.iphone-app-header').style.background = primary;
+    $previewScreen.querySelector('.iphone-app-header .app-mark').style.color = primary;
+    $previewWelcomeTitle.style.color = primary;
+    $previewScreen.querySelectorAll('.tile-accent').forEach(el => el.style.color = primary);
+    $previewScreen.querySelectorAll('.iphone-tab.active').forEach(el => el.style.color = primary);
+    const name = $appName.value || 'Mountainview Medicine';
+    const initial = (name.trim()[0] || 'M').toUpperCase();
+    $previewMark.textContent = initial;
+    $brandLogoPreview.textContent = initial;
+    $brandLogoPreview.style.background = primary;
+    $previewAppName.textContent = name;
+    $previewWelcomeBody.textContent = $welcome.value;
+    const font = $font.value;
+    const fontStack = `"${font}", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    $previewScreen.style.fontFamily = fontStack;
+  }
+
+  function syncColorPicker(colorEl, hexEl) {
+    colorEl.addEventListener('input', () => {
+      hexEl.value = colorEl.value;
+      applyBrandingToPreview();
+    });
+    hexEl.addEventListener('input', () => {
+      const v = hexEl.value.trim();
+      if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+        colorEl.value = v;
+        applyBrandingToPreview();
+      }
+    });
+  }
+  syncColorPicker($primary, $primaryHex);
+  syncColorPicker($secondary, $secondaryHex);
+  $appName.addEventListener('input', applyBrandingToPreview);
+  $welcome.addEventListener('input', applyBrandingToPreview);
+  $font.addEventListener('change', applyBrandingToPreview);
+
+  function resetBranding() {
+    $primary.value = '#16a34a'; $primaryHex.value = '#16a34a';
+    $secondary.value = '#0891b2'; $secondaryHex.value = '#0891b2';
+    $appName.value = 'Mountainview Medicine';
+    $welcome.value = 'Welcome to your weight management journey at Mountainview Medicine.';
+    $font.value = 'Inter';
+    applyBrandingToPreview();
+    toast('Branding reset to Mountainview Medicine defaults');
+  }
+
+  // -------- Preview reflects module toggles --------
+  function updatePreviewModuleVisibility() {
+    const trends = modules.find(m => m.id === 'trends');
+    const messaging = modules.find(m => m.id === 'messaging');
+    const tabTrends = document.getElementById('tab-trends');
+    const tabMsg = document.getElementById('tab-msg');
+    if (tabTrends) {
+      if (trends && trends.on) tabTrends.classList.remove('hidden');
+      else tabTrends.classList.add('hidden');
+    }
+    if (tabMsg) {
+      if (messaging && messaging.on && messaging.approved) tabMsg.classList.remove('hidden');
+      else tabMsg.classList.add('hidden');
+    }
+  }
+
+  // -------- Tickets --------
+  function toggleTicket(id) {
+    const el = document.getElementById('thread-' + id);
+    if (!el) return;
+    el.classList.toggle('open');
+  }
+
+  // -------- Init --------
+  renderModules();
+  applyBrandingToPreview();
+</script>
+
+<script>
+  // Theme management (marketing chrome)
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(val) {
+      const h = document.documentElement;
+      h.setAttribute('data-theme', val);
+      if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+      else h.classList.remove('sys-dark');
+    }
+    window.setTheme = function (val) {
+      try { localStorage.setItem('qh-theme', val); } catch (e) {}
+      applyTheme(val);
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+      closeSettings();
+    };
+    mq.addEventListener('change', () => {
+      let stored = 'system';
+      try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+      if (stored === 'system') applyTheme('system');
+    });
+    let stored = 'system';
+    try { stored = localStorage.getItem('qh-theme') || 'system'; } catch (e) {}
+    applyTheme(stored);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+    });
+
+    // Settings panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    let open = false;
+    window.closeSettings = function () {
+      open = false;
+      if (settingsPanel) settingsPanel.classList.remove('open');
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+    };
+    if (settingsBtn && settingsPanel) {
+      settingsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        open = !open;
+        settingsPanel.classList.toggle('open', open);
+        settingsBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', e => {
+        if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+    }
+  })();
+</script>
+
+</body>
+</html>

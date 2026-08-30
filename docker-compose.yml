@@ -1,0 +1,11 @@
+# quantallabs.ai on the Hetzner box — same shape as the other stacks:
+# one container behind the shared quantal-caddy (which joins this network).
+#   cd /opt/quantallabs-web && docker compose up -d --build
+name: quantallabs-web
+
+services:
+  web:
+    build: .
+    container_name: quantallabs-web
+    restart: unless-stopped
+    # no published ports — quantal-caddy reaches it on this network at quantallabs-web:80
