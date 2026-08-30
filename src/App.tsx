@@ -56,7 +56,7 @@ function Nav() {
           <a href="#about" className="hide-sm">About</a>
           <a href="#health" className="hide-sm">Quantal Health</a>
           <a href="#sdk" className="hide-sm">Platform SDK</a>
-          <a href="mailto:hello@quantallabs.ai" className="hide-sm">Contact</a>
+          <a href="mailto:info@quantallabs.ai" className="hide-sm">Contact</a>
           <button className="theme-btn" onClick={cycleTheme} aria-label={`Theme: ${theme}`}>
             {theme}
           </button>
@@ -219,7 +219,7 @@ function Health() {
             <span className="badge">Design Partner Alpha</span>
           </div>
           <div className="cta-row">
-            <a className="btn solid" href="/quantallabs-health-web/index.html">
+            <a className="btn solid" href="https://quantal-health.com">
               Visit Quantal Health <span className="arr">→</span>
             </a>
           </div>
@@ -321,11 +321,11 @@ function Contact() {
             reach, let's talk.
           </p>
           <div className="cta-row">
-            <a className="btn solid" href="mailto:partners@quantallabs.ai">
-              partners@quantallabs.ai <span className="arr">→</span>
+            <a className="btn solid" href="mailto:info@quantallabs.ai">
+              info@quantallabs.ai <span className="arr">→</span>
             </a>
-            <a className="btn ghost" href="mailto:hello@quantallabs.ai">
-              hello@quantallabs.ai
+            <a className="btn ghost" href="https://quantal-health.com">
+              Visit Quantal Health
             </a>
           </div>
         </Reveal>
@@ -353,7 +353,7 @@ function Footer() {
               <h4>Company</h4>
               <ul>
                 <li><a href="#about">About Quantal AI</a></li>
-                <li><a href="mailto:hello@quantallabs.ai">Contact</a></li>
+                <li><a href="mailto:info@quantallabs.ai">Contact</a></li>
               </ul>
             </div>
             <div>
@@ -361,7 +361,7 @@ function Footer() {
               <ul>
                 <li><a href="#health">Quantal Health</a></li>
                 <li><a href="#sdk">Platform SDK</a></li>
-                <li><a href="mailto:partners@quantallabs.ai">Design Partner Program</a></li>
+                <li><a href="mailto:info@quantallabs.ai">Design Partner Program</a></li>
               </ul>
             </div>
           </div>

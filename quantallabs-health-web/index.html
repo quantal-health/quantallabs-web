@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quantal Health — The care platform GLP-1 clinics actually want</title>
-  <meta name="description" content="A white-label care platform for weight-loss clinics treating GLP-1 patients. Your branded patient app, your clinician dashboard, your dedicated environment." />
+  <title>Quantal Health — The care platform that ships as your clinic</title>
+  <meta name="description" content="A white-label care platform built to your specialty. Your branded patient app, your clinician dashboard, your dedicated environment. Live today with GLP-1 clinics; your modules next." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     /* Brand palette */
     :root{
-      --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E8A412;
+      --ink:#1B1A18; --paper:#F4EFE2; --quantum:#E53535;
       --ink-muted:#6B6863; --ink-soft:#C9C4BC;
       --paper-light:#FAF7EE; --paper-dark:#E8E2D2;
-      --quantum-soft:#FBE9C0; --quantum-dark:#B8810F;
-      --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#EF4444;
+      --quantum-soft:#FBE4E1; --quantum-dark:#B4271F;
+      --success:#10B981; --info:#2563EB; --warning:#F59E0B; --danger:#C81E1E;
       --bg:var(--paper); --bg-clean:#FFFFFF; --surface:#FFFFFF;
       --text:var(--ink); --text-secondary:var(--ink-muted); --text-muted:var(--ink-soft);
       --border:var(--paper-dark); --border-strong:#D4CFC2;
@@ -276,6 +276,63 @@
     /* Bottom CTA strip uses paper-light bg (which switches automatically) — body copy is fine,
        but the H2 was using --ink. Already covered above. */
   </style>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <!-- Quantal Health rebrand refinements: red signature accent, Geist display, mono/dotted eyebrow, active-nav dot, white CTA text -->
+  <style>
+    h1,h2,h3,h4,h5,h6,.hero-title,.section-title{font-family:"Geist","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-0.01em;}
+    /* Mono + dotted eyebrow */
+    .eyebrow{font-family:"Geist Mono","SFMono-Regular",ui-monospace,SFMono-Regular,monospace;letter-spacing:0.14em;}
+    .eyebrow::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--quantum);margin-right:8px;vertical-align:middle;position:relative;top:-1px;}
+    /* Active-nav dot */
+    .topnav a.active{position:relative;}
+    .topnav a.active::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--quantum);}
+    /* White CTA text on the red brand accent, all themes */
+    .btn-primary,.topnav-cta,
+    [data-theme="dark"] .btn-primary,[data-theme="system"].sys-dark .btn-primary,
+    [data-theme="dark"] .topnav-cta,[data-theme="system"].sys-dark .topnav-cta{color:#fff;}
+    .btn-primary:hover,.topnav-cta:hover,
+    [data-theme="dark"] .btn-primary:hover,[data-theme="system"].sys-dark .btn-primary:hover,
+    [data-theme="dark"] .topnav-cta:hover,[data-theme="system"].sys-dark .topnav-cta:hover{color:#fff;}
+    /* Dark-mode accent overrides */
+    [data-theme="dark"] .eyebrow,[data-theme="system"].sys-dark .eyebrow{background:rgba(229,53,53,0.16);color:#F7C9C4;}
+    [data-theme="dark"] .eyebrow::before,[data-theme="system"].sys-dark .eyebrow::before{background:var(--quantum);}
+    :focus-visible{outline:2px solid var(--quantum);outline-offset:2px;}
+  </style>
+  <!-- "Built to your specialization" section — new pattern from the any-specialization reframe.
+       Reuses the live theme tokens (they flip in dark mode); the red quantum dot marks "Live now". -->
+  <style>
+    section.spec{background:var(--paper-light); border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+    .spec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:960px; margin:0 auto;}
+    .spec-card{background:var(--surface); border:1px solid var(--border); border-radius:12px;
+      padding:20px 22px; box-shadow:var(--shadow-sm);}
+    .spec-card.live{border-color:var(--quantum); box-shadow:0 0 0 1px var(--quantum), var(--shadow-md);}
+    .spec-card h3{margin-bottom:6px; font-size:1.05rem;}
+    .spec-card p{font-size:var(--font-small); color:var(--text-secondary); margin-top:6px;}
+    .status{display:inline-flex; align-items:center; gap:7px; font-family:"Geist Mono",ui-monospace,monospace;
+      font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:500; margin-bottom:8px;}
+    .status .dot{width:8px; height:8px; border-radius:50%;}
+    .status.live{color:var(--quantum-dark);}
+    .status.live .dot{background:var(--quantum); box-shadow:0 0 0 4px var(--quantum-soft);}
+    .status.req{color:var(--text-muted);}
+    .status.req .dot{background:var(--ink-soft);}
+    [data-theme="dark"] .status.live, [data-theme="system"].sys-dark .status.live{color:#F7C9C4;}
+    [data-theme="dark"] .spec-card h3, [data-theme="system"].sys-dark .spec-card h3{color:var(--text);}
+    [data-theme="dark"] .spec-card, [data-theme="system"].sys-dark .spec-card{background:var(--bg-clean); border-color:var(--border-strong);}
+    .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:24px; max-width:960px; margin:56px auto 0;}
+    .step .num{font-family:"Geist Mono",ui-monospace,monospace; font-size:13px; color:var(--quantum-dark);
+      font-weight:500; letter-spacing:0.08em;}
+    [data-theme="dark"] .step .num, [data-theme="system"].sys-dark .step .num{color:var(--quantum);}
+    .step h3{margin:10px 0 6px; font-size:1.05rem;}
+    .step p{font-size:var(--font-small); color:var(--text-secondary);}
+    /* Flagship band caption + module tile "example" caption */
+    .flag-caption{display:block; margin:12px auto 0; max-width:640px; font-family:"Geist Mono",ui-monospace,monospace;
+      font-size:12px; color:var(--text-muted); letter-spacing:0.04em;}
+    .module-cap{display:inline-block; margin-top:12px; font-family:"Geist Mono",ui-monospace,monospace;
+      font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--quantum-dark);
+      background:var(--quantum-soft); padding:3px 8px; border-radius:999px;}
+    [data-theme="dark"] .module-cap, [data-theme="system"].sys-dark .module-cap{background:rgba(229,53,53,0.16); color:#F7C9C4;}
+    @media (max-width:900px){ .spec-grid,.steps{grid-template-columns:1fr;} }
+  </style>
 </head>
 <body>
 
@@ -293,6 +350,7 @@
     </a>
     <nav class="topnav">
       <a href="product.html">Product</a>
+      <a href="#specializations">Who we serve</a>
       <a href="for-clinics.html">For Clinics</a>
       <a href="security.html">Security</a>
       <a href="pricing.html">Pricing</a>
@@ -336,8 +394,8 @@
     <div class="hero-grid">
       <div>
         <span class="eyebrow">Now accepting design partners</span>
-        <h1>The care platform GLP-1 clinics actually want.</h1>
-        <p class="lede">A branded patient app and a clinician dashboard, purpose-built for weight-loss clinics treating patients on Wegovy, Ozempic, Zepbound, Mounjaro, and Saxenda. Your brand on the App Store, your team's view of every patient, and your data in its own dedicated environment — without the months of engineering it usually takes to build.</p>
+        <h1>The care platform that ships as your clinic&nbsp;— not ours.</h1>
+        <p class="lede"><strong>Your brand. Your patients. Your data.</strong> A branded patient app and a clinician dashboard, in your name and built to your specialty — your listing on the App Store, your team's view of every patient, and your data in its own dedicated environment, with its own database and encryption keys. <strong>Live today with GLP-1 clinics; your modules next.</strong></p>
         <div class="cta-row">
           <a href="demo.html" class="btn btn-primary">
             Try the demo
@@ -461,6 +519,7 @@
             <text x="44" y="262" font-family="-apple-system,sans-serif" font-size="8" fill="#6B6863">Great progress this week!</text>
           </g>
         </svg>
+        <span class="flag-caption" style="text-align:center;">Example: a GLP-1 clinic's branded app and dashboard.</span>
       </div>
     </div>
   </div>
@@ -471,7 +530,7 @@
   <div class="container">
     <div class="section-head">
       <h2>Your brand. Your team's tools. Your patients' data.</h2>
-      <p>One platform that ships as your clinic — not as ours. Built so you keep the relationship with the patient, the data, and the brand. We stay invisible. Most clinics doing GLP-1 work today are running their workflow on a generic tracking app, a couple of spreadsheets, and a personal phone. We built the alternative — a paired patient app and clinician dashboard, designed specifically for the rhythm of GLP-1 care, and shipped under your name.</p>
+      <p>One platform that ships as your clinic — not as ours. Built so you keep the relationship with the patient, the data, and the brand. We stay invisible. Too many clinics run their workflow on a generic tracking app, a couple of spreadsheets, and a personal phone. We built the alternative — a paired patient app and clinician dashboard, designed around the rhythm of your care model and shipped under your name. GLP-1 clinics are where we proved it first.</p>
     </div>
 
     <div class="pitch-grid">
@@ -488,7 +547,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M2 8h20M8 22h8"/></svg>
         </div>
         <h3>Your clinician dashboard</h3>
-        <p>Your team's view of every patient's progress in one place — daily check-ins, weight trends, food logs, side effects, and messages. Designed around the way GLP-1 clinics already work, not around a generic chronic-care template that asks your clinicians to translate every screen.</p>
+        <p>Your team's view of every patient's progress in one place — daily check-ins, trends, logs, side effects, and messages. Designed around the way your clinic already works, not around a generic chronic-care template that asks your clinicians to translate every screen.</p>
       </div>
 
       <div class="pitch-card">
@@ -502,11 +561,44 @@
   </div>
 </section>
 
+<!-- BUILT TO YOUR SPECIALIZATION -->
+<section class="spec" id="specializations">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Built to your requirements</span>
+      <h2>Any specialization. Built to your requirements.</h2>
+      <p>GLP-1 is where we went deep first — real clinics, live under their own brand. The same core platform configures to how your specialty works.</p>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card live">
+        <span class="status live"><span class="dot"></span>Live now</span>
+        <h3>GLP-1 &amp; metabolic care</h3>
+        <p>In production today, under real clinics' own brands. Our flagship implementation.</p>
+      </div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Primary care</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Behavioral health</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Women's health</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Cardiometabolic</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Endocrinology</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Longevity</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Chronic care</h3></div>
+      <div class="spec-card"><span class="status req"><span class="dot"></span>Built to request</span><h3>Pediatrics</h3></div>
+    </div>
+
+    <div class="steps">
+      <div class="step"><span class="num">01</span><h3>Map your workflow</h3><p>We learn how your specialty actually runs — the visits, the data, the follow-ups.</p></div>
+      <div class="step"><span class="num">02</span><h3>Configure the modules</h3><p>Logging, wearables, trends, messaging, notifications, app shell, admin console.</p></div>
+      <div class="step"><span class="num">03</span><h3>Ship as your branded app</h3><p>Your name on the App Store, your dedicated data environment, your team's dashboard.</p></div>
+    </div>
+  </div>
+</section>
+
 <!-- TRUST STRIP -->
 <section class="trust">
   <div class="container">
-    <p><strong>HIPAA-aligned</strong> &nbsp;·&nbsp; <strong>Now accepting design partners</strong> &nbsp;·&nbsp; <strong>Built for weight-loss clinics treating GLP-1 patients</strong></p>
-    <p style="margin-top:18px; font-size:0.95rem;">A signed HIPAA-compliant data agreement on every contract, encryption at every layer, and a dedicated environment per clinic. The trust signal is built in, not borrowed.</p>
+    <p><strong>HIPAA-aligned</strong> &nbsp;·&nbsp; <strong>Now accepting design partners</strong> &nbsp;·&nbsp; <strong>Built to your specialty — live today with GLP-1 clinics</strong></p>
+    <p style="margin-top:18px; font-size:0.95rem;">A signed HIPAA-aligned data agreement on every contract, encryption at every layer, and a dedicated environment per clinic. The trust signal is built in, not borrowed.</p>
   </div>
 </section>
 
@@ -514,8 +606,9 @@
 <section>
   <div class="container">
     <div class="section-head">
-      <h2>What you'll see when you try it.</h2>
-      <p>Three of the modules your patients and your team rely on every day. Click through the demo for the full tour — daily logging, AI-assisted food logging, and the messaging thread that keeps patients connected to their care team between visits.</p>
+      <span class="eyebrow">Live in production: our GLP-1 flagship</span>
+      <h2>What a live GLP-1 clinic runs today.</h2>
+      <p>GLP-1 is where we went deep first. Three of the modules your patients and your team rely on every day — click through the demo for the full tour: daily logging, AI-assisted food logging, and the messaging thread that keeps patients connected to their care team between visits.</p>
     </div>
 
     <div class="modules-grid">
@@ -581,6 +674,7 @@
         <div class="module-body">
           <h3>AI Food Vision</h3>
           <p>Snap a photo of a meal. The app estimates calories and macros, so logging takes seconds instead of skipped days. For prepackaged foods or things the camera can't read, a fast searchable food database backs up the AI.</p>
+          <span class="module-cap">Example — built for our GLP-1 flagship</span>
         </div>
       </div>
 
@@ -620,8 +714,8 @@
 <!-- BOTTOM CTA -->
 <section class="bottom-cta">
   <div class="container">
-    <h2>See it in action.</h2>
-    <p>Click around a working demo of the patient app and the clinician dashboard with our example clinic, Mountainview Medicine, and example patient, Jane Doe. No signup, no email — just click. When you're ready, talk to founders about onboarding your own clinic.</p>
+    <h2>See the GLP-1 flagship — then let's talk about yours.</h2>
+    <p>Click around a working demo of the patient app and the clinician dashboard with our example GLP-1 clinic, Mountainview Medicine, and example patient, Jane Doe. No signup, no email — just click. When you're ready, tell us about your clinic and we'll talk about the modules built to your specialty.</p>
     <div class="cta-row">
       <a href="demo.html" class="btn btn-primary">
         Try the demo
@@ -639,7 +733,7 @@
         <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
         <circle cx="78.4" cy="72.2" r="11" fill="#E53535"/>
       </svg>
-      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+      <p class="footer-tagline">White-label care platform, built to your specialty. Live today with GLP-1 clinics.</p>
     </div>
     <div class="footer-cols">
       <div class="footer-col">
@@ -648,6 +742,7 @@
         <a href="for-clinics.html">For Clinics</a>
         <a href="pricing.html">Pricing</a>
         <a href="demo.html">Try the demo</a>
+        <a href="design-partner.html">Design partners</a>
       </div>
       <div class="footer-col">
         <h4>Trust</h4>
@@ -663,7 +758,7 @@
   </div>
   <div class="footer-bottom">
     <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
-    <p>Now accepting design partners.</p>
+    <p class="footer-legal"><a href="privacy.html" style="color:var(--paper)">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html" style="color:var(--paper)">Terms of Service</a> &nbsp;&middot;&nbsp; Now accepting design partners.</p>
   </div>
 </footer>
 

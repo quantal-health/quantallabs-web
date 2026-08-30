@@ -7,18 +7,18 @@
 <meta name="description" content="Talk to founders. We're a small team — you'll talk to people who built it.">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
     --ink: #1B1A18;
     --paper: #F4EFE2;
-    --quantum: #E8A412;
+    --quantum: #E53535;
     --ink-muted: #6B6863;
     --ink-soft: #C9C4BC;
     --paper-light: #FAF7EE;
     --paper-dark: #E8E2D2;
-    --quantum-soft: #FBE9C0;
-    --quantum-dark: #B8810F;
+    --quantum-soft: #FBE4E1;
+    --quantum-dark: #B4271F;
     --success: #10B981;
     --bg: var(--paper);
     --bg-clean: #FFFFFF;
@@ -404,6 +404,28 @@
      quantum-soft cream stays cream in dark mode (intentional — it's a warm callout), so the
      dark heading stays legible there. No override needed for .form-success h3. */
 </style>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <!-- Quantal Health rebrand refinements: red signature accent, Geist display, mono/dotted eyebrow, active-nav dot, white CTA text -->
+  <style>
+    h1,h2,h3,h4,h5,h6,.hero-title,.section-title{font-family:"Geist","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-0.01em;}
+    /* Mono + dotted eyebrow */
+    .eyebrow{font-family:"Geist Mono","SFMono-Regular",ui-monospace,SFMono-Regular,monospace;letter-spacing:0.14em;}
+    .eyebrow::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--quantum);margin-right:8px;vertical-align:middle;position:relative;top:-1px;}
+    /* Active-nav dot */
+    .topnav a.active{position:relative;}
+    .topnav a.active::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--quantum);}
+    /* White CTA text on the red brand accent, all themes */
+    .btn-primary,.topnav-cta,
+    [data-theme="dark"] .btn-primary,[data-theme="system"].sys-dark .btn-primary,
+    [data-theme="dark"] .topnav-cta,[data-theme="system"].sys-dark .topnav-cta{color:#fff;}
+    .btn-primary:hover,.topnav-cta:hover,
+    [data-theme="dark"] .btn-primary:hover,[data-theme="system"].sys-dark .btn-primary:hover,
+    [data-theme="dark"] .topnav-cta:hover,[data-theme="system"].sys-dark .topnav-cta:hover{color:#fff;}
+    /* Dark-mode accent overrides */
+    [data-theme="dark"] .eyebrow,[data-theme="system"].sys-dark .eyebrow{background:rgba(229,53,53,0.16);color:#F7C9C4;}
+    [data-theme="dark"] .eyebrow::before,[data-theme="system"].sys-dark .eyebrow::before{background:var(--quantum);}
+    :focus-visible{outline:2px solid var(--quantum);outline-offset:2px;}
+  </style>
 </head>
 <body>
 
@@ -422,6 +444,7 @@
     <nav class="topnav">
       <a href="../#health" class="topnav-back">&larr; Quantal Labs</a>
       <a href="product.html">Product</a>
+      <a href="index.html#specializations">Who we serve</a>
       <a href="for-clinics.html">For Clinics</a>
       <a href="security.html">Security</a>
       <a href="pricing.html">Pricing</a>
@@ -477,40 +500,40 @@
       <p class="section-intro">Each of these goes to a real person on our team — not a queue, not a chatbot. If you're not sure which one applies, the founders' inbox is always a good default.</p>
       <div class="options-grid">
 
-        <a href="mailto:founders@quantal-health.example" class="option-card" style="text-decoration: none; color: inherit;">
+        <a href="mailto:info@quantallabs.ai" class="option-card" style="text-decoration: none; color: inherit;">
           <div class="option-icon">
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
           </div>
           <h3>Talk to a founder</h3>
           <p>General questions about the product, the company, or whether we're a fit for your clinic. This one goes straight to the founders' inbox &mdash; no triage, no gatekeeping.</p>
-          <span class="option-email">founders@quantal-health.example</span>
+          <span class="option-email">info@quantallabs.ai</span>
         </a>
 
-        <a href="mailto:designpartners@quantal-health.example" class="option-card" style="text-decoration: none; color: inherit;">
+        <a href="mailto:info@quantallabs.ai" class="option-card" style="text-decoration: none; color: inherit;">
           <div class="option-icon">
             <svg viewBox="0 0 24 24"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
           </div>
           <h3>Apply as a design partner</h3>
-          <p>We're accepting design partners now. If your clinic treats GLP-1 patients and wants to help shape the product in exchange for white-glove onboarding, tell us a bit about your practice.</p>
-          <span class="option-email">designpartners@quantal-health.example</span>
+          <p>We're accepting design partners now. If your clinic wants to help shape the product in exchange for white-glove onboarding, tell us a bit about your practice.</p>
+          <span class="option-email">info@quantallabs.ai</span>
         </a>
 
-        <a href="mailto:security@quantal-health.example" class="option-card" style="text-decoration: none; color: inherit;">
+        <a href="mailto:info@quantallabs.ai" class="option-card" style="text-decoration: none; color: inherit;">
           <div class="option-icon">
             <svg viewBox="0 0 24 24"><path d="M12 2l9 4v6c0 5-4 8-9 9-5-1-9-4-9-9V6z"/></svg>
           </div>
           <h3>Security and compliance</h3>
           <p>HIPAA reviews, security questionnaires, vendor risk assessments — anything your security or compliance team needs from us. We aim to turn questionnaires around in one business day.</p>
-          <span class="option-email">security@quantal-health.example</span>
+          <span class="option-email">info@quantallabs.ai</span>
         </a>
 
-        <a href="mailto:press@quantal-health.example" class="option-card" style="text-decoration: none; color: inherit;">
+        <a href="mailto:info@quantallabs.ai" class="option-card" style="text-decoration: none; color: inherit;">
           <div class="option-icon">
             <svg viewBox="0 0 24 24"><path d="M3 3h13v18H3z"/><path d="M16 8h5v13h-5"/><path d="M7 8h5"/><path d="M7 12h5"/><path d="M7 16h5"/></svg>
           </div>
           <h3>Press and media</h3>
           <p>We're not aggressively pursuing press, but we're happy to talk to journalists working on stories about GLP-1 care, weight-loss clinics, or healthcare software. We can usually return your call the same day.</p>
-          <span class="option-email">press@quantal-health.example</span>
+          <span class="option-email">info@quantallabs.ai</span>
         </a>
 
       </div>
@@ -606,7 +629,7 @@
         <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-width="7.8"/>
         <circle cx="78.4" cy="72.2" r="11" fill="#E53535"/>
       </svg>
-      <p class="footer-tagline">Care platform for weight-loss clinics, white-labeled for your practice.</p>
+      <p class="footer-tagline">White-label care platform, built to your specialty. Live today with GLP-1 clinics.</p>
     </div>
     <div class="footer-cols">
       <div class="footer-col">
@@ -615,6 +638,7 @@
         <a href="for-clinics.html">For Clinics</a>
         <a href="pricing.html">Pricing</a>
         <a href="demo.html">Try the demo</a>
+        <a href="design-partner.html">Design partners</a>
       </div>
       <div class="footer-col">
         <h4>Trust</h4>
@@ -629,7 +653,7 @@
     </div>
     <div class="footer-bottom">
       <p>&copy; 2026 Quantal Labs. All rights reserved.</p>
-      <p>Now accepting design partners.</p>
+      <p class="footer-legal"><a href="privacy.html" style="color:var(--paper)">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html" style="color:var(--paper)">Terms of Service</a> &nbsp;&middot;&nbsp; Now accepting design partners.</p>
     </div>
   </div>
 </footer>
