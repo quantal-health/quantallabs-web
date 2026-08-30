@@ -1,0 +1,204 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Quantal Health design tokens — warm paper/ink/amber brand, per UI spec §2.
+   Raw values live on :root/.dark; utilities reference them via @theme inline
+   so every color utility flips with the theme automatically.
+--------------------------------------------------------------------------- */
+
+:root {
+  --ink: #1b1a18;
+  --ink-muted: #6b6863;
+  --ink-soft: #c9c4bc;
+  --paper: #f4efe2;
+  --paper-light: #faf7ee;
+  --paper-dark: #e8e2d2;
+  --surface: #ffffff;
+  --line: #e4decf;
+  --line-strong: #d4cfc2;
+  --quantum: #e8a412;
+  --quantum-dark: #b8810f;
+  --quantum-soft: #fbe9c0;
+  --success: #10b981;
+  --info: #2563eb;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  --shadow-soft: 0 1px 2px rgb(27 26 24 / 0.06), 0 2px 6px rgb(27 26 24 / 0.05);
+  --shadow-card: 0 4px 8px rgb(27 26 24 / 0.08), 0 12px 32px rgb(27 26 24 / 0.06);
+  --shadow-float: 0 8px 16px rgb(27 26 24 / 0.1), 0 24px 60px rgb(27 26 24 / 0.1);
+  --bar: rgb(244 239 226 / 0.72);
+
+  --radius: 0.75rem;
+
+  /* shadcn semantic mappings */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-dark);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-light);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--paper-dark);
+  --accent-foreground: var(--ink);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: var(--line-strong);
+  --ring: var(--quantum-dark);
+}
+
+.dark {
+  --ink: #f4efe2;
+  --ink-muted: #b8b3a8;
+  --ink-soft: #7a7570;
+  --paper: #1b1a18;
+  --paper-light: #1f1d1b;
+  --paper-dark: #2c2a27;
+  --surface: #252320;
+  --line: rgb(244 239 226 / 0.1);
+  --line-strong: rgb(244 239 226 / 0.18);
+  --quantum: #e8a412;
+  --quantum-dark: #f0b93e;
+  --quantum-soft: #3a2e15;
+
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-card: 0 4px 8px rgb(0 0 0 / 0.35), 0 12px 32px rgb(0 0 0 / 0.3);
+  --shadow-float: 0 8px 16px rgb(0 0 0 / 0.4), 0 24px 60px rgb(0 0 0 / 0.4);
+  --bar: rgb(27 26 24 / 0.72);
+}
+
+@theme inline {
+  /* brand */
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-paper-light: var(--paper-light);
+  --color-paper-dark: var(--paper-dark);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-quantum: var(--quantum);
+  --color-quantum-dark: var(--quantum-dark);
+  --color-quantum-soft: var(--quantum-soft);
+  --color-success: var(--success);
+  --color-info: var(--info);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  /* demo tenant (Mountainview) — scoped use inside demos only */
+  --color-mv-green: #16a34a;
+  --color-mv-cyan: #0891b2;
+
+  /* shadcn semantics */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* radius scale — sm 8 / md 12 / lg 16 / xl 22 */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: 1.375rem;
+
+  /* elevation */
+  --shadow-soft: var(--shadow-soft);
+  --shadow-card: var(--shadow-card);
+  --shadow-float: var(--shadow-float);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* type scale (~1.25 modular below the fluid hero) */
+  --text-hero: clamp(2.75rem, 5vw, 4.5rem);
+  --text-hero--line-height: 1.02;
+  --text-hero--letter-spacing: -0.03em;
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 1.06;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h2: 1.875rem;
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lead: 1.25rem;
+  --text-lead--line-height: 1.55;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.14em;
+
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--quantum-soft);
+    color: #1b1a18;
+  }
+  .dark ::selection {
+    color: #f4efe2;
+  }
+  :focus-visible {
+    outline: 2px solid var(--quantum-dark);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

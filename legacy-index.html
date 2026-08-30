@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantal Labs · AI</title>
+  <meta name="description" content="Quantal AI is the healthcare division of Quantal Labs — building clinically-grounded software and a modular white-label SDK for modern medicine." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Brand tokens ───────────────────────────────────────────── */
+    :root {
+      /* Core brand */
+      --ink:        #1B1A18;
+      --paper:      #F4EFE2;
+      --quantum:    #E8A412;
+      --quantum-dk: #C98C0A;
+      --quantum-lt: #FDF0D0;
+
+      /* Light theme */
+      --bg:         #F4EFE2;
+      --bg-card:    #FFFFFF;
+      --bg-nav:     rgba(244,239,226,0.90);
+      --bg-overlay: rgba(255,255,255,0.98);
+      --bg-subtle:  rgba(27,26,24,0.04);
+      --border:     rgba(27,26,24,0.10);
+      --border-md:  rgba(27,26,24,0.16);
+      --text:       #1B1A18;
+      --text-2:     #4A453E;
+      --text-3:     #7A7570;
+      --text-inv:   #F4EFE2;
+      --mark:       #1B1A18;      /* ring colour in light mode */
+      --shadow-sm:  0 1px 3px rgba(27,26,24,0.06), 0 1px 2px rgba(27,26,24,0.04);
+      --shadow-md:  0 4px 16px rgba(27,26,24,0.08), 0 2px 6px rgba(27,26,24,0.04);
+      --shadow-lg:  0 12px 48px rgba(27,26,24,0.10), 0 4px 16px rgba(27,26,24,0.05);
+
+      /* Geometry */
+      --r-sm: 6px;
+      --r-md: 12px;
+      --r-lg: 20px;
+      --r-xl: 28px;
+      --t: 0.2s ease;
+
+      /* Type */
+      --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "Geist Mono", "JetBrains Mono", monospace;
+    }
+
+    /* ── Dark mode ──────────────────────────────────────────────── */
+    [data-theme="dark"],
+    [data-theme="system"].sys-dark {
+      --bg:         #1B1A18;
+      --bg-card:    #252320;
+      --bg-nav:     rgba(27,26,24,0.92);
+      --bg-overlay: rgba(30,29,26,0.99);
+      --bg-subtle:  rgba(244,239,226,0.05);
+      --border:     rgba(244,239,226,0.10);
+      --border-md:  rgba(244,239,226,0.16);
+      --text:       #F4EFE2;
+      --text-2:     #B8B3A8;
+      --text-3:     #7A7570;
+      --text-inv:   #1B1A18;
+      --mark:       #F4EFE2;      /* ring colour in dark mode */
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.30);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.40);
+      --shadow-lg:  0 12px 48px rgba(0,0,0,0.50);
+    }
+
+    /* ── Base ───────────────────────────────────────────────────── */
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background var(--t), color var(--t);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1,h2,h3,h4 { line-height: 1.15; letter-spacing: -0.025em; font-weight: 700; }
+    h1 { font-size: clamp(2.4rem, 5.5vw, 4rem); }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+    p  { color: var(--text-2); }
+    a  { color: var(--quantum); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    strong { color: var(--text); font-weight: 600; }
+
+    /* ── Layout ─────────────────────────────────────────────────── */
+    .wrap    { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+    .section { padding: 96px 0; }
+    .divider { height: 1px; background: var(--border); }
+
+    /* ── Nav ────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--bg-nav);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--t), border-color var(--t), box-shadow var(--t);
+    }
+    nav.scrolled { box-shadow: var(--shadow-sm); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+
+    /* Logo */
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo:hover { text-decoration: none; }
+    .logo-wordmark {
+      display: flex; align-items: baseline; gap: 5px;
+      font-size: 1rem; line-height: 1;
+    }
+    .logo-quantal { font-weight: 800; color: var(--text); letter-spacing: -0.03em; }
+    .logo-labs    { font-weight: 400; color: var(--text-3); letter-spacing: -0.02em; }
+    .logo-chip {
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.02em;
+      border: 1.5px solid var(--border-md); border-radius: 4px;
+      padding: 1px 5px; color: var(--text-2);
+      align-self: center;
+    }
+
+    .qh-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.36em;
+      white-space: nowrap;
+      vertical-align: -0.12em;
+    }
+    .qh-mini {
+      position: relative;
+      display: inline-block;
+      width: 1.08em;
+      height: 1.08em;
+      flex: 0 0 auto;
+    }
+    .qh-mini::before {
+      content: "";
+      position: absolute;
+      left: 0.08em;
+      top: 0.08em;
+      width: 0.78em;
+      height: 0.78em;
+      border: 0.12em solid currentColor;
+      border-radius: 999px;
+    }
+    .qh-mini::after {
+      content: "";
+      position: absolute;
+      right: 0.08em;
+      bottom: 0.08em;
+      width: 0.28em;
+      height: 0.28em;
+      background: #E53535;
+      border-radius: 999px;
+    }
+
+    /* Nav links */
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-links a {
+      display: flex; align-items: center; gap: 4px;
+      padding: 6px 12px; border-radius: var(--r-sm);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-2);
+      transition: color var(--t), background var(--t);
+    }
+    .nav-links a:hover { color: var(--text); background: var(--bg-subtle); text-decoration: none; }
+
+    /* Dropdown */
+    .has-dd { position: relative; }
+    .has-dd:hover .dd, .has-dd:focus-within .dd { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dd {
+      position: absolute; top: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      width: 230px;
+      background: var(--bg-overlay); border: 1px solid var(--border);
+      border-radius: var(--r-md); box-shadow: var(--shadow-lg);
+      padding: 6px; opacity: 0; pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .dd-item {
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 10px 12px; border-radius: 8px;
+      font-size: 0.875rem; font-weight: 600; color: var(--text);
+      transition: background var(--t);
+    }
+    .dd-item:hover { background: var(--bg-subtle); text-decoration: none; }
+    .dd-sub { font-size: 0.775rem; font-weight: 400; color: var(--text-3); margin-top: 1px; }
+
+    /* Nav right */
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .btn-nav {
+      font-size: 0.875rem; font-weight: 600;
+      padding: 7px 16px; border-radius: var(--r-sm);
+      background: var(--quantum); color: var(--ink);
+      border: none; cursor: pointer;
+      transition: opacity var(--t), transform var(--t);
+    }
+    .btn-nav:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* Settings */
+    .settings-wrap { position: relative; }
+    .settings-toggle {
+      width: 34px; height: 34px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: none; cursor: pointer;
+      color: var(--text-2); display: flex; align-items: center; justify-content: center;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .settings-toggle:hover { background: var(--bg-subtle); color: var(--text); }
+    .settings-toggle svg { width: 16px; height: 16px; }
+    .settings-panel {
+      position: absolute; top: calc(100% + 8px); right: 0; width: 210px;
+      background: var(--bg-overlay); border: 1px solid var(--border);
+      border-radius: var(--r-md); box-shadow: var(--shadow-lg); padding: 12px;
+      opacity: 0; pointer-events: none; transform: translateY(-4px);
+      transition: opacity 0.15s ease, transform 0.15s ease; z-index: 200;
+    }
+    .settings-panel.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .settings-lbl {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 8px; padding: 0 4px;
+    }
+    .theme-opts { display: flex; flex-direction: column; gap: 2px; }
+    .theme-opt {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 8px; width: 100%;
+      font-size: 0.875rem; font-weight: 500; color: var(--text-2);
+      background: none; border: none; cursor: pointer;
+      transition: background var(--t), color var(--t);
+    }
+    .theme-opt:hover { background: var(--bg-subtle); color: var(--text); }
+    .theme-opt.active { background: var(--bg-subtle); color: var(--quantum-dk); font-weight: 600; }
+    [data-theme="dark"] .theme-opt.active,
+    [data-theme="system"].sys-dark .theme-opt.active { color: var(--quantum); }
+    .theme-opt svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero { padding: 148px 0 96px; position: relative; overflow: hidden; }
+    .hero::before {
+      content: "";
+      position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,164,18,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 800px; }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 28px;
+    }
+    .hero-label-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--quantum); }
+    .hero h1 { margin-bottom: 22px; }
+    .hero h1 em { font-style: normal; color: var(--quantum); }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-2);
+      max-width: 560px; line-height: 1.75; margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 12px 24px; font-size: 0.938rem; font-weight: 700;
+      background: var(--quantum); color: var(--ink); border: none;
+      border-radius: var(--r-sm); cursor: pointer;
+      box-shadow: 0 4px 16px rgba(232,164,18,0.30);
+      transition: opacity var(--t), transform var(--t), box-shadow var(--t);
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,164,18,0.35); text-decoration: none; color: var(--ink); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 11px 22px; font-size: 0.938rem; font-weight: 600;
+      background: transparent; color: var(--text-2);
+      border: 1.5px solid var(--border-md); border-radius: var(--r-sm); cursor: pointer;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .btn-ghost:hover { background: var(--bg-subtle); color: var(--text); border-color: var(--quantum); text-decoration: none; }
+
+    /* ── Section header ─────────────────────────────────────────── */
+    .sec-head { margin-bottom: 56px; }
+    .sec-head-center { text-align: center; }
+    .sec-tag {
+      display: inline-block; font-family: var(--font-mono);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 14px;
+    }
+    .sec-tag::before { content: "· "; color: var(--quantum); }
+    .sec-head h2 { margin-bottom: 14px; }
+    .sec-head p { max-width: 520px; font-size: 1.05rem; line-height: 1.75; }
+    .sec-head-center p { margin: 0 auto; }
+
+    /* ── About grid ─────────────────────────────────────────────── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .about-text p { margin-bottom: 16px; font-size: 1rem; line-height: 1.8; }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-xl); padding: 36px; box-shadow: var(--shadow-lg);
+      position: relative; overflow: hidden;
+    }
+    .about-card::before {
+      content: ""; position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,164,18,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .about-card-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--border);
+    }
+    .stat { text-align: center; padding: 0 8px; }
+    .stat:not(:last-child) { border-right: 1px solid var(--border); }
+    .stat-val { display: block; font-size: 1.3rem; font-weight: 800; color: var(--quantum-dk); letter-spacing: -0.03em; }
+    [data-theme="dark"] .stat-val,
+    [data-theme="system"].sys-dark .stat-val { color: var(--quantum); }
+    .stat-lbl { font-size: 0.75rem; color: var(--text-3); margin-top: 2px; }
+
+    /* Pillars */
+    .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .pillar {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 28px; box-shadow: var(--shadow-sm);
+      transition: transform var(--t), box-shadow var(--t);
+    }
+    .pillar:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .pillar-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--quantum-lt); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; color: var(--quantum-dk);
+    }
+    [data-theme="dark"] .pillar-icon,
+    [data-theme="system"].sys-dark .pillar-icon { background: rgba(232,164,18,0.12); color: var(--quantum); }
+    .pillar-icon svg { width: 20px; height: 20px; }
+    .pillar h3 { font-size: 0.975rem; margin-bottom: 8px; }
+    .pillar p { font-size: 0.875rem; line-height: 1.7; }
+
+    /* ── SDK section ────────────────────────────────────────────── */
+    .sdk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .sdk-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .sdk-feat {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 16px;
+      transition: border-color var(--t);
+    }
+    .sdk-feat:hover { border-color: var(--quantum); }
+    .sdk-feat-icon {
+      width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+      background: var(--quantum-lt); display: flex; align-items: center; justify-content: center;
+      color: var(--quantum-dk);
+    }
+    [data-theme="dark"] .sdk-feat-icon,
+    [data-theme="system"].sys-dark .sdk-feat-icon { background: rgba(232,164,18,0.12); color: var(--quantum); }
+    .sdk-feat-icon svg { width: 14px; height: 14px; }
+    .sdk-feat-text strong { display: block; font-size: 0.825rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .sdk-feat-text span  { font-size: 0.775rem; color: var(--text-3); line-height: 1.5; }
+    .sdk-modules { margin-top: 24px; }
+    .modules-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); letter-spacing: 0.05em; margin-bottom: 10px; }
+    .modules-list { display: flex; flex-wrap: wrap; gap: 7px; }
+    .mod-chip {
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+      padding: 3px 9px; border-radius: 4px;
+      border: 1px solid var(--border-md); color: var(--text-2);
+      background: var(--bg-subtle);
+    }
+    .sdk-tiers { margin-top: 24px; }
+    .tier-row { display: flex; gap: 10px; }
+    .tier {
+      flex: 1; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 16px 14px; text-align: center;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .tier.featured { border-color: var(--quantum); box-shadow: 0 0 0 3px rgba(232,164,18,0.12); }
+    .tier-name { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-3); text-transform: uppercase; }
+    .tier.featured .tier-name { color: var(--quantum-dk); }
+    [data-theme="dark"] .tier.featured .tier-name,
+    [data-theme="system"].sys-dark .tier.featured .tier-name { color: var(--quantum); }
+    .tier-modules { font-size: 0.875rem; font-weight: 700; color: var(--text); margin-top: 6px; }
+
+    /* ── Product card ───────────────────────────────────────────── */
+    .product-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-md);
+      max-width: 900px; margin: 0 auto;
+      transition: transform var(--t), box-shadow var(--t);
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .product-header {
+      padding: 40px 40px 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-subtle);
+    }
+    .product-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em;
+      color: var(--ink); background: var(--quantum);
+      padding: 3px 9px; border-radius: 4px; margin-bottom: 18px;
+    }
+    .product-tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink); opacity: 0.5; }
+    .product-name { font-size: 2rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 10px; }
+    .product-tagline { font-size: 1rem; color: var(--text-2); line-height: 1.65; }
+    .product-body { padding: 40px; }
+    .product-desc { font-size: 0.975rem; line-height: 1.8; color: var(--text-2); margin-bottom: 32px; }
+    .product-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .feat {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 16px;
+    }
+    .feat-ico {
+      width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+      background: var(--quantum); display: flex; align-items: center; justify-content: center;
+      color: var(--ink);
+    }
+    .feat-ico svg { width: 16px; height: 16px; }
+    .feat-txt strong { display: block; font-size: 0.875rem; color: var(--text); margin-bottom: 2px; }
+    .feat-txt span   { font-size: 0.8rem; color: var(--text-3); line-height: 1.5; }
+    .product-footer {
+      padding: 0 40px 36px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .badge-hipaa {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 600;
+      color: #2F855A; background: rgba(47,133,90,0.08);
+      padding: 5px 12px; border-radius: 100px;
+      border: 1px solid rgba(47,133,90,0.20);
+    }
+    [data-theme="dark"] .badge-hipaa,
+    [data-theme="system"].sys-dark .badge-hipaa {
+      color: #68D391; background: rgba(72,187,120,0.08); border-color: rgba(72,187,120,0.20);
+    }
+    .badge-hipaa svg { width: 13px; height: 13px; }
+    .badge-platform {
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+      color: var(--text-3); background: var(--bg-subtle);
+      padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border);
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 56px 0 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 0.875rem; line-height: 1.7; margin-top: 14px; max-width: 260px; }
+    .footer-col h4 {
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 14px;
+    }
+    .footer-col a {
+      display: block; font-size: 0.875rem; color: var(--text-2); margin-bottom: 8px;
+      transition: color var(--t);
+    }
+    .footer-col a:hover { color: var(--text); text-decoration: none; }
+    .footer-bottom {
+      padding-top: 28px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .footer-copy { font-size: 0.8rem; color: var(--text-3); }
+
+    /* ── Ring SVG (the Q mark) ──────────────────────────────────── */
+    .ql-ring { display: block; }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .sdk-grid   { grid-template-columns: 1fr; gap: 40px; }
+      .pillars    { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 640px) {
+      .product-features { grid-template-columns: 1fr; }
+      .sdk-feature-grid { grid-template-columns: 1fr; }
+      .pillars { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .nav-links { display: none; }
+      .hero { padding-top: 110px; }
+      .product-header, .product-body, .product-footer { padding-left: 24px; padding-right: 24px; }
+      .tier-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="wrap nav-inner">
+
+    <!-- Logo: the ring mark + wordmark + AI chip -->
+    <a href="/" class="logo">
+      <!-- Quantal Labs Q-ring SVG: thick ring with quantum dot at bottom-right ~38° -->
+      <svg class="ql-ring" width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Ring (Q) -->
+        <circle cx="16" cy="16" r="11.5" stroke="var(--mark)" stroke-width="3" fill="none"/>
+        <!-- Quantum dot — sits at ~38° below centre-right of ring -->
+        <circle cx="24.1" cy="23.1" r="4.2" fill="#E8A412"/>
+      </svg>
+      <div class="logo-wordmark">
+        <span class="logo-quantal">Quantal</span>
+        <span class="logo-labs">Labs</span>
+        <span class="logo-chip">AI</span>
+      </div>
+    </a>
+
+    <!-- Nav links -->
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li class="has-dd">
+        <a href="#products">
+          Products
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2.5 4L5.5 7L8.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="dd">
+          <a class="dd-item" href="#health">
+            <span>Quantal Health</span>
+            <span class="dd-sub">Medication monitoring platform</span>
+          </a>
+          <a class="dd-item" href="#sdk">
+            <span>Platform SDK</span>
+            <span class="dd-sub">White-label healthcare SDK</span>
+          </a>
+        </div>
+      </li>
+      <li><a href="#sdk">SDK</a></li>
+    </ul>
+
+    <!-- Theme + CTA -->
+    <div class="nav-right">
+      <div class="settings-wrap">
+        <button class="settings-toggle" id="settingsBtn" aria-label="Appearance settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-lbl">Appearance</div>
+          <div class="theme-opts">
+            <button class="theme-opt" data-tv="light" onclick="setTheme('light')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+            <button class="theme-opt" data-tv="dark" onclick="setTheme('dark')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark
+            </button>
+            <button class="theme-opt" data-tv="system" onclick="setTheme('system')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              System
+            </button>
+          </div>
+        </div>
+      </div>
+      <a class="btn-nav" href="mailto:hello@quantallabs.ai">Contact Us</a>
+    </div>
+
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-label">
+        <span class="hero-label-dot"></span>
+        Quantal Labs · AI Division
+      </div>
+      <h1>Precision software<br/>for <em>modern medicine</em></h1>
+      <p class="hero-sub">
+        Quantal AI democratizes AI for small businesses — making production-grade AI products accessible to the businesses that need them most. A division of Quantal Labs LLC.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#health">
+          Quantal Health
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn-ghost" href="#sdk">Platform SDK →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── ABOUT ─────────────────────────────────────────────────────── -->
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+
+      <div class="about-text">
+        <div class="sec-head">
+          <div class="sec-tag">About Quantal AI</div>
+          <h2>Democratizing AI<br/>for small businesses</h2>
+          <p style="margin-top:16px;font-size:1.05rem;line-height:1.75;">
+            Quantal AI is a division of Quantal Labs LLC — built to make powerful, production-grade AI accessible to the small businesses that need it most but can rarely build it themselves.
+          </p>
+        </div>
+        <p>
+          Most AI breakthroughs land at large enterprises first. Quantal AI closes that gap — delivering focused, domain-specific AI products that small teams can adopt without a dedicated ML team or a nine-figure budget.
+        </p>
+        <p>
+          We move vertical by vertical, building opinionated products rather than generic toolkits. Each product is compliance-ready, immediately useful, and designed around the real workflow of its users.
+        </p>
+        <p>
+          <strong>Quantal Health</strong> is our first product — a HIPAA-compliant care platform for clinics, pairing a patient mobile app with a clinician dashboard and a modular white-label SDK that any clinic can run under their own brand.
+        </p>
+      </div>
+
+      <div>
+        <div class="about-card">
+          <!-- Large Q mark in card -->
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="margin-bottom:20px;">
+            <circle cx="30" cy="30" r="21" stroke="var(--mark)" stroke-width="5" fill="none"/>
+            <circle cx="45.5" cy="43.5" r="8" fill="#E8A412"/>
+          </svg>
+          <h3 style="margin-bottom:8px;"><span class="qh-brand"><span class="qh-mini" aria-hidden="true"></span>Quantal Health</span></h3>
+          <p style="font-size:0.9rem;line-height:1.65;">
+            Healthcare software that clinicians trust and patients rely on. Clinically grounded, HIPAA-native, and built for real workflows.
+          </p>
+          <div class="about-card-stats">
+            <div class="stat">
+              <span class="stat-val">HIPAA</span>
+              <div class="stat-lbl">Compliant</div>
+            </div>
+            <div class="stat">
+              <span class="stat-val">SDK</span>
+              <div class="stat-lbl">White-label</div>
+            </div>
+            <div class="stat">
+              <span class="stat-val">FHIR</span>
+              <div class="stat-lbl">Native</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── PILLARS ───────────────────────────────────────────────────── -->
+<section style="padding: 64px 0;">
+  <div class="wrap">
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>Clinically Grounded</h3>
+        <p>Every feature is specced with clinical input. Copy, alerts, and care protocols are signed off by licensed clinicians before shipping.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3>HIPAA by Design</h3>
+        <p>PHI is protected end-to-end: encrypted at rest and in transit, isolated per clinic, and audit-logged on every access.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3>Modular & Customizable</h3>
+        <p>Each clinic enables only the modules they need. Branding, copy, and features are all configurable without a code release.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── PRODUCTS ──────────────────────────────────────────────────── -->
+<section class="section" id="products">
+  <div class="wrap">
+    <div class="sec-head sec-head-center">
+      <div class="sec-tag">Products</div>
+      <h2>Built by Quantal AI</h2>
+      <p>A care platform for patients and clinicians, powered by a customizable white-label SDK.</p>
+    </div>
+
+    <!-- Quantal Health -->
+    <div class="product-card" id="health">
+      <div class="product-header">
+        <div class="product-tag">
+          <span class="product-tag-dot"></span>
+          Quantal AI · Flagship Product
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:0;">
+          <!-- Quantal Health icon: ring with red quantum dot -->
+          <svg width="48" height="48" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+            <circle cx="24" cy="23" r="14" stroke="var(--mark)" stroke-width="3.5" fill="none"/>
+            <circle cx="35.2" cy="34.2" r="6" fill="#E53535"/>
+          </svg>
+          <div class="product-name" style="margin-bottom:0;">Quantal Health</div>
+        </div>
+        <p class="product-tagline">
+          A connected medication monitoring platform — native mobile app for patients, web dashboard for clinicians, built for real clinical workflows.
+        </p>
+      </div>
+
+      <div class="product-body">
+        <p class="product-desc">
+          Quantal Health is a dual-sided platform. Patients log daily health data — food, symptoms, vitals, medication adherence — from their own <strong>branded mobile app</strong>. Clinicians get a structured <strong>web dashboard</strong> that surfaces trend charts, patient summaries, and alerts, so oversight is efficient and nothing slips through. Both sides run on the Quantal Platform SDK and are fully white-labeled per clinic.
+        </p>
+
+        <div class="product-features">
+          <div class="feat">
+            <div class="feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+            </div>
+            <div class="feat-txt">
+              <strong>Patient Mobile App</strong>
+              <span>iOS &amp; Android — daily health logging under the clinic's own brand</span>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            </div>
+            <div class="feat-txt">
+              <strong>Clinician Dashboard</strong>
+              <span>Web — patient roster, trend charts, structured alerts, messaging</span>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+            <div class="feat-txt">
+              <strong>AI Food Vision</strong>
+              <span>Camera-based meal logging with calorie &amp; macro estimates via AI</span>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="feat-txt">
+              <strong>Vitals &amp; Symptom Tracking</strong>
+              <span>Weight trends, energy, appetite, hydration — patient-entered or synced</span>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="feat-txt">
+              <strong>Secure Messaging</strong>
+              <span>Asynchronous patient ↔ clinician messaging, HIPAA-compliant</span>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="feat-txt">
+              <strong>Multi-Tenant Clinics</strong>
+              <span>Each clinic is fully isolated — patients, data, and branding stay separate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-footer">
+        <span class="badge-hipaa">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          HIPAA Compliant
+        </span>
+        <span class="badge-platform">iOS</span>
+        <span class="badge-platform">Android</span>
+        <span class="badge-platform">Web Dashboard</span>
+        <span class="badge-platform">Design Partner Alpha</span>
+        <a href="quantallabs-health-web/index.html" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:var(--ink); color:var(--text-inv); border-radius:var(--r-sm); font-size:0.875rem; font-weight:600; text-decoration:none; transition:background var(--t);">
+          Visit Quantal Health
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SDK ───────────────────────────────────────────────────────── -->
+<section class="section" id="sdk">
+  <div class="wrap">
+    <div class="sdk-grid">
+
+      <!-- Left: copy + tiers -->
+      <div>
+        <div class="sec-head">
+          <div class="sec-tag">Platform SDK</div>
+          <h2>One codebase.<br/>N branded clinics.</h2>
+          <p>
+            The Quantal Platform SDK is the customizable, FHIR-native healthcare framework that powers Quantal Health — and any future clinic-branded care application.
+          </p>
+        </div>
+
+        <p style="font-size:0.95rem;line-height:1.8;color:var(--text-2);margin-bottom:24px;">
+          Clinics don't install the SDK or write code. Instead, they get their <strong>own white-label app</strong> — their bundle ID, their App Store listing, their brand — generated from one source tree via a build pipeline parameterized per tenant. Branding, enabled modules, and copy are all configurable at runtime without a release.
+        </p>
+
+        <!-- Tier table -->
+        <div class="sdk-tiers">
+          <div class="modules-label" style="margin-bottom:10px;">ACCESS TIERS</div>
+          <div class="tier-row">
+            <div class="tier">
+              <div class="tier-name">Lite</div>
+              <div class="tier-modules">4 modules</div>
+            </div>
+            <div class="tier featured">
+              <div class="tier-name">Standard</div>
+              <div class="tier-modules">9 modules</div>
+            </div>
+            <div class="tier">
+              <div class="tier-name">Pro</div>
+              <div class="tier-modules">13 modules</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module chips -->
+        <div class="sdk-modules" style="margin-top:20px;">
+          <div class="modules-label">AVAILABLE MODULES</div>
+          <div class="modules-list">
+            <span class="mod-chip">auth</span>
+            <span class="mod-chip">logging.weight</span>
+            <span class="mod-chip">logging.symptoms</span>
+            <span class="mod-chip">logging.hydration</span>
+            <span class="mod-chip">logging.energy</span>
+            <span class="mod-chip">logging.appetite</span>
+            <span class="mod-chip">ai_vision</span>
+            <span class="mod-chip">manual_food</span>
+            <span class="mod-chip">wearables</span>
+            <span class="mod-chip">messaging</span>
+            <span class="mod-chip">notifications</span>
+            <span class="mod-chip">trends</span>
+            <span class="mod-chip">red_flags</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: feature grid -->
+      <div>
+        <div class="sdk-feature-grid">
+          <div class="sdk-feat">
+            <div class="sdk-feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <div class="sdk-feat-text">
+              <strong>White-Label Per Clinic</strong>
+              <span>Own bundle ID, own App Store listing, own brand — under the clinic's name, not Quantal's</span>
+            </div>
+          </div>
+          <div class="sdk-feat">
+            <div class="sdk-feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="sdk-feat-text">
+              <strong>Modular Feature Toggles</strong>
+              <span>13+ modules toggled ON/OFF per tenant via admin console — no code release needed</span>
+            </div>
+          </div>
+          <div class="sdk-feat">
+            <div class="sdk-feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </div>
+            <div class="sdk-feat-text">
+              <strong>Runtime Branding</strong>
+              <span>Logo, primary color, font, welcome copy — fetched on first launch, no rebuild</span>
+            </div>
+          </div>
+          <div class="sdk-feat">
+            <div class="sdk-feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <div class="sdk-feat-text">
+              <strong>FHIR-Native Data Layer</strong>
+              <span>FHIR R4 native data model — interoperable, standards-compliant, and EHR-ready out of the box</span>
+            </div>
+          </div>
+          <div class="sdk-feat">
+            <div class="sdk-feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div class="sdk-feat-text">
+              <strong>Multi-Provider AI</strong>
+              <span>Abstraction over Claude, GPT-4o, and Gemini — swap providers per tenant</span>
+            </div>
+          </div>
+          <div class="sdk-feat">
+            <div class="sdk-feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="sdk-feat-text">
+              <strong>Jurisdiction-Agnostic</strong>
+              <span>HIPAA US by default, architected to extend to DPDP and other regimes per tenant config</span>
+            </div>
+          </div>
+          <div class="sdk-feat">
+            <div class="sdk-feat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            </div>
+            <div class="sdk-feat-text">
+              <strong>Build Pipeline</strong>
+              <span>Fastlane + per-tenant config produces N IPAs/AABs from one source tree, submitted under the clinic's App Store account</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────── -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <svg width="28" height="28" viewBox="0 0 34 34" fill="none">
+            <circle cx="16" cy="16" r="11.5" stroke="var(--mark)" stroke-width="3" fill="none"/>
+            <circle cx="24.1" cy="23.1" r="4.2" fill="#E8A412"/>
+          </svg>
+          <div class="logo-wordmark">
+            <span class="logo-quantal" style="font-size:0.9rem;">Quantal</span>
+            <span class="logo-labs" style="font-size:0.9rem;">Labs</span>
+            <span class="logo-chip">AI</span>
+          </div>
+        </a>
+        <p>Democratizing AI for small businesses. A division of Quantal Labs LLC.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#about">About Quantal AI</a>
+        <a href="mailto:hello@quantallabs.ai">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="#health">Quantal Health</a>
+        <a href="#sdk">Platform SDK</a>
+        <a href="mailto:partners@quantallabs.ai">Design Partner Program</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2026 Quantal AI. All rights reserved. Quantal AI is a division of Quantal Labs LLC. Quantal Health is a product of Quantal AI.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── SCRIPTS ───────────────────────────────────────────────────── -->
+<script>
+  // ── Theme ────────────────────────────────────────────────────────
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function applyTheme(val) {
+    const h = document.documentElement;
+    h.setAttribute('data-theme', val);
+    if (val === 'system') h.classList.toggle('sys-dark', mq.matches);
+    else h.classList.remove('sys-dark');
+  }
+
+  function setTheme(val) {
+    localStorage.setItem('ql-theme', val);
+    applyTheme(val);
+    document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === val));
+    closeSettings();
+  }
+
+  mq.addEventListener('change', () => {
+    if ((localStorage.getItem('ql-theme') || 'system') === 'system') applyTheme('system');
+  });
+
+  const stored = localStorage.getItem('ql-theme') || 'system';
+  applyTheme(stored);
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.theme-opt').forEach(b => b.classList.toggle('active', b.dataset.tv === stored));
+  });
+
+  // ── Settings panel ───────────────────────────────────────────────
+  const settingsBtn   = document.getElementById('settingsBtn');
+  const settingsPanel = document.getElementById('settingsPanel');
+  let open = false;
+
+  function closeSettings() {
+    open = false;
+    settingsPanel.classList.remove('open');
+    settingsBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  settingsBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    open = !open;
+    settingsPanel.classList.toggle('open', open);
+    settingsBtn.setAttribute('aria-expanded', String(open));
+  });
+
+  document.addEventListener('click', e => {
+    if (open && !settingsPanel.contains(e.target) && e.target !== settingsBtn) closeSettings();
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeSettings(); });
+
+  // ── Nav scroll shadow ─────────────────────────────────────────────
+  const navEl = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+</script>
+
+</body>
+</html>
