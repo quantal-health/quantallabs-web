@@ -183,8 +183,8 @@ function Orcha() {
             <a className="btn solid" href="https://orcha.quantallabs.ai">
               Open Orcha Cloud <span className="arr">→</span>
             </a>
-            <a className="btn ghost" href="https://github.com/open-orcha/orcha" target="_blank" rel="noopener noreferrer">
-              Open source on GitHub
+            <a className="btn ghost" href="https://openorcha.io/" target="_blank" rel="noopener noreferrer">
+              Open Orcha — open source <span className="arr">→</span>
             </a>
           </div>
         </Reveal>
@@ -410,6 +410,7 @@ function Footer() {
                 <li><a href="#health">Quantal Health</a></li>
                 <li><a href="#sdk">Platform SDK</a></li>
                 <li><a href="https://orcha.quantallabs.ai">Orcha Cloud</a></li>
+                <li><a href="https://openorcha.io/" target="_blank" rel="noopener noreferrer">Open Orcha</a></li>
                 <li><a href="mailto:info@quantallabs.ai">Design Partner Program</a></li>
               </ul>
             </div>
