@@ -82,21 +82,24 @@ function Hero() {
           Quantal Labs · AI Division
         </motion.p>
         <motion.h1 variants={item} style={{ marginTop: 22 }}>
-          Precision software
+          Democratizing AI
           <br />
-          for modern medicine
+          for small business
         </motion.h1>
         <motion.p className="lead" variants={item}>
-          Quantal AI democratizes AI for small businesses — making production-grade AI
-          products accessible to the businesses that need them most. A division of
-          Quantal Labs LLC.
+          Quantal Labs builds production-grade AI products for the teams that need them
+          most — from Orcha, our AI-agent orchestration platform, to Quantal Health,
+          precision software for modern medicine.
         </motion.p>
         <motion.div className="cta-row" variants={item}>
-          <a className="btn solid" href="#health">
-            Quantal Health <span className="arr">→</span>
+          <a className="btn solid" href="https://orcha.quantallabs.ai">
+            Orcha Cloud <span className="arr">→</span>
           </a>
-          <a className="btn ghost" href="#sdk">
-            Platform SDK <span className="arr">→</span>
+          <a className="btn ghost" href="#orcha">
+            What is Orcha?
+          </a>
+          <a className="btn ghost" href="#health">
+            Quantal Health <span className="arr">→</span>
           </a>
         </motion.div>
       </motion.div>
@@ -111,7 +114,7 @@ function About() {
       <div className="wrap">
         <Reveal>
           <p className="kicker">About Quantal AI</p>
-          <h2>Democratizing AI for small businesses</h2>
+          <h2>Opinionated products, vertical by vertical</h2>
         </Reveal>
         <div className="split">
           <Reveal delay={0.08}>
@@ -140,6 +143,51 @@ function About() {
             </p>
           </Reveal>
         </div>
+      </div>
+    </section>
+  );
+}
+
+
+/* ---------------------------------------------------------------- orcha -- */
+const ORCHA_STEPS = [
+  ["You file the work", "Describe a task in the portal — or just assign a GitHub issue."],
+  ["Agents ship it", "An Orcha agent claims it, works in an isolated sandbox, and opens a pull request."],
+  ["Humans decide", "Nothing merges on an agent's say-so: you review the diff and verify. That gate is the product."],
+];
+function Orcha() {
+  return (
+    <section id="orcha">
+      <div className="wrap">
+        <Reveal>
+          <p className="kicker">Quantal Labs · Agent Orchestration</p>
+          <h2>Orcha — AI agents that ship. Humans who decide.</h2>
+          <p className="lead" style={{ marginTop: 18 }}>
+            Orcha runs a fleet of AI coding agents against your real repositories —
+            with a human-verification gate on every result. Open source at its core;
+            Orcha Cloud is the hosted, team-ready edition.
+          </p>
+        </Reveal>
+        <div className="feat-rows">
+          {ORCHA_STEPS.map(([t, p2], i) => (
+            <Reveal key={t} delay={i * 0.05}>
+              <div className="feat-row">
+                <h3>{i + 1}. {t}</h3>
+                <p>{p2}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.1}>
+          <div className="cta-row">
+            <a className="btn solid" href="https://orcha.quantallabs.ai">
+              Open Orcha Cloud <span className="arr">→</span>
+            </a>
+            <a className="btn ghost" href="https://github.com/open-orcha/orcha" target="_blank" rel="noopener noreferrer">
+              Open source on GitHub
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -383,6 +431,7 @@ export function App() {
       <main>
         <Hero />
         <About />
+        <Orcha />
         <Health />
         <Sdk />
         <Contact />
