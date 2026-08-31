@@ -55,7 +55,6 @@ function Nav() {
         <nav className="nav-links" aria-label="Primary">
           <a href="#about" className="hide-sm">About</a>
           <a href="#health" className="hide-sm">Quantal Health</a>
-          <a href="#sdk" className="hide-sm">Platform SDK</a>
           <a href="https://orcha.quantallabs.ai" className="hide-sm">Orcha Cloud</a>
           <a href="mailto:info@quantallabs.ai" className="hide-sm">Contact</a>
           <button className="theme-btn" onClick={cycleTheme} aria-label={`Theme: ${theme}`}>
