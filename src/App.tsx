@@ -56,6 +56,7 @@ function Nav() {
           <a href="#about" className="hide-sm">About</a>
           <a href="#health" className="hide-sm">Quantal Health</a>
           <a href="#sdk" className="hide-sm">Platform SDK</a>
+          <a href="https://orcha.quantallabs.ai" className="hide-sm">Orcha Cloud</a>
           <a href="mailto:info@quantallabs.ai" className="hide-sm">Contact</a>
           <button className="theme-btn" onClick={cycleTheme} aria-label={`Theme: ${theme}`}>
             {theme}
@@ -361,6 +362,7 @@ function Footer() {
               <ul>
                 <li><a href="#health">Quantal Health</a></li>
                 <li><a href="#sdk">Platform SDK</a></li>
+                <li><a href="https://orcha.quantallabs.ai">Orcha Cloud</a></li>
                 <li><a href="mailto:info@quantallabs.ai">Design Partner Program</a></li>
               </ul>
             </div>
