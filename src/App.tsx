@@ -55,7 +55,7 @@ function Nav() {
         <nav className="nav-links" aria-label="Primary">
           <a href="#about" className="hide-sm">About</a>
           <a href="#health" className="hide-sm">Quantal Health</a>
-          <a href="https://orcha.quantallabs.ai" className="hide-sm">Orcha Cloud</a>
+          <a href="#orcha" className="hide-sm">Orcha</a>
           <a href="mailto:info@quantallabs.ai" className="hide-sm">Contact</a>
           <button className="theme-btn" onClick={cycleTheme} aria-label={`Theme: ${theme}`}>
             {theme}
@@ -180,11 +180,11 @@ function Orcha() {
         </div>
         <Reveal delay={0.1}>
           <div className="cta-row">
-            <a className="btn solid" href="https://orcha.quantallabs.ai">
-              Open Orcha Cloud <span className="arr">→</span>
+            <a className="btn solid" href="https://openorcha.io/" target="_blank" rel="noopener noreferrer">
+              More about Orcha <span className="arr">→</span>
             </a>
-            <a className="btn ghost" href="https://openorcha.io/" target="_blank" rel="noopener noreferrer">
-              Open Orcha — open source <span className="arr">→</span>
+            <a className="btn ghost" href="https://orcha.quantallabs.ai">
+              Orcha Cloud <span className="arr">→</span>
             </a>
           </div>
         </Reveal>
