@@ -228,7 +228,7 @@ const VERDIKT_CAPS = [
   {
     ico: "⇄",
     t: "Your devices or the cloud",
-    p: "iOS simulators, Android emulators and Chromium on your Mac, or real phones on BrowserStack and Sauce Labs with a live view while they run.",
+    p: "iOS simulators, Android emulators and Chromium on your Mac, or real phones on BrowserStack and Sauce Labs (bring your account) with a live view while they run.",
   },
   {
     ico: "⛨",
@@ -343,9 +343,9 @@ function Verdikt() {
         <Reveal delay={0.08}>
           <div className="pair">
             <p>
-              <b>Orcha ships. Verdikt verifies.</b> Orcha's agents open the pull request;
-              Verdikt tests it on the device, so the human who decides sees evidence, not
-              just a diff.
+              <b>Orcha ships. Verdikt verifies.</b> When Orcha's agents open a pull request,
+              Verdikt's PR check runs your scenarios against that build on real devices, so the
+              human who decides sees evidence, not just a diff.
             </p>
             <a href="#orcha">Back to Orcha ↑</a>
           </div>
