@@ -1,5 +1,5 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Reveal, stagger, staggerItem } from "./motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -56,6 +56,7 @@ function Nav() {
           <a href="#about" className="hide-sm">About</a>
           <a href="#health" className="hide-sm">Quantal Health</a>
           <a href="#orcha" className="hide-sm">Orcha</a>
+          <a href="#verdikt" className="hide-sm">Verdikt</a>
           <a href="mailto:info@quantallabs.ai" className="hide-sm">Contact</a>
           <button className="theme-btn" onClick={cycleTheme} aria-label={`Theme: ${theme}`}>
             {theme}
@@ -88,8 +89,9 @@ function Hero() {
         </motion.h1>
         <motion.p className="lead" variants={item}>
           Quantal Labs builds production-grade AI products for the teams that need them
-          most — from Orcha, our AI-agent orchestration platform, to Quantal Health,
-          precision software for modern medicine.
+          most — from Orcha, our AI-agent orchestration platform, and Verdikt, AI
+          agents that test your apps, to Quantal Health, precision software for modern
+          medicine.
         </motion.p>
         <motion.div className="cta-row" variants={item}>
           <a className="btn solid" href="https://orcha.quantallabs.ai">
@@ -186,6 +188,208 @@ function Orcha() {
             <a className="btn ghost" href="https://orcha.quantallabs.ai">
               Orcha Cloud <span className="arr">→</span>
             </a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------- verdikt -- */
+/** Verdikt has no public site or download yet. Set this to its URL once it does:
+ *  a "More about Verdikt" button then appears next to the early-access CTA. */
+const VERDIKT_URL: string | null = null;
+const VERDIKT_EARLY_ACCESS =
+  "mailto:info@quantallabs.ai?subject=" + encodeURIComponent("Verdikt early access");
+
+const VERDIKT_FLOW = [
+  ["Explore", "An agent maps your app screen by screen and measures each one: contrast, tap targets, clipping."],
+  ["Draft", "Outcome-based scenarios drafted from your code and from what the agent already saw. You keep what you want."],
+  ["Run", "Agents run them on real simulators, emulators and browsers. Every expected outcome gets its own verdict and evidence."],
+  ["Issues", "Failures are deduplicated across runs and land in Linear or Jira, with the frames that prove them."],
+  ["PR check", "Every pull request is tested on its own build and compared with main, so only new regressions block the merge."],
+];
+const VERDIKT_CAPS = [
+  {
+    ico: "◎",
+    t: "Record once, get a suite",
+    p: "Click through a flow on a live device frame. An agent turns it into a scenario with outcomes to check, not brittle coordinates, and suggests the cases you didn't record.",
+  },
+  {
+    ico: "↻",
+    t: "Replay at $0",
+    p: "Passed scenarios replay deterministically with no model call. On drift, the agent takes over. Re-runs can use a cheap model that escalates to a stronger one.",
+  },
+  {
+    ico: "▣",
+    t: "Every verdict, with proof",
+    p: "Watch runs live, then replay them frame by frame: expected versus actual, screenshots and accessibility snapshots for each finding, and a fix prompt for your coding agent.",
+  },
+  {
+    ico: "⇄",
+    t: "Your devices or the cloud",
+    p: "iOS simulators, Android emulators and Chromium on your Mac, or real phones on BrowserStack and Sauce Labs with a live view while they run.",
+  },
+  {
+    ico: "⛨",
+    t: "Safe on production",
+    p: "Mark an environment as production and Verdikt keeps runs against it read-only, with a confirmation before anything risky.",
+  },
+  {
+    ico: "⌂",
+    t: "Local-first, your model",
+    p: "A Mac app with no account to create. Bring your own model: Claude, Codex, an API key or a local model.",
+  },
+];
+const VERDIKT_ALSO = ["Health", "Hardening", "Evals", "Schedules", "Slack alerts", "Linear", "Jira", "BrowserStack", "Sauce Labs"];
+
+/** The theme the page is actually showing: the explicit data-theme, else the OS preference. */
+function useResolvedTheme(): "light" | "dark" {
+  const read = () => {
+    const t = document.documentElement.dataset.theme;
+    if (t === "light" || t === "dark") return t;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  };
+  const [theme, setTheme] = useState<"light" | "dark">(read);
+  useEffect(() => {
+    const update = () => setTheme(read());
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    mq.addEventListener("change", update);
+    const mo = new MutationObserver(update);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => {
+      mq.removeEventListener("change", update);
+      mo.disconnect();
+    };
+  }, []);
+  return theme;
+}
+
+/** Looping product clip in the page's theme. Plays only while on screen; with reduced
+ *  motion it stays on the poster and offers controls instead. */
+function VerdiktClip() {
+  const theme = useResolvedTheme();
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLVideoElement>(null);
+  const base = theme === "light" ? "/videos/verdikt-hero-light" : "/videos/verdikt-hero";
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || reduced) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, [base, reduced]);
+  return (
+    <div className="clip">
+      <video
+        key={base}
+        ref={ref}
+        src={base + ".mp4"}
+        poster={base + ".jpg"}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        controls={!!reduced}
+        aria-label="Verdikt recording a flow, writing the scenario and judging each expected outcome"
+      />
+    </div>
+  );
+}
+
+function Verdikt() {
+  const reduced = useReducedMotion();
+  const item = staggerItem(reduced);
+  return (
+    <section id="verdikt">
+      <div className="wrap">
+        <Reveal>
+          <p className="kicker">Quantal Labs · AI QA</p>
+          <h2>Verdikt — AI agents that test. Evidence that decides.</h2>
+          <p className="lead" style={{ marginTop: 18 }}>
+            Verdikt puts AI agents on real simulators, emulators and browsers. They test
+            your web, iOS and Android apps like a person would, and judge every expected
+            outcome with evidence.
+          </p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <VerdiktClip />
+        </Reveal>
+
+        <Reveal delay={0.04}>
+          <p className="mono-label">How it works</p>
+        </Reveal>
+        <motion.ol
+          className="flow"
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          {VERDIKT_FLOW.map(([t, p], i) => (
+            <motion.li className="flow-step" key={t} variants={item}>
+              <span className="flow-n">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{t}</h3>
+              <p>{p}</p>
+            </motion.li>
+          ))}
+        </motion.ol>
+        <Reveal delay={0.08}>
+          <div className="pair">
+            <p>
+              <b>Orcha ships. Verdikt verifies.</b> Orcha's agents open the pull request;
+              Verdikt tests it on the device, so the human who decides sees evidence, not
+              just a diff.
+            </p>
+            <a href="#orcha">Back to Orcha ↑</a>
+          </div>
+        </Reveal>
+
+        <motion.div
+          className="grid3 caps"
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          {VERDIKT_CAPS.map((c) => (
+            <motion.div className="card" key={c.t} variants={item}>
+              <span className="ico" aria-hidden="true">{c.ico}</span>
+              <h3>{c.t}</h3>
+              <p>{c.p}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <Reveal delay={0.1}>
+          <div className="badges">
+            <span className="badge gold">Early access</span>
+            <span className="badge">Web</span>
+            <span className="badge">iOS</span>
+            <span className="badge">Android</span>
+            <span className="badge">Mac app</span>
+          </div>
+          <p className="mono-label" style={{ marginTop: 26 }}>Also in the box</p>
+          <div className="modules">
+            {VERDIKT_ALSO.map((m) => (
+              <span className="module" key={m}>{m}</span>
+            ))}
+          </div>
+          <div className="cta-row">
+            <a className="btn solid" href={VERDIKT_EARLY_ACCESS}>
+              Get early access to Verdikt <span className="arr">→</span>
+            </a>
+            {VERDIKT_URL && (
+              <a className="btn ghost" href={VERDIKT_URL} target="_blank" rel="noopener noreferrer">
+                More about Verdikt <span className="arr">→</span>
+              </a>
+            )}
           </div>
         </Reveal>
       </div>
@@ -411,6 +615,7 @@ function Footer() {
                 <li><a href="#sdk">Platform SDK</a></li>
                 <li><a href="https://orcha.quantallabs.ai">Orcha Cloud</a></li>
                 <li><a href="https://openorcha.io/" target="_blank" rel="noopener noreferrer">Open Orcha</a></li>
+                <li><a href="#verdikt">Verdikt</a></li>
                 <li><a href="mailto:info@quantallabs.ai">Design Partner Program</a></li>
               </ul>
             </div>
@@ -433,6 +638,7 @@ export function App() {
         <Hero />
         <About />
         <Orcha />
+        <Verdikt />
         <Health />
         <Sdk />
         <Contact />
