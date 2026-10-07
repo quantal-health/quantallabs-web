@@ -100,6 +100,9 @@ function Hero() {
           <a className="btn ghost" href="#orcha">
             What is Orcha?
           </a>
+          <a className="btn ghost" href="#verdikt">
+            What is Verdikt?
+          </a>
           <a className="btn ghost" href="#health">
             Quantal Health <span className="arr">→</span>
           </a>
